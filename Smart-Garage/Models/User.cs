@@ -21,5 +21,10 @@ namespace Smart_Garage.Models
         [Required]
         [StringLength(10, MinimumLength = 10)]
         public string PhoneNumber { get; set; }
+        public IList<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
+        public IList<Service>? Services { get; set; } = new List<Service>();
+        public bool IsAdmin { get; set; }
+
+
     }
 }
