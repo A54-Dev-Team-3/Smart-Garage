@@ -1,6 +1,8 @@
-﻿namespace Smart_Garage.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Smart_Garage.Models
 {
-    public class SGContext
+    public class SGContext : DbContext
     {
     }
 }
