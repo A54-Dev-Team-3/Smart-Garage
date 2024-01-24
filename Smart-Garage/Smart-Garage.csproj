@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Attributes\" />
     <Folder Include="Controllers\Data\Exceptions\" />
     <Folder Include="Controllers\MVC\" />
     <Folder Include="Helpers\Contracts\" />
@@ -17,7 +18,6 @@
     <Folder Include="Models\ViewModel\" />
     <Folder Include="Models\Search\" />
     <Folder Include="Models\QueryParameters\" />
-    <Folder Include="Attributes\" />
     <Folder Include="Repositories\Contracts\" />
     <Folder Include="Services\Contracts\" />
   </ItemGroup>
