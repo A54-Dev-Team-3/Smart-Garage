@@ -7,12 +7,13 @@ namespace Smart_Garage.Models
         [Key]
         public int Id { get; set; }
 
-        public string Labour { get; set; }
         [Required]
+        public string Labour { get; set; }
 
+        [Required]
         [Range(0, int.MaxValue)]
         public int Price { get; set; }
-
+        public int VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
     }
 }
