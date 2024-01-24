@@ -8,7 +8,7 @@ namespace Smart_Garage.Models
         public int Id { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z]{1,2}\s?\d{4}[A-Z]{2}$")]
+        //[RegularExpression(@"^[A-Z]{1,2}\s?\d{4}[A-Z]{2}$")]
         public string LicensePlate { get; set; }
 
         [Required]
@@ -27,8 +27,10 @@ namespace Smart_Garage.Models
         [StringLength(50, MinimumLength = 2)]
         public string Brand { get; set; }
 
+        public int UserId { get; set; }
         public User User { get; set; }
 
         public IList<Service> Services { get; set; } = new List<Service>();
     }
+
 }
