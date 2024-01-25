@@ -11,7 +11,6 @@ namespace Smart_Garage.Repositories.Contracts
         User Create(User newUser); // Register
         User Update(int id, User user);
         User Delete(int id);
-        User Block(int id);
         bool UserExists(string name);
         int Count();
     }
