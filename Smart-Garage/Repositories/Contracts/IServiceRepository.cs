@@ -1,5 +1,5 @@
 ﻿using Smart_Garage.Models;
-using Smart_Garage.Repositories.QueryParameters;
+using Smart_Garage.Models.QueryParameters;
 
 namespace Smart_Garage.Repositories.Contracts
 {

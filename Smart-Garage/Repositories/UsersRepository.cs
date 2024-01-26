@@ -2,8 +2,8 @@
 
 using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
+using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Repositories.Contracts;
-using Smart_Garage.Repositories.QueryParameters;
 
 namespace Smart_Garage.Repositories
 {
