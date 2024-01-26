@@ -18,19 +18,19 @@ namespace Smart_Garage.Repositories
 
         public IList<User> GetAll()
         {
-            return context.Users.ToList();
+            return context.Users.Where(u=> !u.IsDeleted).ToList();
         }
 
         public User GetById(int id)
         {
-            return context.Users
-                .FirstOrDefault(u => u.Id == id) ??
+                return context.Users
+                .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
                 throw new EntityNotFoundException($"User with id:{id} not found.");
         }
 
         public User GetByName(string name)
         {
-            return context.Users.FirstOrDefault(u => u.Username == name) ??
+            return context.Users.FirstOrDefault(u => u.Username == name && !u.IsDeleted) ??
                throw new EntityNotFoundException($"User with username:{name} is not found.");
         }
 
@@ -43,7 +43,7 @@ namespace Smart_Garage.Repositories
 
         public User Update(int id, User updatedUser)
         {
-            User newUser = context.Users.FirstOrDefault(u => u.Id == id) ??
+            User newUser = context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
                 throw new EntityNotFoundException($"User to update with id:{id} not found.");
 
             // Username should not be able to be updated
@@ -57,19 +57,19 @@ namespace Smart_Garage.Repositories
         public User Delete(int id)
         {
             User toDelete = GetById(id);
-            context.Remove(toDelete);
+            toDelete.IsDeleted = true;
             context.SaveChanges();
             return toDelete;
         }
 
         public bool UserExists(string name)
         {
-            return context.Users.Any(u => u.Username == name);
+            return context.Users.Any(u => u.Username == name && !u.IsDeleted);
         }
 
         public int Count()
         {
-            return context.Users.Count();
+            return context.Users.Where(u => !u.IsDeleted).Count();
         }
 
         public IList<User> FilterBy(UserQueryParameters usersParams)
