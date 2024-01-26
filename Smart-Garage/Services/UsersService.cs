@@ -1,20 +1,27 @@
-﻿using Smart_Garage.Exceptions;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
 using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Repositories.Contracts;
 using Smart_Garage.Services.Contracts;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace Smart_Garage.Services
 {
     public class UsersService : IUsersService
     {
         private readonly IUsersRepository usersRepository;
+        private readonly IConfiguration configuration;
 
-        public UsersService(IUsersRepository usersRepository)
+        public UsersService(IUsersRepository usersRepository, IConfiguration configuration)
         {
             this.usersRepository = usersRepository;
+            this.configuration = configuration;
         }
 
         public IList<User> GetAll()
@@ -74,25 +81,24 @@ namespace Smart_Garage.Services
             return usersRepository.Delete(id);
         }
 
-        public string Login(User user)
+        public string Login(UserRequestDTO user)
         {
             if (!usersRepository.UserExists(user.Username))
                 throw new EntityNotFoundException("User not found.");
 
-            // TODO: implement PasswordHas and PasswordSalt and uncomment these lines of code
 
-            //User registeredUser = usersRepository.GetByName(user.Username);
-            //if (!VerifyPasswordHash(
-            //    user.Password,
-            //    registeredUser.PasswordHash,
-            //    registeredUser.PasswordSalt))
-            //{
-            //    throw new WrongPasswordException("Wrong password");
-            //}
+            User registeredUser = usersRepository.GetByName(user.Username);
+            if (!VerifyPasswordHash(
+                user.Password,
+                registeredUser.PasswordHash,
+                registeredUser.PasswordSalt))
+            {
+                throw new WrongPasswordException("Wrong password");
+            }
 
 
-            //var token = CreateToken(registeredUser);
-            //return token;
+            var token = CreateToken(registeredUser);
+            return token;
             throw new NotImplementedException();
         }
 
@@ -107,7 +113,7 @@ namespace Smart_Garage.Services
         }
         public bool UserExists(string username)
         {
-            throw new NotImplementedException();
+            return usersRepository.UserExists(username);
         }
 
         public bool IsCurrentUserAdmin(string currentUser) // "currentUser" is username
@@ -115,14 +121,44 @@ namespace Smart_Garage.Services
             return usersRepository.GetByName(currentUser).IsAdmin;
         }
 
-        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            throw new NotImplementedException();
-        }
-
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            throw new NotImplementedException();
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computeHash.SequenceEqual(passwordHash);
+            }
+        }
+
+        public string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
         }
     }
 }
