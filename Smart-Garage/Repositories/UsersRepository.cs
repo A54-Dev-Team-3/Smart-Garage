@@ -3,6 +3,7 @@
 using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
 using Smart_Garage.Repositories.Contracts;
+using Smart_Garage.Repositories.QueryParameters;
 
 namespace Smart_Garage.Repositories
 {
@@ -40,14 +41,14 @@ namespace Smart_Garage.Repositories
             return newUser;
         }
 
-        public User Update(int id, User user)
+        public User Update(int id, User updatedUser)
         {
             User newUser = context.Users.FirstOrDefault(u => u.Id == id) ??
                 throw new EntityNotFoundException($"User to update with id:{id} not found.");
 
             // Username should not be able to be updated
-            newUser.Email = user.Email;
-            newUser.PhoneNumber = user.PhoneNumber;
+            newUser.Email = updatedUser.Email;
+            newUser.PhoneNumber = updatedUser.PhoneNumber;
 
             context.SaveChanges();
             return newUser;
@@ -69,6 +70,12 @@ namespace Smart_Garage.Repositories
         public int Count()
         {
             return context.Users.Count();
-        }    
+        }
+
+        public IList<User> FilterBy(UserQueryParameters usersParams)
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
     }
 }

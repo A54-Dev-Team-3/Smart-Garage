@@ -5,11 +5,10 @@ namespace Smart_Garage.Repositories.Contracts
     public interface IUsersRepository
     {
         IList<User> GetAll();
-        //IList<User> FilterBy(UserQueryParameters usersParams);
         User GetById(int id);
         User GetByName(string name);
         User Create(User newUser); // Register
-        User Update(int id, User user);
+        User Update(int id, User updatedUser);
         User Delete(int id);
         bool UserExists(string name);
         int Count();
