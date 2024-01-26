@@ -13,6 +13,7 @@ namespace Smart_Garage.Models
 
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public bool IsDeleted { get; set; }
 
         [Required]
         [EmailAddress]
