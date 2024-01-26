@@ -1,4 +1,4 @@
-﻿namespace Smart_Garage.Repositories.QueryParameters
+﻿namespace Smart_Garage.Models.QueryParameters
 {
     public class ServicesQueryParameters
     {
