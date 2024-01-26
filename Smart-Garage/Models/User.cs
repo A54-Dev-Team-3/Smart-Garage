@@ -24,6 +24,6 @@ namespace Smart_Garage.Models
         public IList<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
         public bool IsAdmin { get; set; }
 
-
+        // TODO: add "FirstName" and "LastName"
     }
 }

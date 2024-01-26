@@ -8,7 +8,7 @@ namespace Smart_Garage.Models
         public int Id { get; set; }
 
         [Required]
-        public string Labour { get; set; }
+        public string Labour { get; set; } // TODO: change "Labour" to "Name"
 
         [Required]
         [Range(0, int.MaxValue)]
