@@ -13,11 +13,9 @@
     <Folder Include="Controllers\MVC\" />
     <Folder Include="Helpers\Contracts\" />
     <Folder Include="Models\Contracts\" />
-    <Folder Include="Models\DTOs\" />
     <Folder Include="Models\ViewModel\" />
     <Folder Include="Models\Search\" />
-    <Folder Include="Models\QueryParameters\" />
-    <Folder Include="Services\Contracts\" />
+    <Folder Include="Repositories\QueryParameters\" />
   </ItemGroup>
 
   <ItemGroup>

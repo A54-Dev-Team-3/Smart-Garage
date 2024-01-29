@@ -83,7 +83,7 @@ namespace Smart_Garage.Models
             //Service
             modelBuilder.Entity<Service>(e =>
             {
-                e.Property(s => s.Labour)
+                e.Property(s => s.Name)
                 .IsRequired();
 
                 e.Property(s => s.Price)
