@@ -23,9 +23,9 @@ namespace Smart_Garage.Repositories
 
         public User GetById(int id)
         {
-                return context.Users
-                .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
-                throw new EntityNotFoundException($"User with id:{id} not found.");
+            return context.Users
+            .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
+            throw new EntityNotFoundException($"User with id:{id} not found.");
         }
 
         public User GetByName(string name)
@@ -36,15 +36,30 @@ namespace Smart_Garage.Repositories
 
         public User Create(User newUser)
         {
-            context.Users.Add(newUser);
-            context.SaveChanges();
-            return newUser;
+
+            var username = newUser.Username;
+            var email = newUser.Email;
+
+            if (!UserExists(username))
+            {
+                if (!EmailExists(email))
+                {
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                    return newUser;
+                }
+                else
+                    throw new DuplicationException($"Username with the name: {username} already exists !");
+            }
+            else
+                throw new DuplicationException($"Email with the name: {email} already exists !");
+            
         }
 
         public User Update(int id, User updatedUser)
         {
             User newUser = context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
-                throw new EntityNotFoundException($"User to update with id:{id} not found.");
+                throw new EntityNotFoundException($"User to update with id:{id} not found !");
 
             // Username should not be able to be updated
             newUser.Email = updatedUser.Email;
@@ -62,9 +77,19 @@ namespace Smart_Garage.Repositories
             return toDelete;
         }
 
-        public bool UserExists(string name)
+        public bool UserExists(string username)
         {
-            return context.Users.Any(u => u.Username == name && !u.IsDeleted);
+            return context.Users.Any(u => u.Username == username && !u.IsDeleted);
+        }
+
+        public bool EmailExists(string email)
+        {
+            return context.Users.Any(u => u.Email == email && !u.IsDeleted);
+        }
+
+        public bool PhoneNumberExists(string phoneNumber)
+        {
+            return context.Users.Any(u => u.PhoneNumber == phoneNumber && !u.IsDeleted);
         }
 
         public int Count()

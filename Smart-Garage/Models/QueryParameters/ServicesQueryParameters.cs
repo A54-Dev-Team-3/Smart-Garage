@@ -2,7 +2,7 @@
 {
     public class ServicesQueryParameters
     {
-        public string? Labour { get; set; }
+        public string? Name { get; set; }
         public int? Price { get; set; }
     }
 }
