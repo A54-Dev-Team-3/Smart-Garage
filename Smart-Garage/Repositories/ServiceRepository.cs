@@ -27,7 +27,7 @@ namespace Smart_Garage.Repositories
 
         public Service GetByName(string name)
         {
-            return context.Services.FirstOrDefault(s => s.Labour == name) ??
+            return context.Services.FirstOrDefault(s => s.Name == name) ??
                throw new EntityNotFoundException($"Service with name:{name} is not found.");
         }
         public Service Create(Service newService)
@@ -42,8 +42,7 @@ namespace Smart_Garage.Repositories
             Service newService = context.Services.FirstOrDefault(s => s.Id == id) ??
                 throw new EntityNotFoundException($"Service to update with id:{id} not found.");
 
-            // Username should not be able to be updated
-            newService.Labour = updatedService.Labour;
+            newService.Name = updatedService.Name;
             newService.Price = updatedService.Price;
 
             context.SaveChanges();
@@ -53,14 +52,14 @@ namespace Smart_Garage.Repositories
         public Service Delete(int id)
         {
             Service toDelete = GetById(id);
-            context.Remove(toDelete);
+            toDelete.IsDeleted = true;
             context.SaveChanges();
             return toDelete;
         }
         
         public bool ServiceExists(string name)
         {
-            return context.Services.Any(s => s.Labour == name);
+            return context.Services.Any(s => s.Name == name);
         }
 
         public int Count()

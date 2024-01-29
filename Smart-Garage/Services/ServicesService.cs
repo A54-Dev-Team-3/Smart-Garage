@@ -39,8 +39,8 @@ namespace Smart_Garage.Services
             if (!user.IsAdmin)
                 throw new UnauthorizedOperationException("User is not authorized.");
 
-            if (servicesRepository.ServiceExists(newService.Labour))
-                throw new UnauthorizedOperationException($"Service with name {newService.Labour} already exists.");
+            if (servicesRepository.ServiceExists(newService.Name))
+                throw new UnauthorizedOperationException($"Service with name {newService.Name} already exists.");
 
             return servicesRepository.Create(newService);
         }
@@ -62,6 +62,7 @@ namespace Smart_Garage.Services
 
         public IList<Service> FilterBy(ServicesQueryParameters usersParams)
         {
+            // TODO
             throw new NotImplementedException();
         }
 

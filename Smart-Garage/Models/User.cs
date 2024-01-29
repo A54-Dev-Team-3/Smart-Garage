@@ -10,7 +10,8 @@ namespace Smart_Garage.Models
         [Required]
         [StringLength(20, MinimumLength = 2)]
         public string Username { get; set; }
-
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public bool IsDeleted { get; set; }
@@ -24,7 +25,5 @@ namespace Smart_Garage.Models
         public string PhoneNumber { get; set; }
         public IList<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
         public bool IsAdmin { get; set; }
-
-        // TODO: add "FirstName" and "LastName"
     }
 }

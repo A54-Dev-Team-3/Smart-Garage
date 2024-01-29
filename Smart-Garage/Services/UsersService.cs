@@ -55,13 +55,11 @@ namespace Smart_Garage.Services
             User user = new User()
             {
                 Username = newUser.Username,
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
                 Email = newUser.Email,
                 PhoneNumber = newUser.PhoneNumber,
                 IsAdmin = false
-
-                // TODO
-                //FirstName = newUser.FirstName,
-                //LastName = newUser.LastName
             };
             user.PasswordSalt = passwordSalt;
             user.PasswordHash = passwordHash;
@@ -107,6 +105,7 @@ namespace Smart_Garage.Services
 
         public IList<User> FilterBy(UserQueryParameters usersParams)
         {
+            // TODO
             throw new NotImplementedException();
         }
 
