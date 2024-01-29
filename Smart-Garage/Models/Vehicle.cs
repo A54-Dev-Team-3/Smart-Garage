@@ -30,8 +30,6 @@ namespace Smart_Garage.Models
         public User? User { get; set; }
 
         public IList<Service> Services { get; set; } = new List<Service>();
-
-        public bool IsDeleted { get; set; }
     }
 
 }
