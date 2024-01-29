@@ -8,7 +8,7 @@ namespace Smart_Garage.Models
         public int Id { get; set; }
 
         [Required]
-        //[RegularExpression(@"^[A-Z]{1,2}\s?\d{4}[A-Z]{2}$")]
+        [RegularExpression(@"^[A-C, E, H, K, M, O, P, T, X, Y]{1,2}\s?\d{4}[A-C, E, H, K, M, O, P, T, X, Y]{2}$")]
         public string LicensePlate { get; set; }
 
         [Required]
@@ -16,7 +16,7 @@ namespace Smart_Garage.Models
         public string VIN { get; set; }
 
         [Required]
-        [Range(1886, 2050)]
+        [Range(1886, 2024)]
         public int CreationYear { get; set; }
 
         [Required]
@@ -26,9 +26,8 @@ namespace Smart_Garage.Models
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string Brand { get; set; }
-
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public bool IsDeleted { get; set; }
+        public User? User { get; set; }
 
         public IList<Service> Services { get; set; } = new List<Service>();
     }
