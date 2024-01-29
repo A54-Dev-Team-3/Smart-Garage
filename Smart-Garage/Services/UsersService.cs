@@ -26,25 +26,28 @@ namespace Smart_Garage.Services
 
         public IList<User> GetAll()
         {
-            return usersRepository
-                .GetAll()
-               .ToList();
+            return usersRepository.GetAll();
         }
 
-        public User GetUser(int id)
+        public User GetById(int id)
         {
             return usersRepository.GetById(id);
         }
 
-        public User GetUser(string username)
+        public User GetByName(string username)
         {
             return usersRepository.GetByName(username);
         }
 
         public User Create(UserRequestDTO newUser) // Sign Up
         {
+            User conditionalUser = usersRepository.GetByName(newUser.Username);
+
+            if (!conditionalUser.IsAdmin)
+                throw new UnauthorizedOperationException("User is not authorized.");
+
             if (usersRepository.UserExists(newUser.Username))
-                throw new NameDuplicationException($"User with name {newUser.Username} already exists.");
+                throw new DuplicationException($"User with name {newUser.Username} already exists.");
 
 
             CreatePasswordHash(newUser.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -66,9 +69,9 @@ namespace Smart_Garage.Services
             return usersRepository.Create(user);
         }
 
-        public User Update(int id, User user)
+        public User Update(int id, User updatedUser)
         {
-            return usersRepository.Update(id, user);
+            return usersRepository.Update(id, updatedUser);
         }
 
         public User Delete(int id, string username)
