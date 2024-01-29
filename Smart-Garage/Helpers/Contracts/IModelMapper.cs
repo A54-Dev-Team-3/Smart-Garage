@@ -5,6 +5,6 @@ namespace Smart_Garage.Helpers.Contracts
 {
     public interface IModelMapper
     {
-        User Map(SignUpUserDTO dto);
+        User Map(SignUpUserRequestDTO dto);
     }
 }

@@ -10,7 +10,7 @@ namespace Smart_Garage.Helpers
         public MapperProfiles()
         {
             this.CreateMap<User, UserResponseDTO>();
-            this.CreateMap<UpdateUserDTO, User>();
+            this.CreateMap<UpdateUserRequestDTO, User>();
         }
     }
 }

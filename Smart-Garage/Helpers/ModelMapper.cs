@@ -6,7 +6,7 @@ namespace Smart_Garage.Helpers
 {
     public class ModelMapper : IModelMapper
     {
-        public User Map(SignUpUserDTO dto)
+        public User Map(SignUpUserRequestDTO dto)
         {
             return new User
             {

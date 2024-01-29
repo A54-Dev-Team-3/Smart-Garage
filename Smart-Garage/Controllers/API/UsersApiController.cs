@@ -53,7 +53,7 @@ namespace Smart_Garage.Controllers.API
         // Create
         [HttpPost("signup")] // api/users/signup
         [AllowAnonymous]
-        public async Task<ActionResult<User>> SignUp([FromBody] SignUpUserDTO userRequestDTO)
+        public async Task<ActionResult<User>> SignUp([FromBody] SignUpUserRequestDTO userRequestDTO)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Smart_Garage.Controllers.API
 
         // Update
         [HttpPut("{id}")] // api/users/{id}
-        public IActionResult Update(string id, [FromBody] UpdateUserDTO updatedUser)
+        public IActionResult Update(string id, [FromBody] UpdateUserRequestDTO updatedUser)
         {
             try
             {
