@@ -8,12 +8,12 @@ namespace Smart_Garage.Services.Contracts
     public interface IUsersService
     {
         IList<User> GetAll();
-        User GetById(int id);
-        User GetByName(string username);
-        User Create(UserRequestDTO newUser); // Sign Up
-        User Update(int id, User updatedUser);
+        UserResponseDTO GetById(int id);
+        UserResponseDTO GetByName(string username);
+        UserResponseDTO Create(SignUpUserRequestDTO newUser); // Sign Up
+        UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser);
         User Delete(int id, string username);
-        string Login(UserRequestDTO user);
+        string Login(LoginUserRequestDTO user);
         IList<User> FilterBy(UserQueryParameters usersParams);
         int GetCount();
         bool UserExists(string username);
