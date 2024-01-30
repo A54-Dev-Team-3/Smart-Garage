@@ -27,9 +27,20 @@ namespace Smart_Garage.Services
             this.autoMapper = autoMapper;
         }
 
-        public IList<User> GetAll()
+        public IList<UserResponseDTO> GetAll()
         {
-            return usersRepository.GetAll();
+            var users = usersRepository.GetAll();
+            return autoMapper.Map<IList<UserResponseDTO>>(users);
+        }
+
+        public IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username)
+        {
+            if (!IsCurrentUserAdmin(username))
+                throw new UnauthorizedAccessException("You are not authorized !");
+
+            return usersRepository.FilterBy(filterParameters)
+                            .Select(u => autoMapper.Map<UserResponseDTO>(u))
+                            .ToList();
         }
 
         public UserResponseDTO GetById(int id)
@@ -94,12 +105,6 @@ namespace Smart_Garage.Services
 
             var token = CreateToken(registeredUser);
             return token;
-        }
-
-        public IList<User> FilterBy(UserQueryParameters usersParams)
-        {
-            // TODO
-            throw new NotImplementedException();
         }
 
         public int GetCount()

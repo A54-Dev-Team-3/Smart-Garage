@@ -7,14 +7,14 @@ namespace Smart_Garage.Services.Contracts
 {
     public interface IUsersService
     {
-        IList<User> GetAll();
+        IList<UserResponseDTO> GetAll();
+        IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username);
         UserResponseDTO GetById(int id);
         UserResponseDTO GetByName(string username);
         UserResponseDTO Create(SignUpUserRequestDTO newUser); // Sign Up
         UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser);
         User Delete(int id, string username);
         string Login(LoginUserRequestDTO user);
-        IList<User> FilterBy(UserQueryParameters usersParams);
         int GetCount();
         bool UserExists(string username);
         bool IsCurrentUserAdmin(string currentUser); // "currentUser" is username
