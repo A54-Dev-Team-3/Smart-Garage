@@ -10,6 +10,7 @@ namespace Smart_Garage.Models
         [Required]
         [StringLength(20, MinimumLength = 2)]
         public string Username { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public byte[] PasswordHash { get; set; }

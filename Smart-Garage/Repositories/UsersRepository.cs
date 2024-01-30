@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
+using Smart_Garage.Models.DTOs.RequestDTOs;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
 using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Repositories.Contracts;
 
@@ -10,10 +13,12 @@ namespace Smart_Garage.Repositories
     public class UsersRepository : IUsersRepository
     {
         private readonly SGContext context;
+        private readonly IMapper autoMapper;
 
-        public UsersRepository(SGContext context)
+        public UsersRepository(SGContext context, IMapper autoMapper)
         {
             this.context = context;
+            this.autoMapper = autoMapper;
         }
 
         public IList<User> GetAll()
@@ -25,45 +30,47 @@ namespace Smart_Garage.Repositories
         {
             return context.Users
             .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
-            throw new EntityNotFoundException($"User with id:{id} not found.");
+            throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
         }
 
         public User GetByName(string name)
         {
             return context.Users.FirstOrDefault(u => u.Username == name && !u.IsDeleted) ??
-               throw new EntityNotFoundException($"User with username:{name} is not found.");
+               throw new EntityNotFoundException($"User with username:\"{name}\" is not found.");
         }
 
         public User Create(User newUser)
         {
-
             var username = newUser.Username;
             var email = newUser.Email;
+            var phoneNumber = newUser.PhoneNumber;
 
-            if (!UserExists(username))
-            {
-                if (!EmailExists(email))
-                {
-                    context.Users.Add(newUser);
-                    context.SaveChanges();
-                    return newUser;
-                }
-                else
-                    throw new DuplicationException($"Username with the name: {username} already exists !");
-            }
-            else
-                throw new DuplicationException($"Email with the name: {email} already exists !");
-            
+            if (UserExists(username))
+                throw new DuplicationException($"Username \"{username}\" already exists!");
+
+            if (EmailExists(email))
+                throw new DuplicationException($"Email \"{email}\" already exists!");
+
+            if (PhoneNumberExists(phoneNumber))
+                throw new DuplicationException($"PhoneNumber \"{phoneNumber}\" already exists!");
+
+            context.Users.Add(newUser);
+            context.SaveChanges();
+            return newUser;
         }
 
-        public User Update(int id, User updatedUser)
+        public User Update(int id, UpdateUserRequestDTO updatedUser)
         {
             User newUser = context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
-                throw new EntityNotFoundException($"User to update with id:{id} not found !");
+                throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
 
-            // Username should not be able to be updated
+            //autoMapper.Map<User>(updatedUser);
+
+            newUser.Username = updatedUser.Username;
             newUser.Email = updatedUser.Email;
             newUser.PhoneNumber = updatedUser.PhoneNumber;
+            newUser.IsAdmin = updatedUser.IsAdmin;
+            // TODO password
 
             context.SaveChanges();
             return newUser;

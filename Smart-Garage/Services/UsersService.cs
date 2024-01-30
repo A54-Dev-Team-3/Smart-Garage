@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
@@ -17,11 +18,13 @@ namespace Smart_Garage.Services
     {
         private readonly IUsersRepository usersRepository;
         private readonly IConfiguration configuration;
+        private readonly IMapper autoMapper;
 
-        public UsersService(IUsersRepository usersRepository, IConfiguration configuration)
+        public UsersService(IUsersRepository usersRepository, IConfiguration configuration, IMapper autoMapper)
         {
             this.usersRepository = usersRepository;
             this.configuration = configuration;
+            this.autoMapper = autoMapper;
         }
 
         public IList<User> GetAll()
@@ -29,26 +32,22 @@ namespace Smart_Garage.Services
             return usersRepository.GetAll();
         }
 
-        public User GetById(int id)
+        public UserResponseDTO GetById(int id)
         {
-            return usersRepository.GetById(id);
+            User user = usersRepository.GetById(id);
+            return autoMapper.Map<UserResponseDTO>(user);
         }
 
-        public User GetByName(string username)
+        public UserResponseDTO GetByName(string username)
         {
-            return usersRepository.GetByName(username);
+            User user = usersRepository.GetByName(username);
+            return autoMapper.Map<UserResponseDTO>(user);
         }
 
-        public User Create(UserRequestDTO newUser) // Sign Up
+        public UserResponseDTO Create(SignUpUserRequestDTO newUser) // Sign Up
         {
-            User conditionalUser = usersRepository.GetByName(newUser.Username);
-
-            if (!conditionalUser.IsAdmin)
-                throw new UnauthorizedOperationException("User is not authorized.");
-
             if (usersRepository.UserExists(newUser.Username))
                 throw new DuplicationException($"User with name {newUser.Username} already exists.");
-
 
             CreatePasswordHash(newUser.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -58,35 +57,31 @@ namespace Smart_Garage.Services
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 Email = newUser.Email,
-                PhoneNumber = newUser.PhoneNumber,
-                IsAdmin = false
+                PhoneNumber = newUser.PhoneNumber
             };
             user.PasswordSalt = passwordSalt;
             user.PasswordHash = passwordHash;
 
-            return usersRepository.Create(user);
+            return autoMapper.Map<UserResponseDTO>(usersRepository.Create(user));
         }
 
-        public User Update(int id, User updatedUser)
+        public UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser)
         {
-            return usersRepository.Update(id, updatedUser);
+            User user = usersRepository.Update(id, updatedUser);
+            return autoMapper.Map<UserResponseDTO>(user);
         }
 
         public User Delete(int id, string username)
         {
             User user = usersRepository.GetByName(username);
 
-            if (!user.IsAdmin)
-                throw new UnauthorizedOperationException($"User is not authorized.");
-
             return usersRepository.Delete(id);
         }
 
-        public string Login(UserRequestDTO user)
+        public string Login(LoginUserRequestDTO user)
         {
             if (!usersRepository.UserExists(user.Username))
                 throw new EntityNotFoundException("User not found.");
-
 
             User registeredUser = usersRepository.GetByName(user.Username);
             if (!VerifyPasswordHash(
@@ -97,10 +92,8 @@ namespace Smart_Garage.Services
                 throw new WrongPasswordException("Wrong password");
             }
 
-
             var token = CreateToken(registeredUser);
             return token;
-            throw new NotImplementedException();
         }
 
         public IList<User> FilterBy(UserQueryParameters usersParams)
