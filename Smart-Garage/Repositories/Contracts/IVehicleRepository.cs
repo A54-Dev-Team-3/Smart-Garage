@@ -11,9 +11,7 @@ namespace Smart_Garage.Repositories.Contracts
         Vehicle GetById(int id);
         Vehicle Update(User user, int vehicleId, Vehicle updatedVehicle);
         bool Delete(int id);
-        Vehicle GetByLP(string licensePlate);
-        Vehicle GetByVIN(string VIN);
-        Vehicle FilterBy(VehicleQueryParameters vehicleQueryParameters);
-        List<Vehicle> SearchByPhoneNumber(string phoneNumber);
+        public IList<Vehicle> SearchBy(string filter);
+        IList<Vehicle> FilterBy(VehicleQueryParameters vehicleQueryParameters);
     }
 }
