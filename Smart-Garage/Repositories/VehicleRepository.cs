@@ -10,7 +10,6 @@ namespace Smart_Garage.Repositories
     public class VehicleRepository : IVehicleRepository
     {
         private readonly SGContext context;
-        private string NotFoundMessage = "Vehicle with {0}:{1} doesn't exists.";
         public VehicleRepository(SGContext context)
         {
             this.context = context;
@@ -55,26 +54,14 @@ namespace Smart_Garage.Repositories
         public Vehicle GetById(int id)
         {
             return context.Vehicles.FirstOrDefault(v => v.Id == id && !v.IsDeleted) ??
-                throw new EntityNotFoundException(string.Format(NotFoundMessage, "id", id));
+                throw new EntityNotFoundException($"Vehicle with id: {id} doesn't exists.");
         }
 
-        //public Vehicle GetByLP(string licensePlate)
-        //{
-        //    return context.Vehicles.FirstOrDefault(v => v.LicensePlate == licensePlate && !v.IsDeleted) ??
-        //        throw new EntityNotFoundException(string.Format(NotFoundMessage, "licensePlate", licensePlate));
-        //}
-
-        //public Vehicle GetByVIN(string VIN)
-        //{
-        //    return context.Vehicles.FirstOrDefault(v => v.VIN == VIN && !v.IsDeleted) ??
-        //        throw new EntityNotFoundException(string.Format(NotFoundMessage, "VIN", VIN));
-        //}
-
-        //public List<Vehicle> SearchByPhoneNumber(string phoneNumber)
-        //{
-        //    return context.Users.FirstOrDefault(u => u.PhoneNumber == phoneNumber && !u.IsDeleted).Vehicles.ToList() ??
-        //        throw new EntityNotFoundException($"User with phone number: {phoneNumber} doesn't exists");
-        //}
+        public List<Vehicle> SearchByPhoneNumber(string phoneNumber)
+        {
+            return GetAll().Where(v => v.User.PhoneNumber == phoneNumber).ToList() ??
+            throw new EntityNotFoundException($"User with phone number: {phoneNumber} doesn't exists");
+        }
         public IList<Vehicle> SearchBy(string filter)
         {
             var vehicles = context.Vehicles
@@ -86,7 +73,7 @@ namespace Smart_Garage.Repositories
 
             return vehicles;
         }
-        public Vehicle Update(User user, int vehicleId, Vehicle updatedVehicle)
+        public Vehicle Update(int vehicleId, Vehicle updatedVehicle)
         {
             Vehicle vehicleToUpdate = GetById(vehicleId);
 
