@@ -22,7 +22,6 @@ namespace Smart_Garage.Models
                 .IsRequired()
                 .HasMaxLength(20);
                 
-
                 e.Property(u => u.PasswordHash)
                 .IsRequired();
 
@@ -87,6 +86,9 @@ namespace Smart_Garage.Models
                 .IsRequired();
 
                 e.Property(s => s.Price)
+                .IsRequired();
+
+                e.Property(s => s.VehicleId)
                 .IsRequired();
             });
         }
