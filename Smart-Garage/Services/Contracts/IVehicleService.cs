@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Smart_Garage.Models;
+﻿using Smart_Garage.Models;
 using Smart_Garage.Repositories.QueryParameters;
 
-namespace Smart_Garage.Repositories.Contracts
+namespace Smart_Garage.Services.Contracts
 {
-    public interface IVehicleRepository
+    public interface IVehicleService
     {
         Vehicle Create(User user, Vehicle vehicle);
         IList<Vehicle> GetAll();
@@ -13,6 +12,6 @@ namespace Smart_Garage.Repositories.Contracts
         bool Delete(int id);
         public IList<Vehicle> SearchBy(string filter);
         IList<Vehicle> FilterBy(VehicleQueryParameters vehicleQueryParameters);
-        public List<Vehicle> SearchByPhoneNumber(string phoneNumber);
+        public List<Vehicle> SearchByPhoneNumber(User user, string phoneNumber);
     }
 }
