@@ -106,8 +106,36 @@ namespace Smart_Garage.Repositories
 
         public IList<User> FilterBy(UserQueryParameters usersParams)
         {
-            // TODO
-            throw new NotImplementedException();
+            // TODO: [Question] Should the search functionality use "==" or ".Contains()"
+            IQueryable<User> result = context.Users;
+
+            if (!string.IsNullOrEmpty(usersParams.Username))
+            {
+                result = result.Where(u => u.Username == usersParams.Username);
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.Email))
+            {
+                result = result.Where(u => u.Email == usersParams.Email);
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.PhoneNumber))
+            {
+                result = result.Where(u => u.PhoneNumber == usersParams.PhoneNumber);
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.LicensePlate))
+            {
+                result = result.Where(u => u.Vehicles.Any(v => v.LicensePlate == usersParams.LicensePlate));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.VIN))
+            {
+                result = result.Where(u => u.Vehicles.Any(v => v.VIN == usersParams.VIN));
+            }
+
+            return result.ToList();
         }
+
     }
 }

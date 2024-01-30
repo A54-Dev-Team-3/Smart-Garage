@@ -1,6 +1,7 @@
 ﻿using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
+using Smart_Garage.Models.QueryParameters;
 
 namespace Smart_Garage.Repositories.Contracts
 {
@@ -16,5 +17,6 @@ namespace Smart_Garage.Repositories.Contracts
         bool EmailExists(string email);
         bool PhoneNumberExists(string phoneNumber);
         int Count();
+        IList<User> FilterBy(UserQueryParameters usersParams);
     }
 }
