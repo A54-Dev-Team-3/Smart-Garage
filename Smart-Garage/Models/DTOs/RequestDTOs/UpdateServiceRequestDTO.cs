@@ -11,7 +11,5 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
         [Range(0, int.MaxValue)]
         public int Price { get; set; }
 
-        [Required]
-        public int VehicleId { get; set; }
     }
 }

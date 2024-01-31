@@ -67,8 +67,8 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var newUser = servicesService.Create(newServiceDTO, username);
-                return Ok(newUser);
+                var newService = servicesService.Create(newServiceDTO, username);
+                return Ok(newService);
             }
             catch (DuplicationException ex)
             {
@@ -108,7 +108,7 @@ namespace Smart_Garage.Controllers.API
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
                 servicesService.Delete(int.Parse(id), username);
-                return Ok($"User with id:[{id}] deleted successfully.");
+                return Ok($"Service with id:[{id}] deleted successfully.");
             }
             catch (EntityNotFoundException ex)
             {

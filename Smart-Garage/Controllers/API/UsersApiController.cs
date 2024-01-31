@@ -100,7 +100,8 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                var result = userService.Update(int.Parse(id), updatedUser);
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var result = userService.Update(int.Parse(id), updatedUser, username);
                 return Ok(result);
             }
             catch (EntityNotFoundException ex)

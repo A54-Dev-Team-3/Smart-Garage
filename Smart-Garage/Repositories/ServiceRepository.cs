@@ -44,7 +44,6 @@ namespace Smart_Garage.Repositories
 
             newService.Name = updatedService.Name;
             newService.Price = updatedService.Price;
-            newService.VehicleId = updatedService.VehicleId;
 
             context.SaveChanges();
             return updatedService;

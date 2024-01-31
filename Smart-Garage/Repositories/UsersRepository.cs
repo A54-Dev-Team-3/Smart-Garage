@@ -59,18 +59,19 @@ namespace Smart_Garage.Repositories
             return newUser;
         }
 
-        public User Update(int id, UpdateUserRequestDTO updatedUser)
+        public User Update(int id, User updatedUser)
         {
             User newUser = context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
                 throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
 
-            //autoMapper.Map<User>(updatedUser);
-
             newUser.Username = updatedUser.Username;
+            newUser.FirstName = updatedUser.FirstName;
+            newUser.LastName = updatedUser.LastName;
+            newUser.PasswordSalt = updatedUser.PasswordSalt;
+            newUser.PasswordHash = updatedUser.PasswordHash;
             newUser.Email = updatedUser.Email;
             newUser.PhoneNumber = updatedUser.PhoneNumber;
             newUser.IsAdmin = updatedUser.IsAdmin;
-            // TODO password
 
             context.SaveChanges();
             return newUser;

@@ -11,7 +11,7 @@ namespace Smart_Garage.Repositories.Contracts
         User GetById(int id);
         User GetByName(string name);
         User Create(User newUser); // Register
-        User Update(int id, UpdateUserRequestDTO updatedUser);
+        User Update(int id, User updatedUser);
         User Delete(int id);
         bool UserExists(string username);
         bool EmailExists(string email);

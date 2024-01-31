@@ -72,19 +72,37 @@ namespace Smart_Garage.Services
 
         public UserResponseDTO GetByName(string username)
         {
+
             User user = usersRepository.GetByName(username);
             return autoMapper.Map<UserResponseDTO>(user);
         }
 
-        public UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser)
+        public UserResponseDTO Update(int id, UpdateUserRequestDTO newData, string username)
         {
-            User user = usersRepository.Update(id, updatedUser);
-            return autoMapper.Map<UserResponseDTO>(user);
+            IsCurrentUserOwner(id, username);
+
+            CreatePasswordHash(newData.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var tmpUser = GetById(id);
+
+            User user = new User();
+            user.Username = newData.Username;
+            user.FirstName = tmpUser.FirstName;
+            user.LastName = tmpUser.LastName;
+            user.Email = newData.Email;
+            user.PhoneNumber = newData.PhoneNumber;
+            user.IsAdmin = newData.IsAdmin;
+            user.PasswordHash = passwordSalt;
+            user.PasswordSalt = passwordHash;
+
+            User updatedUser = usersRepository.Update(id, user);
+
+            return autoMapper.Map<UserResponseDTO>(updatedUser);
         }
 
         public User Delete(int id, string username)
         {
-            User user = usersRepository.GetByName(username);
+            IsCurrentUserOwner(id, username);
 
             return usersRepository.Delete(id);
         }
@@ -119,6 +137,12 @@ namespace Smart_Garage.Services
         public bool IsCurrentUserAdmin(string currentUser) // "currentUser" is username
         {
             return usersRepository.GetByName(currentUser).IsAdmin;
+        }
+
+        private void IsCurrentUserOwner(int id, string currentUser) // "currentUser" is username
+        {
+            if (GetById(id).Username != currentUser)
+                throw new UnauthorizedOperationException("You are not the owner of the account!");
         }
 
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

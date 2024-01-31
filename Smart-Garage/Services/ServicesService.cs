@@ -36,7 +36,6 @@ namespace Smart_Garage.Services
             {
                 Name = newService.Name,
                 Price = newService.Price,
-                VehicleId = newService.VehicleId
             };
 
             return autoMapper.Map<CreateServiceResponseDTO>(servicesRepository.Create(service));
@@ -69,7 +68,6 @@ namespace Smart_Garage.Services
             {
                 Name = updatedService.Name,
                 Price = updatedService.Price,
-                VehicleId = updatedService.VehicleId
             };
 
             return autoMapper.Map<UpdateServiceResponseDTO>(servicesRepository.Update(id, service));
