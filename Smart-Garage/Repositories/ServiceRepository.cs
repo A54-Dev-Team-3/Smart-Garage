@@ -69,7 +69,7 @@ namespace Smart_Garage.Repositories
 
         public IList<Service> FilterBy(ServicesQueryParameters usersParams)
         {
-            IQueryable<Service> result = context.Services;
+            IQueryable<Service> result = context.Services.Where(u => !u.IsDeleted);
 
             if (!string.IsNullOrEmpty(usersParams.Name))
             {

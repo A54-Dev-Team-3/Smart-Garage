@@ -72,7 +72,6 @@ namespace Smart_Garage.Services
 
         public UserResponseDTO GetByName(string username)
         {
-
             User user = usersRepository.GetByName(username);
             return autoMapper.Map<UserResponseDTO>(user);
         }

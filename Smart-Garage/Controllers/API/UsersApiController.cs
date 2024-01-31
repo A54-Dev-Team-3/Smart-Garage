@@ -108,6 +108,10 @@ namespace Smart_Garage.Controllers.API
             {
                 return NotFound(ex.Message);
             }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         // Delete
@@ -122,6 +126,10 @@ namespace Smart_Garage.Controllers.API
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
     }

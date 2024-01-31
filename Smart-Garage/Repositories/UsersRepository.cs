@@ -107,7 +107,7 @@ namespace Smart_Garage.Repositories
 
         public IList<User> FilterBy(UserQueryParameters usersParams)
         {
-            IQueryable<User> result = context.Users;
+            IQueryable<User> result = context.Users.Where(u => !u.IsDeleted);
 
             if (!string.IsNullOrEmpty(usersParams.Username))
             {
