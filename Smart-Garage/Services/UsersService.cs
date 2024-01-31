@@ -27,6 +27,27 @@ namespace Smart_Garage.Services
             this.autoMapper = autoMapper;
         }
 
+        public UserResponseDTO Create(SignUpUserRequestDTO newUser) // Sign Up
+        {
+            if (usersRepository.UserExists(newUser.Username))
+                throw new DuplicationException($"User with name {newUser.Username} already exists.");
+
+            CreatePasswordHash(newUser.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            User user = new User()
+            {
+                Username = newUser.Username,
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                Email = newUser.Email,
+                PhoneNumber = newUser.PhoneNumber
+            };
+            user.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+
+            return autoMapper.Map<UserResponseDTO>(usersRepository.Create(user));
+        }
+
         public IList<UserResponseDTO> GetAll()
         {
             var users = usersRepository.GetAll();
@@ -53,27 +74,6 @@ namespace Smart_Garage.Services
         {
             User user = usersRepository.GetByName(username);
             return autoMapper.Map<UserResponseDTO>(user);
-        }
-
-        public UserResponseDTO Create(SignUpUserRequestDTO newUser) // Sign Up
-        {
-            if (usersRepository.UserExists(newUser.Username))
-                throw new DuplicationException($"User with name {newUser.Username} already exists.");
-
-            CreatePasswordHash(newUser.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            User user = new User()
-            {
-                Username = newUser.Username,
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
-                Email = newUser.Email,
-                PhoneNumber = newUser.PhoneNumber
-            };
-            user.PasswordSalt = passwordSalt;
-            user.PasswordHash = passwordHash;
-
-            return autoMapper.Map<UserResponseDTO>(usersRepository.Create(user));
         }
 
         public UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser)

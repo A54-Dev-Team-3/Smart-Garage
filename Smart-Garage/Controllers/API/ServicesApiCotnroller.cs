@@ -7,6 +7,7 @@ using Smart_Garage.Services.Contracts;
 using Smart_Garage.Exceptions;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
+using System.Security.Claims;
 
 namespace Smart_Garage.Controllers.API
 {
@@ -26,9 +27,17 @@ namespace Smart_Garage.Controllers.API
         [HttpGet("")] // api/services/
         public IActionResult GetAll([FromQuery] ServicesQueryParameters filterParameters)
         {
-            // TODO
-            var services = servicesService.FilterBy(filterParameters);
-            return Ok(services);
+            try
+            {
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var services = servicesService.FilterBy(filterParameters, username);
+                return Ok(services);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            
         }
 
         // GetById
@@ -37,27 +46,37 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                var service = servicesService.GetById(int.Parse(id));
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var service = servicesService.GetById(int.Parse(id), username);
                 return Ok(service);
             }
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         // Create
-        [HttpPost("")] // api/services/create
+        [HttpPost("")] // api/services/
         public async Task<ActionResult<Service>> Create([FromBody] CreateServiceRequestDTO newServiceDTO)
         {
             try
             {
-                var newUser = servicesService.Create(newServiceDTO);
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var newUser = servicesService.Create(newServiceDTO, username);
                 return Ok(newUser);
             }
             catch (DuplicationException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
 
@@ -67,12 +86,17 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                var updatedUser = servicesService.Update(int.Parse(id), newService, "");
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var updatedUser = servicesService.Update(int.Parse(id), newService, username);
                 return Ok(updatedUser);
             }
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
 
@@ -82,12 +106,17 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                servicesService.Delete(int.Parse(id));
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                servicesService.Delete(int.Parse(id), username);
                 return Ok($"User with id:[{id}] deleted successfully.");
             }
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
     }

@@ -14,36 +14,23 @@ namespace Smart_Garage.Services
     public class ServicesService : IServicesService
     {
         private readonly IServiceRepository servicesRepository;
-        private readonly IUsersRepository usersRepository;
+        private readonly IUsersService usersService;
         private readonly IMapper autoMapper;
 
-        public ServicesService(IServiceRepository servicesRepository, IUsersRepository usersRepository, IMapper autoMapper)
+        public ServicesService(IServiceRepository servicesRepository, IUsersService usersService, IMapper autoMapper)
         {
             this.servicesRepository = servicesRepository;
-            this.usersRepository = usersRepository;
+            this.usersService = usersService;
             this.autoMapper = autoMapper;
         }
 
-        public IList<Service> GetAll()
-        {
-            return servicesRepository.GetAll();
-        }
-
-        public Service GetById(int id)
-        {
-            return servicesRepository.GetById(id);
-        }
-
-        public Service GetByName(string username)
-        {
-            return servicesRepository.GetByName(username);
-        }
-
-        public CreateServiceResponseDTO Create(CreateServiceRequestDTO newService)
+        public CreateServiceResponseDTO Create(CreateServiceRequestDTO newService, string username)
         {
 
             if (servicesRepository.ServiceExists(newService.Name))
                 throw new DuplicationException($"Service with name {newService.Name} already exists.");
+
+            IsCurrentUserAdmin(username);
 
             Service service = new Service()
             {
@@ -55,12 +42,28 @@ namespace Smart_Garage.Services
             return autoMapper.Map<CreateServiceResponseDTO>(servicesRepository.Create(service));
         }
 
-        public UpdateServiceResponseDTO Update(int id, UpdateServiceRequestDTO updatedService, string? username)
+        public IList<Service> GetAll(string username)
         {
-            if (username?.Length == 5)
-            {
-                throw new NotImplementedException("");
-            }
+            IsCurrentUserAdmin(username);
+
+            return servicesRepository.GetAll();
+        }
+
+        public Service GetById(int id, string username)
+        {
+            IsCurrentUserAdmin(username);
+            return servicesRepository.GetById(id);
+        }
+
+        public Service GetByName(string username)
+        {
+            IsCurrentUserAdmin(username);
+            return servicesRepository.GetByName(username);
+        }
+
+        public UpdateServiceResponseDTO Update(int id, UpdateServiceRequestDTO updatedService, string username)
+        {
+            IsCurrentUserAdmin(username);
 
             Service service = new Service()
             {
@@ -72,26 +75,40 @@ namespace Smart_Garage.Services
             return autoMapper.Map<UpdateServiceResponseDTO>(servicesRepository.Update(id, service));
         }
 
-        public DeleteServiceResponseDTO Delete(int id)
+        public DeleteServiceResponseDTO Delete(int id, string username)
         {
+            IsCurrentUserAdmin(username);
+
             return autoMapper.Map<DeleteServiceResponseDTO>(servicesRepository.Delete(id));
         }
 
-        public IList<Service> FilterBy(ServicesQueryParameters filterParameters)
+        public IList<Service> FilterBy(ServicesQueryParameters filterParameters, string username)
         {
+            IsCurrentUserAdmin(username);
+
             return servicesRepository.FilterBy(filterParameters)
                             .Select(u => autoMapper.Map<Service>(u))
                             .ToList();
         }
 
-        public bool ServiceExists(string name)
+        public bool ServiceExists(string name, string username)
         {
+            IsCurrentUserAdmin(username);
+
             return servicesRepository.ServiceExists(name);
         }
 
-        public int Count()
+        public int Count(string username)
         {
+            IsCurrentUserAdmin(username);
+
             return servicesRepository.Count();
+        }
+
+        private void IsCurrentUserAdmin(string username)
+        {
+            if (!usersService.IsCurrentUserAdmin(username))
+                throw new UnauthorizedOperationException($"You are not an admin!");
         }
     }
 }

@@ -106,7 +106,6 @@ namespace Smart_Garage.Repositories
 
         public IList<User> FilterBy(UserQueryParameters usersParams)
         {
-            // TODO: [Question] Should the search functionality use "==" or ".Contains()"
             IQueryable<User> result = context.Users;
 
             if (!string.IsNullOrEmpty(usersParams.Username))

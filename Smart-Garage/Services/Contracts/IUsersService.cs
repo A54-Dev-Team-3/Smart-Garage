@@ -7,11 +7,11 @@ namespace Smart_Garage.Services.Contracts
 {
     public interface IUsersService
     {
+        UserResponseDTO Create(SignUpUserRequestDTO newUser); // Sign Up
         IList<UserResponseDTO> GetAll();
         IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username);
         UserResponseDTO GetById(int id);
         UserResponseDTO GetByName(string username);
-        UserResponseDTO Create(SignUpUserRequestDTO newUser); // Sign Up
         UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser);
         User Delete(int id, string username);
         string Login(LoginUserRequestDTO user);

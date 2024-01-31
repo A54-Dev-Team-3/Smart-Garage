@@ -46,8 +46,6 @@ namespace Smart_Garage.Repositories
             newService.Price = updatedService.Price;
             newService.VehicleId = updatedService.VehicleId;
 
-            // TODO: Can I use AutoMapper ?
-
             context.SaveChanges();
             return updatedService;
         }

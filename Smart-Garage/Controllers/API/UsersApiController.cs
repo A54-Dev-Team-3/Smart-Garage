@@ -90,7 +90,7 @@ namespace Smart_Garage.Controllers.API
             }
             catch (EntityNotFoundException e)
             {
-                return BadRequest(e.Message);
+                return NotFound(e.Message);
             }
         }
 
