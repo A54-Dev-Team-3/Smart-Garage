@@ -91,8 +91,8 @@ namespace Smart_Garage.Services
             user.Email = newData.Email;
             user.PhoneNumber = newData.PhoneNumber;
             user.IsAdmin = newData.IsAdmin;
-            user.PasswordHash = passwordSalt;
-            user.PasswordSalt = passwordHash;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
 
             User updatedUser = usersRepository.Update(id, user);
 
@@ -182,6 +182,11 @@ namespace Smart_Garage.Services
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        public User Authenticate(string username)
+        {
+            return usersRepository.GetByName(username);
         }
     }
 }

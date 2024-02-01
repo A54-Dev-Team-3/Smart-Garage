@@ -12,6 +12,7 @@ namespace Smart_Garage.Services.Contracts
         IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username);
         UserResponseDTO GetById(int id);
         UserResponseDTO GetByName(string username);
+        User Authenticate(string username);
         UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser, string username);
         User Delete(int id, string username);
         string Login(LoginUserRequestDTO user);
