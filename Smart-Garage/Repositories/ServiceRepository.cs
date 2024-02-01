@@ -1,4 +1,5 @@
-﻿using Smart_Garage.Exceptions;
+﻿using Microsoft.Data.SqlClient;
+using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
 using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Repositories.Contracts;
@@ -67,24 +68,38 @@ namespace Smart_Garage.Repositories
             return context.Services.Count();
         }
 
-        public IList<Service> FilterBy(ServicesQueryParameters usersParams)
+        public IList<Service> FilterBy(ServicesQueryParameters serviceParams)
         {
             IQueryable<Service> result = context.Services.Where(u => !u.IsDeleted);
 
-            if (!string.IsNullOrEmpty(usersParams.Name))
+            if (!string.IsNullOrEmpty(serviceParams.Name))
             {
-                result = result.Where(s => s.Name == usersParams.Name);
+                result = result.Where(s => s.Name == serviceParams.Name);
             }
 
-            if (usersParams.MinPrice.HasValue)
+            if (serviceParams.MinPrice.HasValue)
             {
-                result = result.Where(s => s.Price >= usersParams.MinPrice);
+                result = result.Where(s => s.Price >= serviceParams.MinPrice);
             }
 
-            if (usersParams.MaxPrice.HasValue)
+            if (serviceParams.MaxPrice.HasValue)
             {
-                result = result.Where(s => s.Price <= usersParams.MaxPrice);
+                result = result.Where(s => s.Price <= serviceParams.MaxPrice);
             }
+
+            switch (serviceParams.SortBy)
+            {
+                case "name":
+                    result = result.OrderBy(s => s.Name);
+                    break;
+                case "price":
+                    result = result.OrderBy(s => s.Price);
+                    break;
+                default:
+                    break;
+            }
+
+            result = (serviceParams.SortOrder == "desc") ? result.Reverse() : result;
 
             return result.ToList();
         }
