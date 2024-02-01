@@ -26,10 +26,11 @@ namespace Smart_Garage.Controllers.API
 
         // GetAll: Get all Users or filter by parameters
         [HttpGet("")] // api/users/
-        public IActionResult GetAll([FromQuery] UserQueryParameters filterParameters, [FromHeader] string username)
+        public IActionResult GetAll([FromQuery] UserQueryParameters filterParameters)
         {
             try
             {
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
                 var users = userService.FilterBy(filterParameters, username);
                 return Ok(users);
             }
@@ -116,10 +117,12 @@ namespace Smart_Garage.Controllers.API
 
         // Delete
         [HttpDelete("{id}")] // api/users/{id}
-        public IActionResult Delete(string id, [FromHeader] string username)
+        public IActionResult Delete(string id
+            )
         {
             try
             {
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
                 userService.Delete(int.Parse(id), username);
                 return Ok($"User with id:[{id}] deleted successfully.");
             }
