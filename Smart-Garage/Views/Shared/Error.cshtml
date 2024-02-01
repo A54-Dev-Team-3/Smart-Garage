@@ -1,0 +1,18 @@
+﻿@* <section class="page-section">
+    <div class="error-container">
+        <img src="~/Assets/error.png" height="300px" alt="Error Image" class="error-image">
+        <div class="error-text">
+            <h1 class="primary">SORRY,</h1>
+            <p>we couldn't find the page.</p>
+            @if (isLogged)
+            {
+                <p>Please enter the home page from <a asp-controller="Posts" asp-action="Index">here</a> or try again !</p>
+            }
+            else
+            {
+                <p>Please enter the home page from <a asp-controller="Home" asp-action="Index">here</a> or try again !</p>
+            }
+
+        </div>
+    </div>
+</section> *@
