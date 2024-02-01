@@ -21,13 +21,13 @@ namespace Smart_Garage.Repositories
         public Service GetById(int id)
         {
             return context.Services
-                .FirstOrDefault(s => s.Id == id) ??
+                .FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
                 throw new EntityNotFoundException($"Service with id:{id} not found.");
         }
 
         public Service GetByName(string name)
         {
-            return context.Services.FirstOrDefault(s => s.Name == name) ??
+            return context.Services.FirstOrDefault(s => s.Name == name && !s.IsDeleted) ??
                throw new EntityNotFoundException($"Service with name:{name} is not found.");
         }
         public Service Create(Service newService)
@@ -39,7 +39,7 @@ namespace Smart_Garage.Repositories
 
         public Service Update(int id, Service updatedService)
         {
-            Service newService = context.Services.FirstOrDefault(s => s.Id == id) ??
+            Service newService = context.Services.FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
                 throw new EntityNotFoundException($"Service to update with id:{id} not found.");
 
             newService.Name = updatedService.Name;
@@ -69,8 +69,24 @@ namespace Smart_Garage.Repositories
 
         public IList<Service> FilterBy(ServicesQueryParameters usersParams)
         {
-            // TODO
-            throw new NotImplementedException();
+            IQueryable<Service> result = context.Services.Where(u => !u.IsDeleted);
+
+            if (!string.IsNullOrEmpty(usersParams.Name))
+            {
+                result = result.Where(s => s.Name == usersParams.Name);
+            }
+
+            if (usersParams.MinPrice.HasValue)
+            {
+                result = result.Where(s => s.Price >= usersParams.MinPrice);
+            }
+
+            if (usersParams.MaxPrice.HasValue)
+            {
+                result = result.Where(s => s.Price <= usersParams.MaxPrice);
+            }
+
+            return result.ToList();
         }
     }
 }

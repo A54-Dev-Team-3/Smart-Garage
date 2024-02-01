@@ -27,23 +27,6 @@ namespace Smart_Garage.Services
             this.autoMapper = autoMapper;
         }
 
-        public IList<User> GetAll()
-        {
-            return usersRepository.GetAll();
-        }
-
-        public UserResponseDTO GetById(int id)
-        {
-            User user = usersRepository.GetById(id);
-            return autoMapper.Map<UserResponseDTO>(user);
-        }
-
-        public UserResponseDTO GetByName(string username)
-        {
-            User user = usersRepository.GetByName(username);
-            return autoMapper.Map<UserResponseDTO>(user);
-        }
-
         public UserResponseDTO Create(SignUpUserRequestDTO newUser) // Sign Up
         {
             if (usersRepository.UserExists(newUser.Username))
@@ -65,15 +48,60 @@ namespace Smart_Garage.Services
             return autoMapper.Map<UserResponseDTO>(usersRepository.Create(user));
         }
 
-        public UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser)
+        public IList<UserResponseDTO> GetAll()
         {
-            User user = usersRepository.Update(id, updatedUser);
+            var users = usersRepository.GetAll();
+            return autoMapper.Map<IList<UserResponseDTO>>(users);
+        }
+
+        public IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username)
+        {
+            if (!IsCurrentUserAdmin(username))
+                throw new UnauthorizedAccessException("You are not authorized !");
+
+            return usersRepository.FilterBy(filterParameters)
+                            .Select(u => autoMapper.Map<UserResponseDTO>(u))
+                            .ToList();
+        }
+
+        public UserResponseDTO GetById(int id)
+        {
+            User user = usersRepository.GetById(id);
             return autoMapper.Map<UserResponseDTO>(user);
+        }
+
+        public UserResponseDTO GetByName(string username)
+        {
+            User user = usersRepository.GetByName(username);
+            return autoMapper.Map<UserResponseDTO>(user);
+        }
+
+        public UserResponseDTO Update(int id, UpdateUserRequestDTO newData, string username)
+        {
+            IsCurrentUserOwner(id, username);
+
+            CreatePasswordHash(newData.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var tmpUser = GetById(id);
+
+            User user = new User();
+            user.Username = newData.Username;
+            user.FirstName = tmpUser.FirstName;
+            user.LastName = tmpUser.LastName;
+            user.Email = newData.Email;
+            user.PhoneNumber = newData.PhoneNumber;
+            user.IsAdmin = newData.IsAdmin;
+            user.PasswordHash = passwordSalt;
+            user.PasswordSalt = passwordHash;
+
+            User updatedUser = usersRepository.Update(id, user);
+
+            return autoMapper.Map<UserResponseDTO>(updatedUser);
         }
 
         public User Delete(int id, string username)
         {
-            User user = usersRepository.GetByName(username);
+            IsCurrentUserOwner(id, username);
 
             return usersRepository.Delete(id);
         }
@@ -96,12 +124,6 @@ namespace Smart_Garage.Services
             return token;
         }
 
-        public IList<User> FilterBy(UserQueryParameters usersParams)
-        {
-            // TODO
-            throw new NotImplementedException();
-        }
-
         public int GetCount()
         {
             return usersRepository.Count();
@@ -114,6 +136,12 @@ namespace Smart_Garage.Services
         public bool IsCurrentUserAdmin(string currentUser) // "currentUser" is username
         {
             return usersRepository.GetByName(currentUser).IsAdmin;
+        }
+
+        private void IsCurrentUserOwner(int id, string currentUser) // "currentUser" is username
+        {
+            if (GetById(id).Username != currentUser)
+                throw new UnauthorizedOperationException("You are not the owner of the account!");
         }
 
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

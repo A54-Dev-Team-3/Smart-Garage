@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smart_Garage.Exceptions;
-using Smart_Garage.Helpers;
-using Smart_Garage.Helpers.Contracts;
 using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
 using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Services.Contracts;
-using System.Net;
+using System.Security.Claims;
 
 namespace Smart_Garage.Controllers.API
 {
@@ -28,11 +26,21 @@ namespace Smart_Garage.Controllers.API
 
         // GetAll: Get all Users or filter by parameters
         [HttpGet("")] // api/users/
-        public IActionResult GetUsers([FromQuery] UserQueryParameters filterParameters)
+        public IActionResult GetAll([FromQuery] UserQueryParameters filterParameters, [FromHeader] string username)
         {
-            // TODO
-            IList<User> users = userService.FilterBy(filterParameters);
-            return Ok(users);
+            try
+            {
+                var users = userService.FilterBy(filterParameters, username);
+                return Ok(users);
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch(EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         // GetById
@@ -57,7 +65,7 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                UserResponseDTO newUser = userService.Create(userRequestDTO);
+                var newUser = userService.Create(userRequestDTO);
                 return Ok(newUser);
             }
             catch (DuplicationException e)
@@ -73,7 +81,7 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                string token = userService.Login(requestDTO);
+                var token = userService.Login(requestDTO);
                 return Ok(token);
             }
             catch (WrongPasswordException e)
@@ -82,7 +90,7 @@ namespace Smart_Garage.Controllers.API
             }
             catch (EntityNotFoundException e)
             {
-                return BadRequest(e.Message);
+                return NotFound(e.Message);
             }
         }
 
@@ -92,18 +100,23 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                UserResponseDTO result = userService.Update(int.Parse(id), updatedUser);
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var result = userService.Update(int.Parse(id), updatedUser, username);
                 return Ok(result);
             }
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         // Delete
         [HttpDelete("{id}")] // api/users/{id}
-        public IActionResult DeleteUser(string id, [FromHeader] string username)
+        public IActionResult Delete(string id, [FromHeader] string username)
         {
             try
             {
@@ -113,6 +126,10 @@ namespace Smart_Garage.Controllers.API
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
     }

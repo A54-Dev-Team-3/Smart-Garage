@@ -15,16 +15,17 @@ namespace Smart_Garage.Models
         public string LastName { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public bool IsDeleted { get; set; }
 
         [Required]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(10, MinimumLength = 10)]
+        [RegularExpression(@"^\d{10}$")]
         public string PhoneNumber { get; set; }
-        public IList<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
+
+        public bool IsDeleted { get; set; }
         public bool IsAdmin { get; set; }
+        public IList<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
     }
 }

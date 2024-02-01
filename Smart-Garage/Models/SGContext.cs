@@ -11,6 +11,7 @@ namespace Smart_Garage.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<VehicleService> VehicleService { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,7 +23,6 @@ namespace Smart_Garage.Models
                 .IsRequired()
                 .HasMaxLength(20);
                 
-
                 e.Property(u => u.PasswordHash)
                 .IsRequired();
 
@@ -80,7 +80,7 @@ namespace Smart_Garage.Models
             });
             
 
-            //Service
+            // Service
             modelBuilder.Entity<Service>(e =>
             {
                 e.Property(s => s.Name)
@@ -89,6 +89,20 @@ namespace Smart_Garage.Models
                 e.Property(s => s.Price)
                 .IsRequired();
             });
+
+            // VehicleService
+            modelBuilder.Entity<VehicleService>()
+                .HasKey(vs => new { vs.ServiceId, vs.VehicleId });
+
+            modelBuilder.Entity<VehicleService>()
+                .HasOne(vs => vs.Vehicle)
+                .WithMany(v => v.VehicleServices)
+                .HasForeignKey(vs => vs.VehicleId);
+
+            modelBuilder.Entity<VehicleService>()
+                .HasOne(vs => vs.Service)
+                .WithMany(s => s.VehicleServices)
+                .HasForeignKey(vs => vs.ServiceId);
         }
     }
 }

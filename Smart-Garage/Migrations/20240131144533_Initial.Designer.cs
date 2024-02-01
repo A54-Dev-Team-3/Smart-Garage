@@ -12,7 +12,7 @@ using Smart_Garage.Models;
 namespace Smart_Garage.Migrations
 {
     [DbContext(typeof(SGContext))]
-    [Migration("20240129102732_Initial")]
+    [Migration("20240131144533_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Smart_Garage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -39,12 +42,7 @@ namespace Smart_Garage.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("VehicleId");
 
                     b.ToTable("Services");
                 });
@@ -124,6 +122,9 @@ namespace Smart_Garage.Migrations
                     b.Property<int>("CreationYear")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LicensePlate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -134,7 +135,7 @@ namespace Smart_Garage.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasAnnotation("MinLength", 2);
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("VIN")
@@ -151,26 +152,52 @@ namespace Smart_Garage.Migrations
                     b.HasCheckConstraint("CK_CreationYear", "[CreationYear] > 1867");
                 });
 
-            modelBuilder.Entity("Smart_Garage.Models.Service", b =>
+            modelBuilder.Entity("Smart_Garage.Models.VehicleService", b =>
                 {
-                    b.HasOne("Smart_Garage.Models.Vehicle", "Vehicle")
-                        .WithMany("Services")
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Vehicle");
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServiceId", "VehicleId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehicleService");
                 });
 
             modelBuilder.Entity("Smart_Garage.Models.Vehicle", b =>
                 {
                     b.HasOne("Smart_Garage.Models.User", "User")
                         .WithMany("Vehicles")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Smart_Garage.Models.VehicleService", b =>
+                {
+                    b.HasOne("Smart_Garage.Models.Service", "Service")
+                        .WithMany("VehicleServices")
+                        .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("Smart_Garage.Models.Vehicle", "Vehicle")
+                        .WithMany("VehicleServices")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("Smart_Garage.Models.Service", b =>
+                {
+                    b.Navigation("VehicleServices");
                 });
 
             modelBuilder.Entity("Smart_Garage.Models.User", b =>
@@ -180,7 +207,7 @@ namespace Smart_Garage.Migrations
 
             modelBuilder.Entity("Smart_Garage.Models.Vehicle", b =>
                 {
-                    b.Navigation("Services");
+                    b.Navigation("VehicleServices");
                 });
 #pragma warning restore 612, 618
         }

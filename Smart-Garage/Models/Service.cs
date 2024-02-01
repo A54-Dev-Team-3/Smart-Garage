@@ -13,9 +13,10 @@ namespace Smart_Garage.Models
         [Required]
         [Range(0, int.MaxValue)]
         public int Price { get; set; }
-        public int VehicleId { get; set; }
-        public Vehicle Vehicle { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public IList<VehicleService> VehicleServices { get; set; } = new List<VehicleService>();
+
     }
 }
