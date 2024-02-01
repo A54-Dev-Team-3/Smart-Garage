@@ -1,0 +1,62 @@
+﻿@using Smart_Garage.Models.ViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+	ViewData["Title"] = "Login";
+}
+
+@model LoginViewModel
+
+<style>
+	body {
+		background-color: #f8f9fa;
+	}
+
+	.card {
+		border: none;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.form-group label {
+		font-weight: bold;
+	}
+
+	#mainNav {
+		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+		background-color: #fff;
+	}
+
+		#mainNav .navbar-nav .nav-item .nav-link {
+			color: black;
+			padding: 0 1rem;
+		}
+
+		#mainNav .navbar-nav .nav-item:hover {
+			background-color: rgba(0,0,0,0);
+		}
+
+		#mainNav .navbar-nav .nav-item .nav-link:hover {
+			color: #f4623a;
+		}
+</style>
+
+<a class="nav-link" href="http://localhost:5068/swagger">Develor API</a>
+
+<section class="page-section">
+	<h2 style="margin-left:50px; margin-top:30px;">Sign in</h2>
+	<form asp-controller="Home" asp-action="Login" method="post" style="max-width: 600px; margin-left:70px; margin-bottom:30px;">
+		<div class="form-group">
+			<label asp-for="Username">Username</label>
+			<input type="text" asp-for="Username" class="form-control" placeholder="Username" />
+			<span asp-validation-for="Username" class="text-danger"></span>
+		</div>
+		<div class="form-group" style="margin-top: 25px">
+			<label asp-for="Password">Password</label>
+			<input type="password" asp-for="Password" class="form-control" placeholder="Password" />
+			<span asp-validation-for="Password" class="text-danger"></span>
+		</div>
+		<div class="form-group" style="margin-top: 25px">
+			<button type="submit" value="Login" class="btn btn-primary">Sign in</button>
+		</div>
+	</form>
+	
+</section>
