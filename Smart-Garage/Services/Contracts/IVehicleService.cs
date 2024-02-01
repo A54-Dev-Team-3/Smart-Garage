@@ -1,11 +1,13 @@
 ﻿using Smart_Garage.Models;
 using Smart_Garage.Repositories.QueryParameters;
+using Smart_Garage.Models.DTOs;
+using Smart_Garage.Models.DTOs.RequestDTOs;
 
 namespace Smart_Garage.Services.Contracts
 {
     public interface IVehicleService
     {
-        Vehicle Create(User user, Vehicle vehicle);
+        Vehicle Create(UserRequestDTO user, Vehicle vehicle);
         IList<Vehicle> GetAll();
         Vehicle GetById(int id);
         Vehicle Update(int vehicleId, Vehicle updatedVehicle);
