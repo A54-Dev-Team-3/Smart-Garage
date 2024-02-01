@@ -4,6 +4,8 @@ using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
 using Smart_Garage.Repositories.Contracts;
 using Smart_Garage.Repositories.QueryParameters;
+using Smart_Garage.Models.DTOs;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
 
 namespace Smart_Garage.Repositories
 {
