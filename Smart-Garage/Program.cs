@@ -10,6 +10,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace ForumManagmentSystem
 {
@@ -29,6 +31,9 @@ namespace ForumManagmentSystem
             //builder.Services.AddScoped<IVehicleService, VehicleRepository>();
             builder.Services.AddScoped<IServicesService, ServicesService>();
 
+            // AuthManager
+            builder.Services.AddScoped<AuthManager>();
+
             // Mapper
             builder.Services.AddScoped<IModelMapper, ModelMapper>();
             builder.Services.AddAutoMapper(typeof(Program));
@@ -36,18 +41,18 @@ namespace ForumManagmentSystem
             builder.Services.AddSingleton(cfg);
 
             builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen(options =>
-            //{
-            //    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-            //    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-            //    {
-            //        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-            //        In = ParameterLocation.Header,
-            //        Name = "Authorization",
-            //        Type = SecuritySchemeType.ApiKey
-            //    });
-            //    options.OperationFilter<SecurityRequirementsOperationFilter>();
-            //});
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
 
             // JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -87,11 +92,11 @@ namespace ForumManagmentSystem
             app.UseRouting();
             app.UseStaticFiles();
 
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -102,28 +107,6 @@ namespace ForumManagmentSystem
             });
 
             app.Run();
-
-            /* Old Code
-            // Add services to the container.
-            builder.Services.AddRazorPages();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-            }
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapRazorPages();
-
-            app.Run();
-            */
         }
     }
 }
