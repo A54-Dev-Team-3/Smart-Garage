@@ -10,11 +10,10 @@
   <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="Controllers\Data\Exceptions\" />
-    <Folder Include="Controllers\MVC\" />
     <Folder Include="Models\Contracts\" />
-    <Folder Include="Models\ViewModel\" />
     <Folder Include="Models\Search\" />
     <Folder Include="Repositories\QueryParameters\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +29,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
   </ItemGroup>
 
 </Project>
