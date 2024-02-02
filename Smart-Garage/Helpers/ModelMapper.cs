@@ -43,7 +43,7 @@ namespace Smart_Garage.Helpers
                 Model = vehicleModel.Model,
                 Brand = vehicleModel.Brand,
                 User = user.Username,
-                Services = vehicleModel.Services.ToList()
+                //Services = vehicleModel.Services.ToList()
             };
         }
     }

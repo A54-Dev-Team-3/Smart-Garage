@@ -15,10 +15,10 @@ namespace Smart_Garage.Controllers.API
     [Authorize]
     public class UsersApiController : ControllerBase
     {
-        private readonly IUsersService userService;
+        private readonly IUserService userService;
         private readonly IConfiguration configuration;
 
-        public UsersApiController(IUsersService userService, IConfiguration configuration)
+        public UsersApiController(IUserService userService, IConfiguration configuration)
         {
             this.userService = userService;
             this.configuration = configuration;

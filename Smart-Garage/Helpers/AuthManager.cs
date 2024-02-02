@@ -8,9 +8,9 @@ namespace Smart_Garage.Helpers
     public class AuthManager
     {
         private const string InvalidCredentialsErrorMessage = "Invalid credentials!";
-        private readonly IUsersService userService;
+        private readonly IUserService userService;
 
-        public AuthManager(IUsersService userService)
+        public AuthManager(IUserService userService)
         {
             this.userService = userService;
         }

@@ -16,51 +16,13 @@ namespace Smart_Garage.Controllers.API
     [Authorize]
     public class ServicesApiCotnroller : ControllerBase
     {
-        private readonly IServicesService servicesService;
+        private readonly IServiceService servicesService;
 
-        public ServicesApiCotnroller(IServicesService servicesService)
+        public ServicesApiCotnroller(IServiceService servicesService)
         {
             this.servicesService = servicesService;
         }
 
-        // GetAll: Get all Users or filter by parameters
-        [HttpGet("")] // api/services/
-        public IActionResult GetAll([FromQuery] ServicesQueryParameters filterParameters)
-        {
-            try
-            {
-                var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var services = servicesService.FilterBy(filterParameters, username);
-                return Ok(services);
-            }
-            catch (UnauthorizedOperationException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
-            
-        }
-
-        // GetById
-        [HttpGet("{id}")] // api/services/{id}
-        public IActionResult GetById(string id)
-        {
-            try
-            {
-                var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var service = servicesService.GetById(int.Parse(id), username);
-                return Ok(service);
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (UnauthorizedOperationException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
-        }
-
-        // Create
         [HttpPost("")] // api/services/
         public async Task<ActionResult<Service>> Create([FromBody] CreateServiceRequestDTO newServiceDTO)
         {
@@ -80,7 +42,42 @@ namespace Smart_Garage.Controllers.API
             }
         }
 
-        // Update
+        // GetAll: Get all Services or filter by parameters
+        [HttpGet("")] // api/services/
+        public IActionResult GetAll([FromQuery] ServicesQueryParameters filterParameters)
+        {
+            try
+            {
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var services = servicesService.FilterBy(filterParameters, username);
+                return Ok(services);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            
+        }
+
+        [HttpGet("{id}")] // api/services/{id}
+        public IActionResult GetById(string id)
+        {
+            try
+            {
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                var service = servicesService.GetById(int.Parse(id), username);
+                return Ok(service);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+        }
+
         [HttpPut("{id}")] // api/services/{id}
         public IActionResult Update(string id, [FromBody] UpdateServiceRequestDTO newService)
         {
@@ -100,7 +97,6 @@ namespace Smart_Garage.Controllers.API
             }
         }
 
-        // Delete
         [HttpDelete("{id}")] // api/service/{id}
         public IActionResult Delete(string id)
         {

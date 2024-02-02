@@ -48,7 +48,7 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var services = visitsService.FilterBy(filterParameters);
+                var services = visitsService.FilterBy(filterParameters, username);
                 return Ok(services);
             }
             catch (UnauthorizedOperationException ex)

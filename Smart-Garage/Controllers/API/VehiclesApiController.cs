@@ -23,10 +23,10 @@ namespace Smart_Garage.Controllers.API
     public class VehiclesApiController : ControllerBase
     {
         private readonly IVehicleService vehicleService;
-        private readonly IUsersService usersService;
+        private readonly IUserService usersService;
         private readonly IModelMapper modelMapper;
         private readonly IMapper autoMapper;
-        public VehiclesApiController(IVehicleService vehicleService, IUsersService usersService, IModelMapper modelMapper, IMapper autoMapper)
+        public VehiclesApiController(IVehicleService vehicleService, IUserService usersService, IModelMapper modelMapper, IMapper autoMapper)
         {
             this.vehicleService = vehicleService;
             this.usersService = usersService; 
