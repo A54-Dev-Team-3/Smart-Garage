@@ -15,22 +15,6 @@ namespace Smart_Garage.Repositories
             this.context = context;
         }
 
-        public IList<Service> GetAll()
-        {
-            return context.Services.ToList();
-        }
-        public Service GetById(int id)
-        {
-            return context.Services
-                .FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
-                throw new EntityNotFoundException($"Service with id:{id} not found.");
-        }
-
-        public Service GetByName(string name)
-        {
-            return context.Services.FirstOrDefault(s => s.Name == name && !s.IsDeleted) ??
-               throw new EntityNotFoundException($"Service with name:{name} is not found.");
-        }
         public Service Create(Service newService)
         {
             context.Services.Add(newService);
@@ -38,34 +22,9 @@ namespace Smart_Garage.Repositories
             return newService;
         }
 
-        public Service Update(int id, Service updatedService)
+        public IList<Service> GetAll()
         {
-            Service newService = context.Services.FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
-                throw new EntityNotFoundException($"Service to update with id:{id} not found.");
-
-            newService.Name = updatedService.Name;
-            newService.Price = updatedService.Price;
-
-            context.SaveChanges();
-            return updatedService;
-        }
-
-        public Service Delete(int id)
-        {
-            Service toDelete = GetById(id);
-            toDelete.IsDeleted = true;
-            context.SaveChanges();
-            return toDelete;
-        }
-        
-        public bool ServiceExists(string name)
-        {
-            return context.Services.Any(s => s.Name == name);
-        }
-
-        public int Count()
-        {
-            return context.Services.Count();
+            return context.Services.ToList();
         }
 
         public IList<Service> FilterBy(ServicesQueryParameters serviceParams)
@@ -102,6 +61,49 @@ namespace Smart_Garage.Repositories
             result = (serviceParams.SortOrder == "desc") ? result.Reverse() : result;
 
             return result.ToList();
+        }
+
+        public Service GetById(int id)
+        {
+            return context.Services
+                .FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
+                throw new EntityNotFoundException($"Service with id:{id} not found.");
+        }
+
+        public Service GetByName(string name)
+        {
+            return context.Services.FirstOrDefault(s => s.Name == name && !s.IsDeleted) ??
+               throw new EntityNotFoundException($"Service with name:{name} is not found.");
+        }
+
+        public Service Update(int id, Service updatedService)
+        {
+            Service newService = context.Services.FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
+                throw new EntityNotFoundException($"Service to update with id:{id} not found.");
+
+            newService.Name = updatedService.Name;
+            newService.Price = updatedService.Price;
+
+            context.SaveChanges();
+            return updatedService;
+        }
+
+        public Service Delete(int id)
+        {
+            Service toDelete = GetById(id);
+            toDelete.IsDeleted = true;
+            context.SaveChanges();
+            return toDelete;
+        }
+        
+        public bool ServiceExists(string name)
+        {
+            return context.Services.Any(s => s.Name == name);
+        }
+
+        public int Count()
+        {
+            return context.Services.Count();
         }
     }
 }

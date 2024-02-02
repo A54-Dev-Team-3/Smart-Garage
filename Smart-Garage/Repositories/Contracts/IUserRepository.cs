@@ -5,7 +5,7 @@ using Smart_Garage.Models.QueryParameters;
 
 namespace Smart_Garage.Repositories.Contracts
 {
-    public interface IUsersRepository
+    public interface IUserRepository
     {
         IList<User> GetAll();
         User GetById(int id);

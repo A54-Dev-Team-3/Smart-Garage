@@ -5,13 +5,13 @@ namespace Smart_Garage.Repositories.Contracts
 {
     public interface IServiceRepository
     {
+        Service Create(Service newService);
         IList<Service> GetAll();
+        IList<Service> FilterBy(ServicesQueryParameters usersParams);
         Service GetById(int id);
         Service GetByName(string name);
-        Service Create(Service newService);
         Service Update(int id, Service updatedService);
         Service Delete(int id);
-        IList<Service> FilterBy(ServicesQueryParameters usersParams);
         bool ServiceExists(string name);
         int Count();
     }

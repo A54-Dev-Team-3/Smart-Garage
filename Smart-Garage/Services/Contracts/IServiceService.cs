@@ -5,15 +5,15 @@ using Smart_Garage.Models.DTOs.ResponseDTOs;
 
 namespace Smart_Garage.Services.Contracts
 {
-    public interface IServicesService
+    public interface IServiceService
     {
         CreateServiceResponseDTO Create(CreateServiceRequestDTO newService, string username);
-        IList<Service> GetAll(string username);
-        Service GetById(int id, string username);
-        Service GetByName(string username);
+        IList<ServiceReponseDTO> GetAll(string username);
+        IList<ServiceReponseDTO> FilterBy(ServicesQueryParameters filterParameters, string username);
+        ServiceReponseDTO GetById(int id, string username);
+        ServiceReponseDTO GetByName(string username);
         UpdateServiceResponseDTO Update(int id, UpdateServiceRequestDTO updatedService, string username);
         DeleteServiceResponseDTO Delete(int id, string username);
-        IList<Service> FilterBy(ServicesQueryParameters filterParameters, string username);
         bool ServiceExists(string name, string username);
         int Count(string username);
     }

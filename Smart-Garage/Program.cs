@@ -22,14 +22,14 @@ namespace ForumManagmentSystem
             var builder = WebApplication.CreateBuilder(args);
 
             // Repository
-            builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
             // Service
-            builder.Services.AddScoped<IUsersService, UsersService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             //builder.Services.AddScoped<IVehicleService, VehicleRepository>();
-            builder.Services.AddScoped<IServicesService, ServicesService>();
+            builder.Services.AddScoped<IServiceService, ServiceService>();
 
             // AuthManager
             builder.Services.AddScoped<AuthManager>();

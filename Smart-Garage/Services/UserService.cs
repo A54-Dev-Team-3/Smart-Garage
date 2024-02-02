@@ -14,13 +14,13 @@ using System.Security.Cryptography;
 
 namespace Smart_Garage.Services
 {
-    public class UsersService : IUsersService
+    public class UserService : IUserService
     {
-        private readonly IUsersRepository usersRepository;
+        private readonly IUserRepository usersRepository;
         private readonly IConfiguration configuration;
         private readonly IMapper autoMapper;
 
-        public UsersService(IUsersRepository usersRepository, IConfiguration configuration, IMapper autoMapper)
+        public UserService(IUserRepository usersRepository, IConfiguration configuration, IMapper autoMapper)
         {
             this.usersRepository = usersRepository;
             this.configuration = configuration;
@@ -56,8 +56,7 @@ namespace Smart_Garage.Services
 
         public IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username)
         {
-            if (!IsCurrentUserAdmin(username))
-                throw new UnauthorizedAccessException("You are not authorized !");
+            IsCurrentUserAdmin(username);
 
             return usersRepository.FilterBy(filterParameters)
                             .Select(u => autoMapper.Map<UserResponseDTO>(u))
@@ -133,9 +132,10 @@ namespace Smart_Garage.Services
             return usersRepository.UserExists(username);
         }
 
-        public bool IsCurrentUserAdmin(string currentUser) // "currentUser" is username
+        public void IsCurrentUserAdmin(string currentUser) // "currentUser" is username
         {
-            return usersRepository.GetByName(currentUser).IsAdmin;
+            if (!usersRepository.GetByName(currentUser).IsAdmin)
+                throw new UnauthorizedOperationException("You are not an admin!");
         }
 
         private void IsCurrentUserOwner(int id, string currentUser) // "currentUser" is username

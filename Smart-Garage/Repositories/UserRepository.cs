@@ -11,12 +11,12 @@ using System.Globalization;
 
 namespace Smart_Garage.Repositories
 {
-    public class UsersRepository : IUsersRepository
+    public class UserRepository : IUserRepository
     {
         private readonly SGContext context;
         private readonly IMapper autoMapper;
 
-        public UsersRepository(SGContext context, IMapper autoMapper)
+        public UserRepository(SGContext context, IMapper autoMapper)
         {
             this.context = context;
             this.autoMapper = autoMapper;

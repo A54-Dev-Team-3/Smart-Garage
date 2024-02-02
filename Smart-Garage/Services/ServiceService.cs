@@ -11,13 +11,13 @@ using Smart_Garage.Services.Contracts;
 
 namespace Smart_Garage.Services
 {
-    public class ServicesService : IServicesService
+    public class ServiceService : IServiceService
     {
         private readonly IServiceRepository servicesRepository;
-        private readonly IUsersService usersService;
+        private readonly IUserService usersService;
         private readonly IMapper autoMapper;
 
-        public ServicesService(IServiceRepository servicesRepository, IUsersService usersService, IMapper autoMapper)
+        public ServiceService(IServiceRepository servicesRepository, IUserService usersService, IMapper autoMapper)
         {
             this.servicesRepository = servicesRepository;
             this.usersService = usersService;
@@ -30,7 +30,7 @@ namespace Smart_Garage.Services
             if (servicesRepository.ServiceExists(newService.Name))
                 throw new DuplicationException($"Service with name {newService.Name} already exists.");
 
-            IsCurrentUserAdmin(username);
+            usersService.IsCurrentUserAdmin(username);
 
             Service service = new Service()
             {
@@ -41,33 +41,44 @@ namespace Smart_Garage.Services
             return autoMapper.Map<CreateServiceResponseDTO>(servicesRepository.Create(service));
         }
 
-        public IList<Service> GetAll(string username)
+        public IList<ServiceReponseDTO> GetAll(string username)
         {
-            IsCurrentUserAdmin(username);
+            usersService.IsCurrentUserAdmin(username);
 
-            return servicesRepository.GetAll();
+            return servicesRepository.GetAll()
+                .Select(s => autoMapper.Map<ServiceReponseDTO>(s))
+                .ToList();
         }
 
-        public Service GetById(int id, string username)
+        public IList<ServiceReponseDTO> FilterBy(ServicesQueryParameters filterParameters, string username)
         {
-            IsCurrentUserAdmin(username);
-            return servicesRepository.GetById(id);
+            usersService.IsCurrentUserAdmin(username);
+
+            return servicesRepository.FilterBy(filterParameters)
+                            .Select(f => autoMapper.Map<ServiceReponseDTO>(f))
+                            .ToList();
         }
 
-        public Service GetByName(string username)
+        public ServiceReponseDTO GetById(int id, string username)
         {
-            IsCurrentUserAdmin(username);
-            return servicesRepository.GetByName(username);
+            usersService.IsCurrentUserAdmin(username);
+            return autoMapper.Map<ServiceReponseDTO>(servicesRepository.GetById(id));
+        }
+
+        public ServiceReponseDTO GetByName(string username)
+        {
+            usersService.IsCurrentUserAdmin(username);
+            return autoMapper.Map<ServiceReponseDTO>(servicesRepository.GetByName(username));
         }
 
         public UpdateServiceResponseDTO Update(int id, UpdateServiceRequestDTO updatedService, string username)
         {
-            IsCurrentUserAdmin(username);
+            usersService.IsCurrentUserAdmin(username);
 
             Service service = new Service()
             {
                 Name = updatedService.Name,
-                Price = updatedService.Price,
+                Price = updatedService.Price
             };
 
             return autoMapper.Map<UpdateServiceResponseDTO>(servicesRepository.Update(id, service));
@@ -75,38 +86,24 @@ namespace Smart_Garage.Services
 
         public DeleteServiceResponseDTO Delete(int id, string username)
         {
-            IsCurrentUserAdmin(username);
+            usersService.IsCurrentUserAdmin(username);
 
             return autoMapper.Map<DeleteServiceResponseDTO>(servicesRepository.Delete(id));
         }
 
-        public IList<Service> FilterBy(ServicesQueryParameters filterParameters, string username)
-        {
-            IsCurrentUserAdmin(username);
-
-            return servicesRepository.FilterBy(filterParameters)
-                            .Select(u => autoMapper.Map<Service>(u))
-                            .ToList();
-        }
-
         public bool ServiceExists(string name, string username)
         {
-            IsCurrentUserAdmin(username);
+            usersService.IsCurrentUserAdmin(username);
 
             return servicesRepository.ServiceExists(name);
         }
 
         public int Count(string username)
         {
-            IsCurrentUserAdmin(username);
+            usersService.IsCurrentUserAdmin(username);
 
             return servicesRepository.Count();
         }
 
-        private void IsCurrentUserAdmin(string username)
-        {
-            if (!usersService.IsCurrentUserAdmin(username))
-                throw new UnauthorizedOperationException($"You are not an admin!");
-        }
     }
 }

@@ -5,7 +5,7 @@ using Smart_Garage.Models.DTOs.RequestDTOs;
 
 namespace Smart_Garage.Services.Contracts
 {
-    public interface IUsersService
+    public interface IUserService
     {
         UserResponseDTO Create(SignUpUserRequestDTO newUser); // Sign Up
         IList<UserResponseDTO> GetAll();
@@ -18,7 +18,7 @@ namespace Smart_Garage.Services.Contracts
         string Login(LoginUserRequestDTO user);
         int GetCount();
         bool UserExists(string username);
-        bool IsCurrentUserAdmin(string currentUser); // "currentUser" is username
+        void IsCurrentUserAdmin(string currentUser); // "currentUser" is username
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
         string CreateToken(User user);
