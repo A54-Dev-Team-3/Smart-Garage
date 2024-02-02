@@ -12,11 +12,11 @@ namespace Smart_Garage.Models
 
         [Required]
         [Range(0, int.MaxValue)]
-        public int Price { get; set; }
+        public double Price { get; set; }
 
         public bool IsDeleted { get; set; }
 
-        public IList<VehicleService> VehicleServices { get; set; } = new List<VehicleService>();
+        public IList<ServiceInstanceService> ServiceInstanceServices { get; set; } = new List<ServiceInstanceService>();
 
     }
 }

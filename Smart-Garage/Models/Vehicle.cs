@@ -29,6 +29,6 @@ namespace Smart_Garage.Models
         public bool IsDeleted { get; set; }
         public User? User { get; set; }
 
-        public IList<VehicleService> VehicleServices { get; set; } = new List<VehicleService>();
+        public IList<Visit> Visits { get; set; } = new List<Visit>();
     }
 }
