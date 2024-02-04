@@ -22,7 +22,7 @@ namespace Smart_Garage.Controllers.MVC
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult SignIn()
         {
             var loginViewModel = new LoginViewModel();
 
