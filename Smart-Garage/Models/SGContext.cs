@@ -154,7 +154,10 @@ namespace Smart_Garage.Models
             // Mechanic
             modelBuilder.Entity<Mechanic>(e =>
             {
-                e.Property(m => m.Name)
+                e.Property(m => m.FirstName)
+                .IsRequired();
+
+                e.Property(m => m.LastName)
                 .IsRequired();
             });
 
