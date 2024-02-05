@@ -25,11 +25,17 @@ namespace ForumManagmentSystem
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IVisitRepository, VisitRepository>();
+            builder.Services.AddScoped<IPartRepository, PartRepository>();
+            builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
 
             // Service
             builder.Services.AddScoped<IUserService, UserService>();
-            //builder.Services.AddScoped<IVehicleService, VehicleRepository>();
+            builder.Services.AddScoped<IVehicleService, VehicleService>();
             builder.Services.AddScoped<IServiceService, ServiceService>();
+            builder.Services.AddScoped<IVisitService, VisitService>();
+            builder.Services.AddScoped<IPartService, PartService>();
+            builder.Services.AddScoped<IMechanicService, MechanicService>();
 
             // AuthManager
             builder.Services.AddScoped<AuthManager>();
