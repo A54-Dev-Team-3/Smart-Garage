@@ -1,0 +1,39 @@
+﻿@using Smart_Garage.Models.ViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Visits";
+}
+
+@model IList<VisitViewModel>
+
+@* table-striped *@
+<table class="table" id="resizeMe">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">License Plate</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Date</th>
+            <th scope="col">Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var visit in Model)
+        {
+            <tr>
+                <td>@visit.Id</td>
+                <td>@visit.Vehicle.LicensePlate</td>
+                <td>@visit.Vehicle.Brand</td>
+                <td>@visit.Vehicle.Model</td>
+                <td>@visit.Vehicle.User.FirstName</td>
+                <td>@visit.Vehicle.User.LastName</td>
+                <td>@visit.Date.ToString("dd.MM.yyyy")</td>
+                <td>@visit.TotalPrice</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

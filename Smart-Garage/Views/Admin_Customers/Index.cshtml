@@ -1,0 +1,33 @@
+﻿@using Smart_Garage.Models.ViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Customers";
+}
+
+@model IList<CustomerViewModel>
+
+@* table-striped *@
+<table class="table" id="resizeMe">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Username</td>
+                <td>@customer.FirstName</td>
+                <td>@customer.LastName</td>
+                <td>@customer.Email</td>
+                <td>@customer.PhoneNumber</td>
+                <td><a asp-controller="Customers" asp-action="Detail" class="btn btn-primary">Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
