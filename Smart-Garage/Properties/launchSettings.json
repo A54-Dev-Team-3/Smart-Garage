@@ -13,7 +13,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5068",
-      "launchUrl": "Home/SignIn",
+      "launchUrl": "Admin_Users/SignIn",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

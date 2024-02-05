@@ -8,6 +8,7 @@ namespace Smart_Garage.Repositories.Contracts
     public interface IUserRepository
     {
         IList<User> GetAll();
+        IList<User> GetAllNotAdmins();
         User GetById(int id);
         User GetByName(string name);
         User Create(User newUser); // Register

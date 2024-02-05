@@ -27,6 +27,11 @@ namespace Smart_Garage.Repositories
             return context.Users.Where(u=> !u.IsDeleted).ToList();
         }
 
+        public IList<User> GetAllNotAdmins()
+        {
+            return context.Users.Where(u => u.IsAdmin && !u.IsDeleted).ToList();
+        }
+
         public User GetById(int id)
         {
             return context.Users
@@ -127,16 +132,15 @@ namespace Smart_Garage.Repositories
 
             if (!string.IsNullOrEmpty(usersParams.LicensePlate))
             {
-                result = result.Where(u => u.Vehicles.Any(v => v.LicensePlate == usersParams.LicensePlate));
+                result = result.Where(u => u.UserVehicles.Any(v => v.LicensePlate == usersParams.LicensePlate));
             }
 
             if (!string.IsNullOrEmpty(usersParams.VIN))
             {
-                result = result.Where(u => u.Vehicles.Any(v => v.VIN == usersParams.VIN));
+                result = result.Where(u => u.UserVehicles.Any(v => v.VIN == usersParams.VIN));
             }
 
             return result.ToList();
         }
-
     }
 }

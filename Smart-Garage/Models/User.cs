@@ -31,6 +31,6 @@ namespace Smart_Garage.Models
         public bool IsDeleted { get; set; }
 
         public bool IsAdmin { get; set; }
-        public IList<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
+        public IList<Vehicle>? UserVehicles { get; set; } = new List<Vehicle>();
     }
 }

@@ -23,7 +23,7 @@ namespace Smart_Garage.Repositories
 
         public IList<Mechanic> GetAll()
         {
-            return context.Mechanics.ToList();
+            return context.Mechanics.Where(u => !u.IsDeleted).ToList();
         }
 
         public Mechanic GetById(int id)
