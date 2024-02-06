@@ -71,13 +71,17 @@ namespace Smart_Garage.Services
 
 
 
-        //public IList<Vehicle> SearchBy(string filter)
-        //{
-        //    return this.vehicleRepository.SearchBy(filter);
-        //}
-
-        public List<Vehicle> SearchByPhoneNumber(string phoneNumber)
+        public IList<Vehicle> SearchBy(string filter)
         {
+            return this.vehicleRepository.SearchBy(filter);
+        }
+
+        public List<Vehicle> SearchByPhoneNumber(User user, string phoneNumber)
+        {
+            if (!user.IsAdmin)
+            {
+                throw new UnauthorizedOperationException("You are not an admin!");
+            }
             return this.vehicleRepository.SearchByPhoneNumber(phoneNumber);
         }
 
