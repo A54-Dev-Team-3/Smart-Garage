@@ -28,7 +28,7 @@ namespace ForumManagmentSystem
 
             // Service
             builder.Services.AddScoped<IUserService, UserService>();
-            //builder.Services.AddScoped<IVehicleService, VehicleRepository>();
+            builder.Services.AddScoped<IVehicleService, VehicleService>();
             builder.Services.AddScoped<IServiceService, ServiceService>();
 
             // AuthManager

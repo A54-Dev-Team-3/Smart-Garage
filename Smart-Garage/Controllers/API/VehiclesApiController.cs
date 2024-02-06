@@ -14,6 +14,7 @@ using AutoMapper;
 using System.Runtime.InteropServices;
 using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
+using Smart_Garage.Models.QueryParameters;
 
 namespace Smart_Garage.Controllers.API
 {
@@ -29,7 +30,7 @@ namespace Smart_Garage.Controllers.API
         public VehiclesApiController(IVehicleService vehicleService, IUserService usersService, IModelMapper modelMapper, IMapper autoMapper)
         {
             this.vehicleService = vehicleService;
-            this.usersService = usersService; 
+            this.usersService = usersService;
             this.modelMapper = modelMapper;
             this.autoMapper = autoMapper;
         }
@@ -42,16 +43,36 @@ namespace Smart_Garage.Controllers.API
             {
                 var user = GetUser();
 
-                var vehicle = modelMapper.Map(dto, autoMapper.Map<User>(user));
+                var createdVehicle = vehicleService.Create(user.Username, dto);
 
-                var createdVehicle = vehicleService.Create(user, vehicle);
-                VehicleResponseDTO responseDto = autoMapper.Map<VehicleResponseDTO>(createdVehicle);
-
-                return StatusCode(StatusCodes.Status201Created, responseDto);
+                return StatusCode(StatusCodes.Status201Created, createdVehicle);
             }
             catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch(UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+        }
+
+        // GetAll: Get all Users or filter by parameters
+        //api/vehicles
+        [HttpGet]
+        public IActionResult GetAllVehicles([FromQuery] VehicleQueryParameters filter)
+        {
+            try
+            {
+                var user = GetUser();
+
+                var vehicles = this.vehicleService.FilterBy(filter);
+
+                return Ok(vehicles);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
 
@@ -61,15 +82,17 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
-                var createdVehicle = vehicleService.GetById(id);
+                var vehicle = vehicleService.GetById(id);
 
-                VehicleResponseDTO responseDto = autoMapper.Map<VehicleResponseDTO>(createdVehicle);
-
-                return Ok(responseDto);
+                return Ok(vehicle);
             }
             catch(EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
 
@@ -81,18 +104,21 @@ namespace Smart_Garage.Controllers.API
             {
                 var user = GetUser();
 
-                var vehicle = modelMapper.Map(dto, autoMapper.Map<User>(user));
+                var updatedVehicle = vehicleService.Update(id, dto);
 
-                var updatedVehicle = vehicleService.Update(id, vehicle);
-                VehicleResponseDTO responseDTO = autoMapper.Map<VehicleResponseDTO>(updatedVehicle);
-
-                return Ok(responseDTO);
+                return Ok(updatedVehicle);
             }
             catch(EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
+
+
 
         //api/vehicles/id
         [HttpDelete("{id}")]
@@ -100,6 +126,8 @@ namespace Smart_Garage.Controllers.API
         {
             try
             {
+                var user = GetUser();
+
                 vehicleService.Delete(id);
 
                 return NoContent();
@@ -108,30 +136,19 @@ namespace Smart_Garage.Controllers.API
             {
                 return NotFound(ex.Message);
             }
-        }
-
-        //GET: api/vehicles?filterParameter=filter
-        [HttpGet]
-        public IActionResult FilterVehicles([FromQuery] VehicleQueryParameters filters)
-        {
-            var user = GetUser();
-
-            List<VehicleResponseDTO> vehicles = vehicleService
-                .FilterBy(filters)
-                .Select(vehicle => modelMapper.Map(user, vehicle))
-                .ToList();
-
-            if(vehicles.Count > 0)
+            catch (UnauthorizedOperationException ex)
             {
-                return Ok(vehicles);
+                return Unauthorized(ex.Message);
             }
-            return NoContent();
         }
 
         private UserRequestDTO GetUser()
         {
-            
             var user = usersService.GetByName(User.FindFirst(ClaimTypes.Name)?.Value);
+            if(!user.IsAdmin)
+            {
+                throw new UnauthorizedOperationException("You are not an admin!");
+            }
             return autoMapper.Map<UserRequestDTO>(user);
         }
     }
