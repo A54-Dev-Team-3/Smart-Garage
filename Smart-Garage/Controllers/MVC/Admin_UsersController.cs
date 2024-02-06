@@ -1,36 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Smart_Garage.Exceptions;
 using Smart_Garage.Helpers;
+using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.ViewModel;
+using Smart_Garage.Services;
+using Smart_Garage.Services.Contracts;
 
 namespace Smart_Garage.Controllers.MVC
 {
-    public class HomeController : Controller
+    public class Admin_UsersController : Controller
     {
         private readonly AuthManager authManager;
+        private readonly IUserService userService;
+		private readonly IMapper autoMapper;
 
-        public HomeController(AuthManager authManager)
+		public Admin_UsersController(AuthManager authManager, IMapper autoMapper, IUserService userService)
         {
             this.authManager = authManager;
-        }
-
-        [HttpGet]
-        [IsAuthenticated]
-        public IActionResult Index()
-        {
-            return View();
-        }
+            this.autoMapper = autoMapper;
+            this.userService = userService;
+		}
 
         [HttpGet]
         public IActionResult SignIn()
         {
-            var loginViewModel = new LoginViewModel();
+            var logInViewModel = new LogInViewModel();
 
-            return View(loginViewModel);
+            return View(logInViewModel);
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel loginviewModel)
+        public IActionResult SignIn(LogInViewModel loginviewModel)
         {
             if (!ModelState.IsValid)
                 return View(loginviewModel);
@@ -41,7 +42,7 @@ namespace Smart_Garage.Controllers.MVC
                 HttpContext.Session.SetString("user", user.Username);
                 HttpContext.Session.SetString("id", user.Id.ToString());
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Admin_Visits");
             }
             catch (UnauthorizedOperationException ex)
             {
@@ -56,6 +57,16 @@ namespace Smart_Garage.Controllers.MVC
                 ModelState.AddModelError("Password", ex.Message);
                 return View(loginviewModel);
             }
+        }
+
+        [HttpGet]
+        [IsAuthenticated]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("user");
+            HttpContext.Session.Remove("id");
+
+            return RedirectToAction("SignIn", "Admin_Users");
         }
     }
 }

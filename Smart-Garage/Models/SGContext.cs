@@ -19,6 +19,7 @@ namespace Smart_Garage.Models
         public DbSet<ServiceInstancePart> Part { get; set; }
 
 
+        // Lists of data
         public DbSet<Mechanic> Mechanics { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Part> Parts { get; set; }
@@ -59,34 +60,23 @@ namespace Smart_Garage.Models
                 .HasIndex(u => u.PhoneNumber)
                 .IsUnique();
 
-
             //Vehicle
             modelBuilder.Entity<Vehicle>(e =>
             {
                 e.Property(v => v.LicensePlate)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasAnnotation("MinLength", 2);
 
                 e.Property(v => v.VIN)
                 .IsRequired()
-                .HasMaxLength(17)
-                .HasColumnType("nvarchar(17)");
+                .HasMaxLength(50)
+                .HasAnnotation("MinLength", 2);
 
                 e.Property(v => v.CreationYear)
                 .IsRequired()
-                .HasColumnType("int");
-
-                e.HasCheckConstraint("CK_CreationYear", "[CreationYear] > 1867");
-
-                e.Property(v => v.Model)
-                .IsRequired()
                 .HasMaxLength(50)
                 .HasAnnotation("MinLength", 2);
-
-                e.Property(v => v.Brand)
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasAnnotation("MinLength", 2);
-
             });
 
             // Visit
@@ -120,7 +110,7 @@ namespace Smart_Garage.Models
 
             modelBuilder.Entity<ServiceInstanceMechanic>()
                 .HasOne(sim => sim.Mechanic)
-                .WithMany(m => m.ServiceInstanceMechanic)
+                .WithMany(m => m.ServiceInstanceMechanics)
                 .HasForeignKey(sim => sim.MechanicId);
 
             // ServiceInstanceService
@@ -180,7 +170,6 @@ namespace Smart_Garage.Models
                 e.Property(p => p.Price)
                 .IsRequired();
             });
-
         }
     }
 }

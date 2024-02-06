@@ -54,6 +54,12 @@ namespace Smart_Garage.Services
             return autoMapper.Map<IList<UserResponseDTO>>(users);
         }
 
+        public IList<UserResponseDTO> GetAllNotAdmins() // Get all customers
+        {
+            var users = usersRepository.GetAllNotAdmins();
+            return autoMapper.Map<IList<UserResponseDTO>>(users);
+        }
+
         public IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username)
         {
             IsCurrentUserAdmin(username);
@@ -100,7 +106,7 @@ namespace Smart_Garage.Services
 
         public User Delete(int id, string username)
         {
-            IsCurrentUserOwner(id, username);
+            IsCurrentUserAdmin(username);
 
             return usersRepository.Delete(id);
         }

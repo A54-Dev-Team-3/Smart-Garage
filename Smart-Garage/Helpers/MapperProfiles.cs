@@ -2,6 +2,7 @@
 using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
+using Smart_Garage.Models.ViewModel;
 
 namespace Smart_Garage.Helpers
 {
@@ -21,6 +22,9 @@ namespace Smart_Garage.Helpers
             this.CreateMap<Visit, VisitResponseDTO>();
             this.CreateMap<Mechanic, MechanicResponseDTO>();
             this.CreateMap<Part, PartResponseDTO>();
+            this.CreateMap<SignUpViewModel, SignUpUserRequestDTO>();
+            this.CreateMap<MechanicResponseDTO, MechanicViewModel>();
+            this.CreateMap<Vehicle, VehicleViewModel>();
         }
     }
 }

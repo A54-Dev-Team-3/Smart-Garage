@@ -22,7 +22,7 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
         public string Password { get; set; }
 
         [Required]
-        [StringLength(10, MinimumLength = 10)]
-        public string PhoneNumber { get; set; }
+		[RegularExpression(@"^\d{10}$")]
+		public string PhoneNumber { get; set; }
     }
 }

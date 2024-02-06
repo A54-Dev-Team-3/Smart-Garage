@@ -12,7 +12,7 @@ namespace Smart_Garage.Helpers
 
             if (!isLogged)
             {
-                context.Result = new RedirectToRouteResult(new { controller = "Users", action = "Login" });
+                context.Result = new RedirectToRouteResult(new { controller = "Users", action = "SignIn" });
             }
         }
     }

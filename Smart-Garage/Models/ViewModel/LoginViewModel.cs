@@ -2,7 +2,7 @@
 
 namespace Smart_Garage.Models.ViewModel
 {
-    public class LoginViewModel
+    public class LogInViewModel
     {
         [Required]
         public string Username { get; set; }
