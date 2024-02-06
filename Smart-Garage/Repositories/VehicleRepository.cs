@@ -22,7 +22,7 @@ namespace Smart_Garage.Repositories
             vehicle.User = user;
             vehicle.CreationYear = DateTime.Now.Year;
             context.Vehicles.Add(vehicle);
-            vehicle.User.Vehicles.Add(vehicle);
+            vehicle.User.UserVehicles.Add(vehicle);
             context.SaveChanges();
 
             return vehicle;
