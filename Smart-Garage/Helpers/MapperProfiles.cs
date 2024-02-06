@@ -16,6 +16,7 @@ namespace Smart_Garage.Helpers
             this.CreateMap<Service, DeleteServiceResponseDTO>();
             this.CreateMap<UserRequestDTO, User>();
             this.CreateMap<UserResponseDTO, UserRequestDTO>();
+            this.CreateMap<VehicleRequestDTO, Vehicle>();
             this.CreateMap<VehicleResponseDTO, Vehicle>();
             this.CreateMap<Visit, VisitResponseDTO>();
             this.CreateMap<Mechanic, MechanicResponseDTO>();
