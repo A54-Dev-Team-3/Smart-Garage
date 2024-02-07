@@ -22,10 +22,32 @@ namespace Smart_Garage.Repositories
             vehicle.User = user;
             vehicle.CreationYear = DateTime.Now.Year;
             context.Vehicles.Add(vehicle);
-            vehicle.User.Vehicles.Add(vehicle);
+            vehicle.User.UserVehicles.Add(vehicle);
             context.SaveChanges();
 
             return vehicle;
+        }
+        public IList<Vehicle> GetAll()
+        {
+            return context.Vehicles.Where(v => !v.IsDeleted).ToList();
+        }
+
+        public Vehicle GetById(int id)
+        {
+            return context.Vehicles.FirstOrDefault(v => v.Id == id && !v.IsDeleted) ??
+                throw new EntityNotFoundException($"Vehicle with id: {id} doesn't exists.");
+        }
+
+        public Vehicle Update(int vehicleId, Vehicle updatedVehicle)
+        {
+            Vehicle vehicleToUpdate = GetById(vehicleId);
+
+            vehicleToUpdate.LicensePlate = updatedVehicle.LicensePlate;
+
+            context.Update(vehicleToUpdate);
+            context.SaveChanges();
+
+            return vehicleToUpdate;
         }
 
         public bool Delete(int id)
@@ -48,16 +70,7 @@ namespace Smart_Garage.Repositories
             return vehicles.ToList();
         }
 
-        public IList<Vehicle> GetAll()
-        {
-            return context.Vehicles.Where(v => !v.IsDeleted).ToList();
-        }
 
-        public Vehicle GetById(int id)
-        {
-            return context.Vehicles.FirstOrDefault(v => v.Id == id && !v.IsDeleted) ??
-                throw new EntityNotFoundException($"Vehicle with id: {id} doesn't exists.");
-        }
 
         public List<Vehicle> SearchByPhoneNumber(string phoneNumber)
         {
@@ -74,17 +87,6 @@ namespace Smart_Garage.Repositories
             .ToList();
 
             return vehicles;
-        }
-        public Vehicle Update(int vehicleId, Vehicle updatedVehicle)
-        {
-            Vehicle vehicleToUpdate = GetById(vehicleId);
-
-            vehicleToUpdate.LicensePlate = updatedVehicle.LicensePlate;
-
-            context.Update(vehicleToUpdate);
-            context.SaveChanges();
-
-            return vehicleToUpdate;
         }
 
         private IList<Vehicle> FilterByModel(IList<Vehicle> vehicles, string model)

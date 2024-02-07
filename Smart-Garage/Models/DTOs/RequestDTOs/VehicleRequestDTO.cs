@@ -12,7 +12,7 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
         [StringLength(17, ErrorMessage = "The {0} must be exactly {1} characters.")]
         public string VIN { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "The {0} field is required and must not be an empty string.")]
+        [Required]
         [Range(1886, 2024, ErrorMessage = "The {0} must be between {1} and {2}.")]
         public int CreationYear { get; set; }
 
@@ -25,5 +25,8 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
         [MaxLength(50, ErrorMessage = "The {0} must be less than {1} characters.")]
         [MinLength(2, ErrorMessage = "The {0} must be at least {1} character.")]
         public string Brand { get; set; }
+
+        [Required]
+        public int UserId { get; set; }
     }
 }

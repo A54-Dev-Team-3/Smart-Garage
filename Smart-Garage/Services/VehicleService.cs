@@ -7,23 +7,54 @@ using Smart_Garage.Models.DTOs;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Helpers.Contracts;
 using AutoMapper;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
+using Smart_Garage.Helpers;
 
 namespace Smart_Garage.Services
 {
     public class VehicleService : IVehicleService
     {
         private readonly IVehicleRepository vehicleRepository;
-        private readonly IMapper mapper;
-        public VehicleService(IVehicleRepository vehicleRepository, IMapper mapper)
+        private readonly IUserRepository userRepository;
+        private readonly IMapper autoMapper;
+
+        public VehicleService(IVehicleRepository vehicleRepository, IMapper autoMapper, IUserRepository userRepository)
         {
             this.vehicleRepository = vehicleRepository;
-            this.mapper = mapper;
+            this.autoMapper = autoMapper;
+            this.userRepository = userRepository;
         }
 
-        public Vehicle Create(UserRequestDTO dto, Vehicle vehicle)
+        public VehicleResponseDTO Create(string username, VehicleRequestDTO dto)
         {
-            User user = mapper.Map<User>(dto);
-            return this.vehicleRepository.Create(user, vehicle);
+            User user = userRepository.GetByName(username);
+            if (!user.IsAdmin)
+            {
+                throw new UnauthorizedOperationException("You are not an admin!");
+            }
+            Vehicle vehicle = this.vehicleRepository.Create(userRepository.GetById(dto.UserId), autoMapper.Map<Vehicle>(dto));
+            return autoMapper.Map<VehicleResponseDTO>(vehicle);
+        }
+        public IList<VehicleResponseDTO> GetAll()
+        {
+            IList<Vehicle> vehicles = this.vehicleRepository.GetAll();
+            return vehicles
+                .Select(v => autoMapper.Map<VehicleResponseDTO>(v))
+                .ToList();
+        }
+
+        public VehicleResponseDTO GetById(int id)
+        {
+
+            Vehicle vehicle = this.vehicleRepository.GetById(id);
+            return autoMapper.Map<VehicleResponseDTO>(vehicle);
+        }
+
+        public VehicleResponseDTO Update(int vehicleId, VehicleRequestDTO dto)
+        {
+            Vehicle updatedVehicle = this.vehicleRepository.Update(vehicleId, autoMapper.Map<Vehicle>(dto));
+            return autoMapper.Map<VehicleResponseDTO>(updatedVehicle);
+
         }
 
         public bool Delete(int id)
@@ -31,20 +62,14 @@ namespace Smart_Garage.Services
             return this.vehicleRepository.Delete(id);
         }
 
-        public IList<Vehicle> FilterBy(VehicleQueryParameters vehicleQueryParameters)
+        public IList<VehicleResponseDTO> FilterBy(VehicleQueryParameters vehicleQueryParameters)
         {
-            return this.vehicleRepository.FilterBy(vehicleQueryParameters);
+            return this.vehicleRepository.FilterBy(vehicleQueryParameters)
+                .Select(v => autoMapper.Map<VehicleResponseDTO>(v))
+                .ToList();
         }
 
-        public IList<Vehicle> GetAll()
-        {
-            return this.vehicleRepository.GetAll();
-        }
 
-        public Vehicle GetById(int id)
-        {
-            return this.vehicleRepository.GetById(id);
-        }
 
         public IList<Vehicle> SearchBy(string filter)
         {
@@ -53,16 +78,12 @@ namespace Smart_Garage.Services
 
         public List<Vehicle> SearchByPhoneNumber(User user, string phoneNumber)
         {
-            if(!user.IsAdmin)
+            if (!user.IsAdmin)
             {
                 throw new UnauthorizedOperationException("You are not an admin!");
             }
             return this.vehicleRepository.SearchByPhoneNumber(phoneNumber);
         }
 
-        public Vehicle Update(int vehicleId, Vehicle updatedVehicle)
-        {
-            return this.vehicleRepository.Update(vehicleId, updatedVehicle);
-        }
     }
 }

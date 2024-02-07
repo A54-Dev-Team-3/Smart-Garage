@@ -20,18 +20,17 @@ namespace Smart_Garage.Helpers
             };
         }
 
-        public Vehicle Map(VehicleRequestDTO dto, User user)
-        {
-            return new Vehicle
-            {
-                LicensePlate = dto.LicensePlate,
-                VIN = dto.VIN,
-                CreationYear = dto.CreationYear,
-                Model = dto.Model,
-                Brand = dto.Brand,
-                User = user
-            };
-        }
+        //public Vehicle Map(VehicleRequestDTO dto, User user)
+        //{
+        //    return new Vehicle
+        //    {
+        //        LicensePlate = dto.LicensePlate,
+        //        VIN = dto.VIN,
+        //        CreationYear = dto.CreationYear,
+        //        Model = dto.Model,
+        //        Brand = dto.Brand
+        //    };
+        //}
 
         public VehicleResponseDTO Map(UserRequestDTO user, Vehicle vehicleModel)
         {
