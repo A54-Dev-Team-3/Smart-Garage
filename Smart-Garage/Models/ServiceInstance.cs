@@ -7,8 +7,8 @@ namespace Smart_Garage.Models
         [Key]
         public int Id { get; set; }
 
-        public IList<ServiceInstanceMechanic> ServiceInstanceMechanics { get; set; } = new List<ServiceInstanceMechanic>();
-        public IList<ServiceInstanceService> ServiceInstanceServices { get; set; } = new List<ServiceInstanceService>();
-        public IList<ServiceInstancePart>? ServiceInstanceParts { get; set; } = new List<ServiceInstancePart>();
+        public ICollection<ServiceInstanceMechanic> ServiceInstanceMechanics { get; set; } = new HashSet<ServiceInstanceMechanic>();
+        public ICollection<ServiceInstanceService> ServiceInstanceServices { get; set; } = new HashSet<ServiceInstanceService>();
+        public ICollection<ServiceInstancePart>? ServiceInstanceParts { get; set; } = new HashSet<ServiceInstancePart>();
     }
 }

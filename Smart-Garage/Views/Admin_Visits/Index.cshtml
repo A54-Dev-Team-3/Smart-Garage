@@ -1,10 +1,12 @@
-﻿@using Smart_Garage.Models.ViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
+﻿@{
     ViewData["Title"] = "Visits";
 }
 
 @model IList<VisitViewModel>
+
+<h2 style="margin-bottom:30px; margin-left:30px">Visits</h2>
+
+<a asp-controller="Admin_VisitsController" asp-action="Create" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Visit</a>
 
 @* table-striped *@
 <table class="table" id="resizeMe">

@@ -16,7 +16,7 @@ namespace Smart_Garage.Models
 
         public bool IsDeleted { get; set; }
 
-        public IList<ServiceInstanceService> ServiceInstanceServices { get; set; } = new List<ServiceInstanceService>();
+        public ICollection<ServiceInstanceService> ServiceInstanceServices { get; set; } = new HashSet<ServiceInstanceService>();
 
     }
 }

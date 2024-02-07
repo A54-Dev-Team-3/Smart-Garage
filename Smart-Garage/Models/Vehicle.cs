@@ -27,6 +27,6 @@ namespace Smart_Garage.Models
 
         public bool IsDeleted { get; set; }
 
-        public IList<Visit> Visits { get; set; } = new List<Visit>();
+        public ICollection<Visit> Visits { get; set; } = new HashSet<Visit>();
     }
 }

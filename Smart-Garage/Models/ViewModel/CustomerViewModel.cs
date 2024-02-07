@@ -22,6 +22,8 @@ namespace Smart_Garage.Models.ViewModel
         [RegularExpression(@"^\d{10}$")]
         public string PhoneNumber { get; set; }
 
-        public IList<Vehicle>? UserVehicles { get; set; } = new List<Vehicle>();
+        public bool IsAdmin { get; set; }
+
+        public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

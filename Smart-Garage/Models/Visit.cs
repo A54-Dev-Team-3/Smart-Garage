@@ -16,6 +16,6 @@ namespace Smart_Garage.Models
         public int ServicesTotalPrice { get; set; } // in BGN
         public int PartsTotalPrice { get; set; } // in BGN
         public bool IsDeleted { get; set; }
-        public IList<ServiceInstance> ServiceInstances { get; set; } = new List<ServiceInstance>();
+        public ICollection<ServiceInstance> ServiceInstances { get; set; } = new HashSet<ServiceInstance>();
     }
 }

@@ -10,5 +10,7 @@ namespace Smart_Garage.Models.ViewModel
 
         public DateTime Date { get; set; }
         public int TotalPrice { get; set; } // in BGN
+        public int ServicesTotalPrice { get; set; } // in BGN
+        public int PartsTotalPrice { get; set; } // in BGN
     }
 }
