@@ -1,18 +1,25 @@
-﻿@using Smart_Garage.Models.ViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
+﻿@{
     ViewData["Title"] = "Customers";
+    string profile = "";
 }
 
 @model IList<CustomerViewModel>
 
+<h2 style="margin-bottom:30px; margin-left:30px">Customers</h2>
+
+<a asp-controller="Admin_Customers" asp-action="SignUp" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Customer</a>
+
 @* table-striped *@
-<table class="table" id="resizeMe">
+<table class="table" id="resizeMe" style="margin-left:30px; max-width:96%">
     <thead>
         <tr>
             <th scope="col">Id</th>
+            <th scope="col">Username</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Details</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +33,17 @@
                 <td>@customer.LastName</td>
                 <td>@customer.Email</td>
                 <td>@customer.PhoneNumber</td>
-                <td><a asp-controller="Customers" asp-action="Detail" class="btn btn-primary">Details</a></td>
+                <td>
+                    <form asp-controller="Admin_Customers" asp-action="Index" method="post">
+                        <input asp-for="@profile" type="hidden" name="customerId" value="@customer.Id">
+                        <button type="submit" class="btn btn-primary" style="font-size: 0px;">
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                        </button>
+                    </form>
+
+                </td>
             </tr>
         }
     </tbody>

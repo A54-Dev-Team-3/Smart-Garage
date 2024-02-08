@@ -1,0 +1,272 @@
+﻿
+@{ViewData["Title"] = "Customer Detail";}
+@model CustomerViewModel
+
+<style>
+    #delete-icon {
+        color: #E12E2E;
+    }
+
+        #delete-icon:hover {
+            color: #A52727;
+        }
+
+        #delete-icon:active {
+            color: #391313;
+        }
+</style>
+
+<h2 style="margin-bottom:30px; margin-left:30px">Customer Detail</h2>
+
+<div style="max-width:600px; margin-left:70px;">
+    <div class="card-body">
+
+        <form asp-controller="Admin_Customers" asp-action="Update" method="post">
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Id</p>
+                </div>
+                <div class="col-sm-7">
+                    <p class="text-muted mb-0">@Model.Id</p>
+                    <input asp-for="Id" type="text" class="form-control" style="display: none;" value="@Model.Id" />
+                </div>
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Username</p>
+                </div>
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.Username</span>
+                    <input asp-for="Username" type="text" class="form-control" style="display: none;" value="@Model.Username" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">First Name</p>
+                </div>
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.FirstName</span>
+                    <input asp-for="FirstName" type="text" class="form-control" style="display: none;" value="@Model.FirstName" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Last Name</p>
+                </div>
+
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.LastName</span>
+                    <input asp-for="LastName" type="text" class="form-control" style="display: none;" value="@Model.LastName" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Email</p>
+                </div>
+
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.Email</span>
+                    <input asp-for="Email" type="text" class="form-control" style="display: none;" value="@Model.Email" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Phone Number</p>
+                </div>
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.PhoneNumber</span>
+                    <input asp-for="PhoneNumber" type="text" class="form-control" style="display: none;" value="@Model.PhoneNumber" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Is Admin</p>
+                </div>
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.IsAdmin</span>
+                    <input asp-for="IsAdmin" type="text" class="form-control" style="display: none;" value="@Model.IsAdmin" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+            </div>
+            <hr>
+
+            <div style="display: flex; align-items: center;">
+                <button type="submit" class="btn btn-primary" style="font-size: 17px; margin-right:10px;" disabled>
+                    Save
+                </button>
+
+                @* <a asp-controller="Admin_Customers" asp-action="Detail" asp-route-id="@Model.Id" style="font-size: 17px; margin-top: 3px;">
+                    Cancel
+                </a> *@
+
+                <form id="innerForm" asp-controller="Admin_Customers" asp-action="Detail" method="post">
+                    <input asp-for="@Model.Id" type="hidden" name="customerId" value="@Model.Id" />
+                    <button form="innerForm" class="btn" type="submit" style="font-size: 17px; margin-top: 3px;" disabled>
+                        Cancel
+                    </button>
+                </form>
+
+                <a asp-controller="Admin_Customers" asp-action="Delete" asp-route-id="@Model.Id" style="font-size: 0px; margin-left: 382px; margin-top: 3px;">
+                    <span id="delete-icon" class="material-symbols-outlined" style="font-size: 30px;">
+                        delete
+                    </span>
+                </a>
+
+               @*  <form id="deleteForm" action="/Admin_Customers/Delete/@Model.Id" method="post">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit">Delete</button>
+                </form> *@
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<h2 style="margin-top: 90px; margin-bottom:20px; margin-left:30px;">Vehicles</h2>
+<table class="table" id="resizeMe" style="margin-left:30px; max-width: 1200px;">
+
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">License Plate</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Creation Year</th>
+            <th scope="col">VIN</th>
+            <th scope="col">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var vehicle in Model.Vehicles)
+        {
+            <tr>
+                <td>@vehicle.Id</td>
+                <td>@vehicle.LicensePlate</td>
+                <td>@vehicle.Brand</td>
+                <td>@vehicle.Model</td>
+                <td>@vehicle.CreationYear</td>
+                <td>@vehicle.VIN</td>
+                <td>
+                    <form asp-controller="Admin_Customers" asp-action="Index" method="post">
+                        <input asp-for="@vehicle.Id" type="hidden" name="customerId" value="@vehicle.Id">
+                        <button type="submit" class="btn btn-primary" style="font-size: 0px;">
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".edit-btn").click(function (e) {
+            e.stopPropagation(); // Prevent click event from propagating
+            var parent = $(this).closest(".row");
+            var textElement = parent.find(".text-element"); // Target the text element within the same row
+            var inputElement = parent.find("input[type='text']");
+
+            if (textElement.is(":visible")) {
+                textElement.hide();
+                inputElement.show().focus();
+            } else {
+                textElement.show();
+                inputElement.hide();
+            }
+        });
+
+        // Listen for "blur" event on input fields
+        $("input[type='text']").blur(function () {
+            saveChanges($(this));
+        });
+
+        // Listen for "keypress" event on input fields
+        $("input[type='text']").keypress(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                saveChanges($(this));
+            }
+        });
+
+        // Listen for "keydown" event on input fields
+        $("input[type='text']").keydown(function (e) {
+            if (e.which == 27) { // Esc key
+                cancelEdit($(this));
+            }
+        });
+
+        function saveChanges(inputField) {
+            var newValue = inputField.val();
+            var parentRow = inputField.closest(".row");
+            var textElement = parentRow.find(".text-element");
+            var inputElement = parentRow.find("input[type='text']");
+            textElement.text(newValue);
+            textElement.show();
+            inputElement.hide();
+            $('button[type="submit"]').prop('disabled', false);
+        }
+
+        function cancelEdit(inputField) {
+            var parentRow = inputField.closest(".row");
+            var textElement = parentRow.find(".text-element");
+            var inputElement = parentRow.find("input[type='text']");
+            // Restore the original text
+            inputField.val(textElement.text());
+            // Hide the input field and show the text element
+            textElement.show();
+            inputElement.hide();
+        }
+    });
+</script>

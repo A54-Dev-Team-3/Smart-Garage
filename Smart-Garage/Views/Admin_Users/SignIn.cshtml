@@ -1,12 +1,9 @@
-﻿@using Smart_Garage.Models.ViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
+﻿@{
 	ViewData["Title"] = "Sign In";
 }
 
 @model LogInViewModel
-
-<div id="login-Form">
+<div class="myForm">
 
 	<h2 id="heading">Sign In</h2>
 
@@ -18,7 +15,7 @@
 			<span asp-validation-for="Username" class="text-danger"></span>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group" style="margin-top:20px;">
 			<label asp-for="Password">Password</label>
 			<input asp-for="Password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 			<span asp-validation-for="Password" class="text-danger"></span>

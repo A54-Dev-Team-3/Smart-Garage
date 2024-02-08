@@ -29,15 +29,19 @@ namespace Smart_Garage.Repositories
 
         public IList<User> GetAllNotAdmins()
         {
-            return context.Users.Where(u => u.IsAdmin && !u.IsDeleted).ToList();
+            return context.Users.Where(u => !u.IsAdmin && !u.IsDeleted).ToList();
         }
 
         public User GetById(int id)
         {
-            return context.Users
-            .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
-            throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
+            User user = context.Users
+                .Include(u => u.Vehicles)
+                .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
+                throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
+
+            return user;
         }
+
 
         public User GetByName(string name)
         {
@@ -73,8 +77,8 @@ namespace Smart_Garage.Repositories
             newUser.Username = updatedUser.Username;
             newUser.FirstName = updatedUser.FirstName;
             newUser.LastName = updatedUser.LastName;
-            newUser.PasswordSalt = updatedUser.PasswordSalt;
-            newUser.PasswordHash = updatedUser.PasswordHash;
+            //newUser.PasswordSalt = updatedUser.PasswordSalt;
+            //newUser.PasswordHash = updatedUser.PasswordHash;
             newUser.Email = updatedUser.Email;
             newUser.PhoneNumber = updatedUser.PhoneNumber;
             newUser.IsAdmin = updatedUser.IsAdmin;
@@ -132,12 +136,12 @@ namespace Smart_Garage.Repositories
 
             if (!string.IsNullOrEmpty(usersParams.LicensePlate))
             {
-                result = result.Where(u => u.UserVehicles.Any(v => v.LicensePlate == usersParams.LicensePlate));
+                result = result.Where(u => u.Vehicles.Any(v => v.LicensePlate == usersParams.LicensePlate));
             }
 
             if (!string.IsNullOrEmpty(usersParams.VIN))
             {
-                result = result.Where(u => u.UserVehicles.Any(v => v.VIN == usersParams.VIN));
+                result = result.Where(u => u.Vehicles.Any(v => v.VIN == usersParams.VIN));
             }
 
             return result.ToList();

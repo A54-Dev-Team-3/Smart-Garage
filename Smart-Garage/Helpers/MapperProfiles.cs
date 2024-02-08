@@ -25,6 +25,9 @@ namespace Smart_Garage.Helpers
             this.CreateMap<SignUpViewModel, SignUpUserRequestDTO>();
             this.CreateMap<MechanicResponseDTO, MechanicViewModel>();
             this.CreateMap<Vehicle, VehicleViewModel>();
+            this.CreateMap<UserResponseDTO, CustomerViewModel>();
+            this.CreateMap<CustomerViewModel, UpdateUserRequestDTO>();
+
             this.CreateMap<Vehicle, VehicleResponseDTO>();
         }
     }

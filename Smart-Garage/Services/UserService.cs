@@ -83,21 +83,17 @@ namespace Smart_Garage.Services
 
         public UserResponseDTO Update(int id, UpdateUserRequestDTO newData, string username)
         {
-            IsCurrentUserOwner(id, username);
-
-            CreatePasswordHash(newData.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            var tmpUser = GetById(id);
+            //CreatePasswordHash(newData.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             User user = new User();
             user.Username = newData.Username;
-            user.FirstName = tmpUser.FirstName;
-            user.LastName = tmpUser.LastName;
+            user.FirstName = newData.FirstName;
+            user.LastName = newData.LastName;
             user.Email = newData.Email;
             user.PhoneNumber = newData.PhoneNumber;
             user.IsAdmin = newData.IsAdmin;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            //user.PasswordHash = passwordHash;
+            //user.PasswordSalt = passwordSalt;
 
             User updatedUser = usersRepository.Update(id, user);
 
