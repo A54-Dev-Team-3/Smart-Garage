@@ -32,7 +32,7 @@ namespace Smart_Garage.Services
             {
                 throw new UnauthorizedOperationException("You are not an admin!");
             }
-            Vehicle vehicle = this.vehicleRepository.Create(userRepository.GetById(dto.UserId), autoMapper.Map<Vehicle>(dto));
+            Vehicle vehicle = this.vehicleRepository.Create(user, autoMapper.Map<Vehicle>(dto));
             return autoMapper.Map<VehicleResponseDTO>(vehicle);
         }
         public IList<VehicleResponseDTO> GetAll()

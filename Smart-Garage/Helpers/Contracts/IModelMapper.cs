@@ -9,6 +9,6 @@ namespace Smart_Garage.Helpers.Contracts
     {
         User Map(SignUpUserRequestDTO dto);
         //Vehicle Map(VehicleRequestDTO dto, User user);
-        public VehicleResponseDTO Map(UserRequestDTO user, Vehicle vehicleModel);
+        //public VehicleResponseDTO Map(UserRequestDTO user, Vehicle vehicleModel);
     }
 }

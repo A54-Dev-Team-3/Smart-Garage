@@ -32,18 +32,18 @@ namespace Smart_Garage.Helpers
         //    };
         //}
 
-        public VehicleResponseDTO Map(UserRequestDTO user, Vehicle vehicleModel)
-        {
-            return new VehicleResponseDTO()
-            {
-                LicencePlate = vehicleModel.LicensePlate,
-                VIN = vehicleModel.VIN,
-                CreationYear = vehicleModel.CreationYear,
-                Model = vehicleModel.Model,
-                Brand = vehicleModel.Brand,
-                User = user.Username,
-                //Services = vehicleModel.Services.ToList()
-            };
-        }
+        //public VehicleResponseDTO Map(UserRequestDTO user, Vehicle vehicleModel)
+        //{
+        //    return new VehicleResponseDTO()
+        //    {
+        //        LicensePlate = vehicleModel.LicensePlate,
+        //        VIN = vehicleModel.VIN,
+        //        CreationYear = vehicleModel.CreationYear,
+        //        Model = vehicleModel.Model,
+        //        Brand = vehicleModel.Brand,
+        //        User = user.Username,
+        //        //Services = vehicleModel.Services.ToList()
+        //    };
+        //}
     }
 }
