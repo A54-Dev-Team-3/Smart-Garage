@@ -84,8 +84,6 @@ namespace Smart_Garage.Helpers
             // CustomerViewModel
             this.CreateMap<CustomerViewModel, UpdateUserRequestDTO>();
 
-
-            
         }
     }
 }

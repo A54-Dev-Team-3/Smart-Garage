@@ -19,8 +19,17 @@ namespace Smart_Garage.Repositories
 
         public Vehicle Create(User user, Vehicle vehicle)
         {
-            vehicle.User = user;
-            vehicle.CreationYear = DateTime.Now.Year;
+            if(context.Vehicles.Any(v => v.LicensePlate == vehicle.LicensePlate && !v.IsDeleted))
+            {
+                throw new DuplicationException($"Vehicle with license plate: {vehicle.LicensePlate} already exists!");
+            }
+
+            if (context.Vehicles.Any(v => v.VIN == vehicle.VIN && !v.IsDeleted))
+            {
+                throw new DuplicationException($"Vehicle with VIN: {vehicle.VIN} already exists!");
+            }
+
+            vehicle.UserId= user.Id;
             context.Vehicles.Add(vehicle);
             vehicle.User.Vehicles.Add(vehicle);
             context.SaveChanges();

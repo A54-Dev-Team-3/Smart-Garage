@@ -14,6 +14,6 @@ namespace Smart_Garage.Models.DTOs.ResponseDTOs
         public string Model { get; set; }
         public string Brand { get; set; }
         public UserResponseDTO User { get; set; }
-        public List<Service> Services { get; set; }
+        public List<Visit> Visits { get; set; }
     }
 }
