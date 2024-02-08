@@ -4,12 +4,12 @@
 
 @model IList<VisitViewModel>
 
-<h2 style="margin-bottom:30px; margin-left:30px">Visits</h2>
+<h2 class="heading">Visits</h2>
 
 <a asp-controller="Admin_VisitsController" asp-action="Create" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Visit</a>
 
 @* table-striped *@
-<table class="table" id="resizeMe">
+<table class="table myTable" id="resizeMe">
     <thead>
         <tr>
             <th scope="col">Id</th>
@@ -30,8 +30,8 @@
                 <td>@visit.Vehicle.LicensePlate</td>
                 <td>@visit.Vehicle.Brand</td>
                 <td>@visit.Vehicle.Model</td>
-                <td>@visit.Vehicle.User.FirstName</td>
-                <td>@visit.Vehicle.User.LastName</td>
+                <td>@visit.Vehicle.User</td>
+                @* <td>@visit.Vehicle.User.LastName</td> *@
                 <td>@visit.Date.ToString("dd.MM.yyyy")</td>
                 <td>@visit.TotalPrice</td>
             </tr>

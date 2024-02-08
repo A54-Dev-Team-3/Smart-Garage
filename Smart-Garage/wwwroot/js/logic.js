@@ -47,3 +47,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     createResizableTable(document.getElementById('resizeMe'));
 });
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Get the input field for the license plate
+    var licensePlateInput = document.getElementById('licensePlateInput');
+
+    // Add event listener for keypress event
+    licensePlateInput.addEventListener('keypress', function (event) {
+        // Check if the pressed key is 'Enter' (key code 13)
+        if (event.which === 13 || event.keyCode === 13) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            // Submit the form using JavaScript
+            console.log("Enter key pressed"); // Check if this line is logged
+            document.getElementById('myForm').submit();
+        }
+    });
+});

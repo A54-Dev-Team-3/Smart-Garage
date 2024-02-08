@@ -140,11 +140,11 @@ namespace Smart_Garage.Services
                 throw new UnauthorizedOperationException("You are not an admin!");
         }
 
-        private void IsCurrentUserOwner(int id, string currentUser) // "currentUser" is username
-        {
-            if (GetById(id).Username != currentUser)
-                throw new UnauthorizedOperationException("You are not the owner of the account!");
-        }
+        //private void IsCurrentUserOwner(int id, string currentUser) // "currentUser" is username
+        //{
+        //    if (GetById(id).Username != currentUser)
+        //        throw new UnauthorizedOperationException("You are not the owner of the account!");
+        //}
 
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

@@ -10,7 +10,7 @@ namespace Smart_Garage.Models.ViewModel
         public string LicensePlate { get; set; }
         public string VIN { get; set; }
         public int CreationYear { get; set; }
-        public User? User { get; set; }
-        public IList<Visit> Visits { get; set; } = new List<Visit>();
+        public CustomerViewModel? User { get; set; }
+        public IList<Visit> Visits { get; set; }
     }
 }

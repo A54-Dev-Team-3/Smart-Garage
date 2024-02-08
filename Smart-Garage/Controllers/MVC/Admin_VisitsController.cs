@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models;
+using Smart_Garage.Models.DTOs.RequestDTOs;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
 using Smart_Garage.Models.ViewModel;
+using Smart_Garage.Repositories.QueryParameters;
 using Smart_Garage.Services;
 using Smart_Garage.Services.Contracts;
 
@@ -14,15 +17,15 @@ namespace Smart_Garage.Controllers.MVC
     {
         private readonly IMapper autoMapper;
         private readonly IVisitService visitService;
-        private readonly SGContext _dbContext;
         private readonly IVehicleService vehicleService;
+        private readonly IUserService userService;
 
-        public Admin_VisitsController(IMapper autoMapper, IVisitService visitService, SGContext _dbContext, IVehicleService vehicleService)
+        public Admin_VisitsController(IMapper autoMapper, IVisitService visitService, IVehicleService vehicleService, IUserService userService)
         {
             this.autoMapper = autoMapper;
             this.visitService = visitService;
-            this._dbContext = _dbContext;
             this.vehicleService = vehicleService;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -42,13 +45,38 @@ namespace Smart_Garage.Controllers.MVC
         [IsAuthenticated]
         public IActionResult Create()
         {
-			var visitViewModel = new CreateVisitGetViewModel();
-            visitViewModel.Vehicles = vehicleService.GetAll();
+            var visitViewModel = new VisitViewModel();
+            return View(visitViewModel);
+        }
+
+        [HttpPost("Admin_VisitsController/Create")]
+        [IsAuthenticated]
+        public IActionResult Create(VisitViewModel visitViewModel)
+        {
+			if (string.IsNullOrEmpty(visitViewModel.Vehicle.LicensePlate))
+			{
+				ModelState.AddModelError("Vehicle.LicensePlate", "The License Plate field is required !");
+				return View(visitViewModel);
+			}
+
+			var vehicleResponseDTO = vehicleService.FilterByLicensePlate(visitViewModel.Vehicle.LicensePlate);
+            //var userResponseDTO = userService.GetById(vehicleResponseDTO.UserId);
+
+
+            if (vehicleResponseDTO == null)
+            {
+                ModelState.AddModelError("Vehicle.LicensePlate", "No vehicle found with the provided license plate !");
+                return View(visitViewModel);
+            }
+
+            visitViewModel.Vehicle = autoMapper.Map<VehicleViewModel>(vehicleResponseDTO);
+            visitViewModel.Vehicle.User = autoMapper.Map<CustomerViewModel>(vehicleResponseDTO.User);
+            //visitViewModel.Vehicle.User = autoMapper.Map<CustomerViewModel>(userResponseDTO);
 
             return View(visitViewModel);
-		}
+        }
 
-		[HttpGet]
+        [HttpGet]
         [IsAuthenticated]
         public IActionResult Detail(int id)
 		{
@@ -57,26 +85,5 @@ namespace Smart_Garage.Controllers.MVC
 			return View();
 		}
 
-        public IActionResult GetLicensePlateSuggestions(string inputText)
-        {
-            // Query your database to fetch suggestions based on inputText
-            var suggestions = _dbContext.Vehicles
-                .Where(v => v.LicensePlate.StartsWith(inputText))
-                .Select(v => v.LicensePlate)
-                .ToList();
-
-            return Json(suggestions);
-        }
-
-		[HttpGet]
-		public IActionResult AutocompleteLicensePlates(string term)
-		{
-			var suggestions = _dbContext.Vehicles
-				.Where(v => v.LicensePlate.StartsWith(term))
-				.Select(v => v.LicensePlate)
-				.ToList();
-
-			return Json(suggestions);
-		}
 	}
 }

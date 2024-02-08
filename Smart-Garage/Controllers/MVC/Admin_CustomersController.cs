@@ -97,7 +97,7 @@ namespace Smart_Garage.Controllers.MVC
 			return RedirectToAction("Index", "Admin_Customers"); // TODO
 		}
 
-        [HttpGet] // TODO: [Question] Shouldn't be "HttpDelete"
+        [HttpGet]
         [IsAuthenticated]
         public IActionResult Delete(int id)
         {

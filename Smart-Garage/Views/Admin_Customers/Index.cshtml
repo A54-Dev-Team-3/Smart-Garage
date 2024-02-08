@@ -5,12 +5,12 @@
 
 @model IList<CustomerViewModel>
 
-<h2 style="margin-bottom:30px; margin-left:30px">Customers</h2>
+<h2 class="heading">Customers</h2>
 
 <a asp-controller="Admin_Customers" asp-action="SignUp" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Customer</a>
 
 @* table-striped *@
-<table class="table" id="resizeMe" style="margin-left:30px; max-width:96%">
+<table class="table myTable" id="resizeMe">
     <thead>
         <tr>
             <th scope="col">Id</th>

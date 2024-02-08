@@ -22,14 +22,19 @@ namespace Smart_Garage.Repositories
             vehicle.User = user;
             vehicle.CreationYear = DateTime.Now.Year;
             context.Vehicles.Add(vehicle);
-            vehicle.User.UserVehicles.Add(vehicle);
+            vehicle.User.Vehicles.Add(vehicle);
             context.SaveChanges();
 
             return vehicle;
         }
         public IList<Vehicle> GetAll()
         {
-            return context.Vehicles.Where(v => !v.IsDeleted).ToList();
+            return context.Vehicles
+                .Where(v => !v.IsDeleted)
+                .Include(v => v.User)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Brand)
+                .ToList();
         }
 
         public Vehicle GetById(int id)
@@ -70,8 +75,6 @@ namespace Smart_Garage.Repositories
             return vehicles.ToList();
         }
 
-
-
         public List<Vehicle> SearchByPhoneNumber(string phoneNumber)
         {
             return GetAll().Where(v => v.User.PhoneNumber == phoneNumber).ToList() ??
@@ -83,17 +86,32 @@ namespace Smart_Garage.Repositories
             .Where(v => v.LicensePlate.Contains(filter) ||
                         v.VIN.Contains(filter))
             .Include(v => v.Model)
-            .Include(v => v.Brand)
+            .Include(v => v.Model.Brand)
             .ToList();
 
             return vehicles;
+        }
+
+        public Vehicle FilterByLicensePlate(string licensePlate)
+        {
+            var vehicles = context.Vehicles
+                .Where(v => !v.IsDeleted)
+                .Include(v => v.User)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Brand)
+                .ToList();
+
+            if (!string.IsNullOrEmpty(licensePlate))
+                return vehicles.FirstOrDefault(v => v.LicensePlate == licensePlate);
+            else
+                throw new EntityNotFoundException($"Car with license plate \"{licensePlate}\" not found");
         }
 
         private IList<Vehicle> FilterByModel(IList<Vehicle> vehicles, string model)
         {
             if (!string.IsNullOrEmpty(model))
             {
-                return vehicles.Where(v => v.Model.Contains(model)).ToList();
+                return vehicles.Where(v => v.Model.Name.Contains(model)).ToList();
             }
 
             return vehicles;
@@ -103,7 +121,7 @@ namespace Smart_Garage.Repositories
         {
             if (!string.IsNullOrEmpty(brand))
             {
-                return vehicles.Where(v => v.Brand.Contains(brand)).ToList();
+                return vehicles.Where(v => v.Model.Brand.Name.Contains(brand)).ToList();
             }
 
             return vehicles;
@@ -127,7 +145,7 @@ namespace Smart_Garage.Repositories
                 case "model":
                     return vehicles.OrderBy(v => v.Model).ToList();
                 case "brand":
-                    return vehicles.OrderBy(v => v.Brand).ToList();
+                    return vehicles.OrderBy(v => v.Model.Brand).ToList();
                 case "year":
                     return vehicles.OrderBy(v => v.CreationYear).ToList();
                 default:
