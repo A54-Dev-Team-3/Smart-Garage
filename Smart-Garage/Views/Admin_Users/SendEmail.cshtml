@@ -1,0 +1,21 @@
+﻿@model SendEmailViewModel
+
+<div style="margin-left:34%; margin-top: 12%">
+
+    <h2>Send Email to Set a Password</h2>
+    <div style="max-width: 500px;">
+        <form asp-controller="Admin_Users" asp-action="SendEmail" method="post">
+            <div>
+                <div class="form-group">
+                    <label asp-for="Email" style="margin-bottom:15px;">Enter your email address:</label>
+                    <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div style="margin-top:20px;">
+                <button type="submit" class="btn btn-primary">Send</button>
+                <a asp-controller="Admin_Users" asp-action="SignIn" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 10px;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

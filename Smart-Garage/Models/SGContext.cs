@@ -171,6 +171,12 @@ namespace Smart_Garage.Models
 
                 e.Property(p => p.Price)
                 .IsRequired();
+
+                e.Property(p => p.UnitPrice)
+                .IsRequired();
+
+                e.Property(p => p.Quantity)
+                .IsRequired();
             });
         }
     }

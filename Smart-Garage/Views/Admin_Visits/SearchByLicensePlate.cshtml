@@ -1,0 +1,20 @@
+﻿@{
+    string licensePlate = "";
+}
+
+<form asp-controller="Admin_Visits" asp-action="SearchByLicensePlate" method="post" id="myForm">
+
+    <div class="form-groupel" style="margin-bottom: 20px">
+        <label asp-for="@licensePlate">License Plate:</label>
+        <input id="licensePlateInput" asp-for="@licensePlate" type="text" class="form-control" placeholder="License Plate">
+        <span asp-validation-for="@licensePlate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" value="Create" class="btn btn-primary" style="display: flex; align-items: center;">
+        Search
+        <span class="material-symbols-outlined" style="margin-left: 5px;">
+            search
+        </span>
+    </button>
+
+</form>

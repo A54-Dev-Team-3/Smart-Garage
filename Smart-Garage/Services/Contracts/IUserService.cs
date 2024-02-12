@@ -2,6 +2,7 @@
 using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
+using Smart_Garage.Models.ViewModel;
 
 namespace Smart_Garage.Services.Contracts
 {
@@ -15,10 +16,13 @@ namespace Smart_Garage.Services.Contracts
         UserResponseDTO GetByName(string username);
         User Authenticate(string username);
         UserResponseDTO Update(int id, UpdateUserRequestDTO updatedUser, string username);
-        User Delete(int id, string username);
+        void SetPassword(string email, string password);
+		User Delete(int id, string username);
         string Login(LoginUserRequestDTO user);
         int GetCount();
         bool UserExists(string username);
+        bool EmailExists(string email);
+        void SendEmailLogic(SendEmailViewModel userEmail);
         void IsCurrentUserAdmin(string currentUser); // "currentUser" is username
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);

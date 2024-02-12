@@ -4,6 +4,7 @@
 @model VisitViewModel
 
 <h2 style="margin-bottom:30px; margin-left:30px">Add a new Visit</h2>
+<p style="margin-bottom:30px; margin-left:30px">Date: @DateTime.Now.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</p>
 
 <div class="myForm">
     <partial name="_VisitForm" />

@@ -1,5 +1,6 @@
 ﻿@{
     var isLogged = Context.Session.Keys.Contains("user");
+    var isAdmin = Context.Session.GetString("isAdmin");
 }
 
 <!DOCTYPE html>
@@ -14,65 +15,72 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     </head>
     <body>
-
+    
     @if (isLogged)
     {
-        <div class="wrapper">
-            <!-- Sidebar Holder -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Smart Garage</h3>
-                </div>
+        @if (isAdmin == "true")
+        {
+            <div class="wrapper">
+                <!-- Sidebar Holder -->
+                <nav id="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Smart Garage</h3>
+                    </div>
 
-                <ul class="list-unstyled components">
+                    <ul class="list-unstyled components">
 
-                    <li>
-                        <a asp-controller="Admin_Visits" asp-action="Index">Visits</a>
-                    </li>
-                    
-                    <li>
-                        <a asp-controller="Admin_Customers" asp-action="Index">Customers</a>
-                    </li>
+                        <li>
+                            <a asp-controller="Admin_Visits" asp-action="Index">Visits</a>
+                        </li>
 
-                    <li>
-                        <a asp-controller="Admin_Vehicles" asp-action="Index">Vehicles</a>
-                    </li>
+                        <li>
+                            <a asp-controller="Admin_Customers" asp-action="Index">Customers</a>
+                        </li>
 
-                    <li>
-                        <a asp-controller="Admin_Services" asp-action="Index">Services</a>
-                    </li>
+                        <li>
+                            <a asp-controller="Admin_Vehicles" asp-action="Index">Vehicles</a>
+                        </li>
 
-                    <li>
-                        <a asp-controller="Admin_Mechanics" asp-action="Index">Mechanics</a>
-                    </li>
+                        <li>
+                            <a asp-controller="Admin_Services" asp-action="Index">Services</a>
+                        </li>
 
-                    <li>
-                        <a asp-controller="Admin_Users" asp-action="LogOut">Log Out</a>
-                    </li>
+                        <li>
+                            <a asp-controller="Admin_Mechanics" asp-action="Index">Mechanics</a>
+                        </li>
 
-                </ul>
-            </nav>
+                        <li>
+                            <a asp-controller="Admin_Users" asp-action="LogOut">Log Out</a>
+                        </li>
 
-            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-align-justify"></i>
-            </button>
+                    </ul>
+                </nav>
 
-            <!-- Page Content Holder -->
-            <div id="content">
-                <div class="container-fluid" style="margin-bottom:30px;">
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-align-justify"></i>
+                </button>
 
-                    <button type="button" id="sidebarCollapse" class="navbar-btn">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </div>
+                <!-- Page Content Holder -->
+                <div id="content">
+                    <div class="container-fluid" style="margin-bottom:30px;">
 
-                <div>
-                    @RenderBody()
+                        <button type="button" id="sidebarCollapse" class="navbar-btn">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+
+                    <div>
+                        @RenderBody()
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+        else // isAdmin = false. This is the 
+        {
+            
+        }
     }
     else
     {

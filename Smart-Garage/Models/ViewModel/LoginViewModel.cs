@@ -9,5 +9,6 @@ namespace Smart_Garage.Models.ViewModel
 
         [Required]
         public string Password { get; set; }
+
     }
 }

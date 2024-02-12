@@ -36,12 +36,13 @@ namespace Smart_Garage.Repositories
         {
             User user = context.Users
                 .Include(u => u.Vehicles)
+                .ThenInclude(v => v.Model)
+                .ThenInclude(m => m.Brand)
                 .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
                 throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
 
             return user;
         }
-
 
         public User GetByName(string name)
         {
@@ -49,7 +50,13 @@ namespace Smart_Garage.Repositories
                throw new EntityNotFoundException($"User with username:\"{name}\" is not found.");
         }
 
-        public User Create(User newUser)
+		public User GetByEmail(string email)
+		{
+			return context.Users.FirstOrDefault(u => u.Email == email && !u.IsDeleted) ??
+			   throw new EntityNotFoundException($"User with email:\"{email}\" is not found.");
+		}
+
+		public User Create(User newUser)
         {
             var username = newUser.Username;
             var email = newUser.Email;
@@ -71,14 +78,12 @@ namespace Smart_Garage.Repositories
 
         public User Update(int id, User updatedUser)
         {
-            User newUser = context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
+            var newUser = context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
                 throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
 
             newUser.Username = updatedUser.Username;
             newUser.FirstName = updatedUser.FirstName;
             newUser.LastName = updatedUser.LastName;
-            //newUser.PasswordSalt = updatedUser.PasswordSalt;
-            //newUser.PasswordHash = updatedUser.PasswordHash;
             newUser.Email = updatedUser.Email;
             newUser.PhoneNumber = updatedUser.PhoneNumber;
             newUser.IsAdmin = updatedUser.IsAdmin;
@@ -87,7 +92,17 @@ namespace Smart_Garage.Repositories
             return newUser;
         }
 
-        public User Delete(int id)
+		public User SetPassword(string email, User updatedUser)
+        {
+            var userToUpdate = GetByEmail(email);
+
+			userToUpdate.PasswordSalt = updatedUser.PasswordSalt;
+			userToUpdate.PasswordHash = updatedUser.PasswordHash;
+			context.SaveChanges();
+			return userToUpdate;
+		}
+
+		public User Delete(int id)
         {
             User toDelete = GetById(id);
             toDelete.IsDeleted = true;
