@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Rotativa.AspNetCore;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.ViewModel;
@@ -32,28 +33,28 @@ namespace Smart_Garage.Controllers.MVC
             return View(customerViewModels);
         }
 
-		[HttpPost]
-		[IsAuthenticated]
-		public IActionResult Index(int customerId)
-		{
-            return RedirectToAction("Detail", "Admin_Customers", new { id = customerId} );
-        }
+		//[HttpPost]
+		//[IsAuthenticated]
+		//public IActionResult Index(int customerId)
+		//{
+  //          return RedirectToAction("Detail", "Admin_Customers", new { id = customerId} );
+  //      }
 
-        [HttpGet("Customers/Detail/{id}")]
+        [HttpGet]
         [IsAuthenticated]
-        public IActionResult Detail([FromRoute] int id)
+        public IActionResult Detail([FromRoute] string id)
         {
 
-			var userReponseDTO = userService.GetById(id);
+			var userReponseDTO = userService.GetById(int.Parse(id));
 
 			var customerViewModel = autoMapper.Map<CustomerViewModel>(userReponseDTO);
 
             return View(customerViewModel);
         }
 
-        [HttpPost("Customers/Detail/{id}")]
+        [HttpPost]
         [IsAuthenticated]
-        public IActionResult Detail([FromRoute] int? customerId)
+        public IActionResult ShowDetail(string customerId)
         {
 
             return RedirectToAction("Detail", "Admin_Customers", new { id = customerId });
@@ -85,16 +86,15 @@ namespace Smart_Garage.Controllers.MVC
 			if (!ModelState.IsValid)
 				return View(signUpViewModel);
 
-			//if (signUpViewModel.Password != signUpViewModel.ConfirmPassword)
-			//{
-			//	ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");
-			//	return View(signUpViewModel);
-			//}
-
 			var signUpUserRequestDTO = autoMapper.Map<SignUpUserRequestDTO>(signUpViewModel);
 			_ = userService.Create(signUpUserRequestDTO);
 
-			return RedirectToAction("Index", "Admin_Customers"); // TODO
+            var userEmail = new SendEmailViewModel();
+            userEmail.Email = signUpViewModel.Email;
+
+            userService.SendEmailLogic(userEmail);
+
+            return RedirectToAction("Index", "Admin_Customers");
 		}
 
         [HttpGet]
@@ -105,6 +105,17 @@ namespace Smart_Garage.Controllers.MVC
             userService.Delete(id, currentUser);
 
             return RedirectToAction("Index", "Admin_Customers");
+        }
+
+        [HttpGet]
+        public IActionResult GeneratePdf()
+        {
+            var customerResponseDTO = userService.GetAllNotAdmins();
+
+            var customerViewModels = autoMapper.Map<IList<CustomerViewModel>>(customerResponseDTO);
+
+            var pdf = new ViewAsPdf("Index", customerViewModels);
+            return pdf;
         }
     }
 }

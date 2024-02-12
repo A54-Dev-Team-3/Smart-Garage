@@ -12,7 +12,7 @@ using Smart_Garage.Models;
 namespace Smart_Garage.Migrations
 {
     [DbContext(typeof(SGContext))]
-    [Migration("20240208141854_Initial")]
+    [Migration("20240208154259_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,6 +110,9 @@ namespace Smart_Garage.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

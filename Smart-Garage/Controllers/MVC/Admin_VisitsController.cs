@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Rotativa.AspNetCore;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
@@ -41,49 +43,66 @@ namespace Smart_Garage.Controllers.MVC
             return View(visitViewModels);
         }
 
-        [HttpGet("Admin_VisitsController/Create")]
+        [HttpGet]
         [IsAuthenticated]
         public IActionResult Create()
         {
-            var visitViewModel = new VisitViewModel();
+            string serializedVisitViewModel = TempData["VisitViewModel"] as string;
+            VisitViewModel visitViewModel = JsonConvert.DeserializeObject<VisitViewModel>(serializedVisitViewModel);
             return View(visitViewModel);
         }
 
-        [HttpPost("Admin_VisitsController/Create")]
+        [HttpPost]
         [IsAuthenticated]
-        public IActionResult Create(VisitViewModel visitViewModel)
+        public async Task<IActionResult> Create(VisitViewModel visitViewModel)
         {
-			if (string.IsNullOrEmpty(visitViewModel.Vehicle.LicensePlate))
-			{
-				ModelState.AddModelError("Vehicle.LicensePlate", "The License Plate field is required !");
-				return View(visitViewModel);
-			}
+            return View();
+        }
 
-			var vehicleResponseDTO = vehicleService.FilterByLicensePlate(visitViewModel.Vehicle.LicensePlate);
-            //var userResponseDTO = userService.GetById(vehicleResponseDTO.UserId);
+        [HttpGet]
+        public IActionResult SearchByLicensePlate()
+        {
+            var vehicleViewModel = new VehicleViewModel();
+            return View(vehicleViewModel);
+        }
 
+        [HttpPost]
+        [IsAuthenticated]
+        public IActionResult SearchByLicensePlate(string licensePlate)
+        {
+            if (string.IsNullOrEmpty(licensePlate))
+            {
+                ModelState.AddModelError("Vehicle.LicensePlate", "The License Plate field is required !");
+                return View(licensePlate);
+            }
+
+            var vehicleResponseDTO = vehicleService.FilterByLicensePlate(licensePlate);
 
             if (vehicleResponseDTO == null)
             {
                 ModelState.AddModelError("Vehicle.LicensePlate", "No vehicle found with the provided license plate !");
-                return View(visitViewModel);
+                return View(licensePlate);
             }
 
-            visitViewModel.Vehicle = autoMapper.Map<VehicleViewModel>(vehicleResponseDTO);
-            visitViewModel.Vehicle.User = autoMapper.Map<CustomerViewModel>(vehicleResponseDTO.User);
-            //visitViewModel.Vehicle.User = autoMapper.Map<CustomerViewModel>(userResponseDTO);
+            var vehicleViewModel = autoMapper.Map<VehicleViewModel>(vehicleResponseDTO);
+            var customerViewModel = autoMapper.Map<CustomerViewModel>(vehicleResponseDTO.User);
 
-            return View(visitViewModel);
+            var visitViewModel = new VisitViewModel();
+            visitViewModel.Vehicle = vehicleViewModel;
+            visitViewModel.Vehicle.User = customerViewModel;
+
+            string serializedVisitViewModel = JsonConvert.SerializeObject(visitViewModel);
+            TempData["VisitViewModel"] = serializedVisitViewModel;
+
+            return RedirectToAction("Create", "Admin_Visits");
+            //return RedirectToAction("Detail", "Admin_Customers", new { id = customerId });
         }
 
         [HttpGet]
         [IsAuthenticated]
         public IActionResult Detail(int id)
 		{
-			//var visitViewModel = new VisitViewModel();
-
 			return View();
-		}
-
-	}
+		}  
+    }
 }

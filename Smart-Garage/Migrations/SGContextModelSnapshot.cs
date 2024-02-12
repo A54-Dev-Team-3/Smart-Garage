@@ -109,6 +109,9 @@ namespace Smart_Garage.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Parts");
@@ -447,6 +450,7 @@ namespace Smart_Garage.Migrations
 
             modelBuilder.Entity("Smart_Garage.Models.User", b =>
                 {
+                    b.Navigation("Vehicles");
                 });
 
             modelBuilder.Entity("Smart_Garage.Models.Vehicle", b =>
