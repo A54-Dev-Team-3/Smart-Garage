@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Smart_Garage.Helpers;
 using Smart_Garage.Models.ViewModel;
 using Smart_Garage.Services;
 using Smart_Garage.Services.Contracts;
@@ -18,6 +19,7 @@ namespace Smart_Garage.Controllers.MVC
         }
 
         [HttpGet]
+        [IsAuthenticated]
         public IActionResult Index()
         {
             var vehicleResponseDTO = vehicleService.GetAll();

@@ -64,7 +64,7 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var service = visitsService.GetById(int.Parse(id), username);
+                var service = visitsService.GetById(int.Parse(id));
                 return Ok(service);
             }
             catch (EntityNotFoundException ex)

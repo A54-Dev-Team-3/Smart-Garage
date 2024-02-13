@@ -106,16 +106,5 @@ namespace Smart_Garage.Controllers.MVC
 
             return RedirectToAction("Index", "Admin_Customers");
         }
-
-        [HttpGet]
-        public IActionResult GeneratePdf()
-        {
-            var customerResponseDTO = userService.GetAllNotAdmins();
-
-            var customerViewModels = autoMapper.Map<IList<CustomerViewModel>>(customerResponseDTO);
-
-            var pdf = new ViewAsPdf("Index", customerViewModels);
-            return pdf;
-        }
     }
 }

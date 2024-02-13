@@ -48,7 +48,11 @@ namespace Smart_Garage.Controllers.MVC
                 HttpContext.Session.SetString("id", user.Id.ToString());
                 HttpContext.Session.SetString("isAdmin", user.IsAdmin.ToString());
 
-                return RedirectToAction("Index", "Admin_Visits");
+                if(user.IsAdmin)
+                    return RedirectToAction("Index", "Admin_Visits");
+                else
+                    return RedirectToAction("Index", "Customers_Visits");
+
             }
             catch (UnauthorizedOperationException ex)
             {

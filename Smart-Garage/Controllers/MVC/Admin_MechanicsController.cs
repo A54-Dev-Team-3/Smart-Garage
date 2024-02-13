@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Smart_Garage.Helpers;
 using Smart_Garage.Models.ViewModel;
 using Smart_Garage.Repositories.Contracts;
 using Smart_Garage.Services;
@@ -19,6 +20,7 @@ namespace Smart_Garage.Controllers.MVC
         }
 
         [HttpGet]
+        [IsAuthenticated]
         public IActionResult Index()
         {
             string currentUser = HttpContext.Session.GetString("user");

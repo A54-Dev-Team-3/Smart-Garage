@@ -60,6 +60,7 @@ namespace Smart_Garage.Controllers.MVC
         }
 
         [HttpGet]
+        [IsAuthenticated]
         public IActionResult SearchByLicensePlate()
         {
             var vehicleViewModel = new VehicleViewModel();
@@ -95,7 +96,6 @@ namespace Smart_Garage.Controllers.MVC
             TempData["VisitViewModel"] = serializedVisitViewModel;
 
             return RedirectToAction("Create", "Admin_Visits");
-            //return RedirectToAction("Detail", "Admin_Customers", new { id = customerId });
         }
 
         [HttpGet]
