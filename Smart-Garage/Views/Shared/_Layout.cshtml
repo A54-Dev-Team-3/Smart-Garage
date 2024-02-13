@@ -5,20 +5,22 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Smart-Garage - @ViewData["Title"]</title>
+        <title>Smart-Garage - @ViewData["Title"]</title>
         <link rel="stylesheet" href="~/css/bootstrap.css" type="text/css">
         <link rel="stylesheet" href="~/css/sidebar.css" type="text/css">
         <link rel="stylesheet" href="~/css/style.css" type="text/css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     </head>
+
     <body>
     
     @if (isLogged)
     {
-        @if (isAdmin == "true")
+        @if (isAdmin == "True")
         {
             <div class="wrapper">
                 <!-- Sidebar Holder -->
@@ -50,6 +52,10 @@
                         </li>
 
                         <li>
+                            <a class="nav-link" href="http://localhost:5068/swagger">Develor API</a>
+                        </li>
+
+                        <li>
                             <a asp-controller="Admin_Users" asp-action="LogOut">Log Out</a>
                         </li>
 
@@ -77,12 +83,50 @@
                 </div>
             </div>
         }
-        else // isAdmin = false. This is the 
+        else // isAdmin = false. This is the Private Parts
         {
-            
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+                <a class="navbar-brand" asp-controller="Customers_Visits" asp-action="Index">Smart-Garage</a>
+
+                @* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> *@
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customers_Visits" asp-action="Index">Visits</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customers_Vehicles" asp-action="Index">Vehicles</a>
+                        </li> 
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customers_Profile" asp-action="Index">Profile</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customers_ContactUs" asp-action="Index">Contact Us</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin_Users" asp-action="LogOut">Logout</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </nav>
+
+            <div>
+                @RenderBody()
+            </div>
         }
     }
-    else
+    else // for Login View
     {
         <div>
             @RenderBody()
@@ -109,6 +153,45 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
+
+    <script type='text/javascript'
+            src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+
+    <script type='text/javascript'>
+        function GetMap() {
+            // Fetch latitude and longitude for the address using Bing Maps API
+            var address = "София център, бул. „Княз Александър Дондуков\" 2";
+            var geocodeUrl = "http://dev.virtualearth.net/REST/v1/Locations?query=" + encodeURIComponent(address) + "&key=AhNxNW_ofnsfGJtG6wZFAiwvnRSjr-fs7LjlU61CHkJ1eDeaK9vOYQZsLX57apXF";
+
+            fetch(geocodeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var location = data.resourceSets[0].resources[0].point.coordinates;
+                    var latitude = location[0];
+                    var longitude = location[1];
+
+                    // Initialize the map with the retrieved location
+                    var map = new Microsoft.Maps.Map('#myMap', {
+                        credentials: 'AhNxNW_ofnsfGJtG6wZFAiwvnRSjr-fs7LjlU61CHkJ1eDeaK9vOYQZsLX57apXF',
+                        center: new Microsoft.Maps.Location(latitude, longitude),
+                        mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                        minZoom: 8,
+                        maxZoom: 17
+                    });
+
+                    // Add a pushpin for the specified location
+                    var pin = new Microsoft.Maps.Pushpin(map.getCenter(), null);
+                    map.entities.push(pin);
+
+                    // Calculate bounding box for the locations
+                    var rect = Microsoft.Maps.LocationRect.fromLocations([new Microsoft.Maps.Location(latitude, longitude)]);
+
+                    // Set the map view to show the specified location with padding
+                    map.setView({ bounds: rect, padding: 80 });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
 
     <script type="text/javascript">
         $(document).ready(function () {

@@ -9,19 +9,14 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Data\**" />
-    <Compile Remove="Repositories\QueryParameters\**" />
     <Content Remove="Controllers\Data\**" />
-    <Content Remove="Repositories\QueryParameters\**" />
     <EmbeddedResource Remove="Controllers\Data\**" />
-    <EmbeddedResource Remove="Repositories\QueryParameters\**" />
     <None Remove="Controllers\Data\**" />
-    <None Remove="Repositories\QueryParameters\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="Models\Search\" />
-    <Folder Include="Repositories\QueryParameters\" />
   </ItemGroup>
 
   <ItemGroup>
