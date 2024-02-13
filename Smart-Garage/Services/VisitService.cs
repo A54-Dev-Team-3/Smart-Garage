@@ -48,13 +48,16 @@ namespace Smart_Garage.Services
 
         public IList<VisitResponseDTO> FilterBy(VisitQueryParameters filterParameters, string username)
         {
-            userService.IsCurrentUserAdmin(username);
-            throw new NotImplementedException();
+            //userService.IsCurrentUserAdmin(username);
+
+            return visitsRepository.FilterBy(filterParameters)
+                            .Select(u => autoMapper.Map<VisitResponseDTO>(u))
+                            .ToList();
         }
 
-        public VisitResponseDTO GetById(int id, string username)
+        public VisitResponseDTO GetById(int id)
         {
-            userService.IsCurrentUserAdmin(username);
+            //userService.IsCurrentUserAdmin(username);
             return autoMapper.Map<VisitResponseDTO>(visitsRepository.GetById(id));
         }
 

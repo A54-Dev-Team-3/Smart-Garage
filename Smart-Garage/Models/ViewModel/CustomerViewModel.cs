@@ -24,6 +24,6 @@ namespace Smart_Garage.Models.ViewModel
 
         public bool IsAdmin { get; set; }
 
-        public ICollection<Vehicle> Vehicles { get; set; }
+        public ICollection<VehicleViewModel> Vehicles { get; set; }
     }
 }

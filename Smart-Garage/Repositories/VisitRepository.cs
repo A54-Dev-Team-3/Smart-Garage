@@ -1,4 +1,5 @@
-﻿using Smart_Garage.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using Smart_Garage.Exceptions;
 using Smart_Garage.Models;
 using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Repositories.Contracts;
@@ -23,17 +24,37 @@ namespace Smart_Garage.Repositories
 
         public IList<Visit> GetAll()
         {
-            return context.Visits.ToList();
+            return context.Visits
+                .Where(v => !v.IsDeleted)
+                .Include(v => v.Vehicle)
+                    .ThenInclude(v => v.Model)
+                        .ThenInclude(m => m.Brand)
+                .ToList();
         }
 
-        public IList<Visit> FilterBy(VisitQueryParameters usersParams)
+        public IList<Visit> FilterBy(VisitQueryParameters visitsParams)
         {
-            throw new NotImplementedException();
+            IQueryable<Visit> result = context.Visits
+                .Where(v => !v.IsDeleted)
+                .Include(v => v.Vehicle)
+                    .ThenInclude(v => v.Model)
+                        .ThenInclude(m => m.Brand);
+
+            if (!string.IsNullOrEmpty(visitsParams.User))
+            {
+                result = result.Where(v => v.Vehicle.User.Username == visitsParams.User);
+            }
+
+            return result.ToList();
         }
 
         public Visit GetById(int id)
         {
             return context.Visits
+                .Include(v => v.Vehicle.User)
+                .Include(v => v.Vehicle)
+                    .ThenInclude(v => v.Model)
+                        .ThenInclude(m => m.Brand)
                 .FirstOrDefault(v => v.Id == id && !v.IsDeleted) ??
                 throw new EntityNotFoundException($"Visit with id:{id} not found.");
         }

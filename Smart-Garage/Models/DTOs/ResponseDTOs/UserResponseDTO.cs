@@ -11,6 +11,6 @@ namespace Smart_Garage.Models.DTOs.ResponseDTOs
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsAdmin { get; set; }
-        public IList<Vehicle> Vehicles { get; set; }
+        public IList<VehicleResponseDTO> Vehicles { get; set; }
     }
 }

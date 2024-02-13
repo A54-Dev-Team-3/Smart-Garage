@@ -2,5 +2,7 @@
 {
     public class VisitQueryParameters
     {
+        public string? User { get; set; } // Username
+        public string? Vehicle { get; set; } // Username
     }
 }

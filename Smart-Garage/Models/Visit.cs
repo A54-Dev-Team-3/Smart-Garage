@@ -13,9 +13,9 @@ namespace Smart_Garage.Models
 
         [Required]
         public DateTime Date { get; set; }
-        public int TotalPrice { get; set; } // in BGN
-        public int ServicesTotalPrice { get; set; } // in BGN
-        public int PartsTotalPrice { get; set; } // in BGN
+        public double TotalPrice { get; set; } // in BGN
+        public double ServicesTotalPrice { get; set; } // in BGN
+        public double PartsTotalPrice { get; set; } // in BGN
         public bool IsDeleted { get; set; }
         public ICollection<ServiceInstance> ServiceInstances { get; set; } = new HashSet<ServiceInstance>();
     }

@@ -112,6 +112,9 @@ namespace Smart_Garage.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.ToTable("Parts");
@@ -308,14 +311,14 @@ namespace Smart_Garage.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PartsTotalPrice")
-                        .HasColumnType("int");
+                    b.Property<double>("PartsTotalPrice")
+                        .HasColumnType("float");
 
-                    b.Property<int>("ServicesTotalPrice")
-                        .HasColumnType("int");
+                    b.Property<double>("ServicesTotalPrice")
+                        .HasColumnType("float");
 
-                    b.Property<int>("TotalPrice")
-                        .HasColumnType("int");
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("int");

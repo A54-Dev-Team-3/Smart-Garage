@@ -42,7 +42,7 @@ namespace Smart_Garage.Repositories
                 .Where(v => !v.IsDeleted)
                 .Include(v => v.User)
                 .Include(v => v.Model)
-                .ThenInclude(m => m.Brand)
+                    .ThenInclude(m => m.Brand)
                 .ToList();
         }
 

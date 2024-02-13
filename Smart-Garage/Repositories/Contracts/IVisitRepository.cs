@@ -7,7 +7,7 @@ namespace Smart_Garage.Repositories.Contracts
     {
         Visit Create(Visit newVisit);
         IList<Visit> GetAll();
-        IList<Visit> FilterBy(VisitQueryParameters usersParams);
+        IList<Visit> FilterBy(VisitQueryParameters visitsParams);
         Visit GetById(int id);
         Visit Delete(int id);
         bool VisitExists(int id);

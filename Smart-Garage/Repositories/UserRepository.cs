@@ -34,19 +34,21 @@ namespace Smart_Garage.Repositories
 
         public User GetById(int id)
         {
-            User user = context.Users
+            return context.Users
                 .Include(u => u.Vehicles)
                 .ThenInclude(v => v.Model)
                 .ThenInclude(m => m.Brand)
                 .FirstOrDefault(u => u.Id == id && !u.IsDeleted) ??
                 throw new EntityNotFoundException($"User with id:\"{id}\" not found.");
-
-            return user;
         }
 
         public User GetByName(string name)
         {
-            return context.Users.FirstOrDefault(u => u.Username == name && !u.IsDeleted) ??
+            return context.Users
+                .Include(u => u.Vehicles)
+                .ThenInclude(v => v.Model)
+                .ThenInclude(m => m.Brand)
+                .FirstOrDefault(u => u.Username == name && !u.IsDeleted) ??
                throw new EntityNotFoundException($"User with username:\"{name}\" is not found.");
         }
 
