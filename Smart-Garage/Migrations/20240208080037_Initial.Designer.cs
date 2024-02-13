@@ -12,7 +12,10 @@ using Smart_Garage.Models;
 namespace Smart_Garage.Migrations
 {
     [DbContext(typeof(SGContext))]
-    [Migration("20240212202351_Initial")]
+<<<<<<<< HEAD:Smart-Garage/Migrations/20240208080037_Initial.Designer.cs
+    [Migration("20240208080037_Initial")]
+========
+    [Migration("20240208154259_Initial")]
 >>>>>>>> b5a99b809e33ce5a423e3c25a0a00ad224a6a174:Smart-Garage/Migrations/20240208154259_Initial.Designer.cs
     partial class Initial
     {
@@ -114,9 +117,6 @@ namespace Smart_Garage.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -314,14 +314,14 @@ namespace Smart_Garage.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<double>("PartsTotalPrice")
-                        .HasColumnType("float");
+                    b.Property<int>("PartsTotalPrice")
+                        .HasColumnType("int");
 
-                    b.Property<double>("ServicesTotalPrice")
-                        .HasColumnType("float");
+                    b.Property<int>("ServicesTotalPrice")
+                        .HasColumnType("int");
 
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
+                    b.Property<int>("TotalPrice")
+                        .HasColumnType("int");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("int");
