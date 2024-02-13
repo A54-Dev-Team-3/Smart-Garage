@@ -402,6 +402,7 @@ namespace Smart_Garage.Migrations
 
             modelBuilder.Entity("Smart_Garage.Models.User", b =>
                 {
+                    b.Navigation("Vehicles");
                 });
 
             modelBuilder.Entity("Smart_Garage.Models.Vehicle", b =>

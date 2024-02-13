@@ -31,7 +31,7 @@ namespace Smart_Garage.Repositories
 
             vehicle.UserId= user.Id;
             context.Vehicles.Add(vehicle);
-            vehicle.User.UserVehicles.Add(vehicle);
+            vehicle.User.Vehicles.Add(vehicle);
             context.SaveChanges();
 
             return vehicle;

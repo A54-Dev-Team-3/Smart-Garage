@@ -12,7 +12,7 @@ using Smart_Garage.Models;
 namespace Smart_Garage.Migrations
 {
     [DbContext(typeof(SGContext))]
-    [Migration("20240205163256_Initial")]
+    [Migration("20240208080037_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

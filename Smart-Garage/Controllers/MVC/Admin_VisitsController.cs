@@ -43,7 +43,7 @@ namespace Smart_Garage.Controllers.MVC
         public IActionResult Create()
         {
 			var visitViewModel = new CreateVisitGetViewModel();
-            visitViewModel.Vehicles = vehicleService.GetAll();
+            visitViewModel.Vehicles = autoMapper.Map<IList<Vehicle>>(vehicleService.GetAll);
 
             return View(visitViewModel);
 		}
