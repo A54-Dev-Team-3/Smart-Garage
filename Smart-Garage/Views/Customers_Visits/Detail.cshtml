@@ -1,0 +1,85 @@
+﻿@model VisitViewModel
+
+<div style="display: flex; width: 90%; margin-left: 5%">
+
+    <span style="flex: 0.3;">
+
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                directions_car
+            </span>
+            Vehicle
+        </h4>
+
+        <p>License Plate: @Model.Vehicle.LicensePlate</p>
+        <p>VIN: @Model.Vehicle.VIN</p>
+        <p>Brand: @Model.Vehicle.Brand</p>
+        <p>Model: @Model.Vehicle.Model</p>
+        <p>Model: @Model.Vehicle.Model</p>
+        <p>Creation Year: @Model.Vehicle.CreationYear</p>
+
+    </span>
+
+    <span style="flex: 0.9; margin-left:0px;">
+
+@*         <h4 style="margin-bottom: 20px; display: flex; align-items: center; margin-top:30px; margin-left: 30px;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                package_2
+            </span>
+            Parts
+        </h4> *@
+
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                package_2
+            </span>
+            Parts
+        </h4>
+
+        <table class="table" style="width:100%; margin-left:0px">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 60%">Name</th>
+                    <th scope="col" style="width: 10%">Quantity</th>
+                    <th scope="col" style="width: 18%">Unit Price (лв)</th>
+                    <th scope="col" style="width: 23%">Price (лв)</th>
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+            </tbody>
+        </table>
+    </span>
+
+</div>
+
+<div style="display: flex; width: 95%; margin-left: 2%; margin-top: 2%">
+    <span style="flex: 0.3; margin-left:0px;">
+
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                person
+            </span>
+            Owner
+        </h4>
+
+        <p>Username: @Model.Vehicle.User.Username</p>
+        <p>First Name: @Model.Vehicle.User.FirstName</p>
+        <p>Last Name: @Model.Vehicle.User.LastName</p>
+        <p>Last Name: @Model.Vehicle.User.LastName</p>
+        <p>Email: @Model.Vehicle.User.Email</p>
+        <p>Phone Number: @Model.Vehicle.User.PhoneNumber</p>
+
+    </span>
+</div>
+
+
+
+
+
+
+<form asp-controller="Customers_Visits" asp-action="Detail" method="post">
+    <input asp-for="@Model.Id" type="hidden" name="id" value="@Model.Id">
+    <button type="submit" class="btn btn-primary" style="font-size: 18px;">
+        PDF
+    </button>
+</form>
