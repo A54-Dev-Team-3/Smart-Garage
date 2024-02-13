@@ -2,6 +2,7 @@
 using Smart_Garage.Models;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
+using Smart_Garage.Models.ViewModel;
 
 namespace Smart_Garage.Services.Contracts
 {

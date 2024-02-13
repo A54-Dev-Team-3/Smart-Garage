@@ -15,6 +15,7 @@ namespace Smart_Garage.Services.Contracts
         bool Delete(int id);
         public IList<Vehicle> SearchBy(string filter);
         IList<VehicleResponseDTO> FilterBy(VehicleQueryParameters vehicleQueryParameters);
+        VehicleResponseDTO FilterByLicensePlate(string licensePlate);
         public List<Vehicle> SearchByPhoneNumber(User user, string phoneNumber);
     }
 }

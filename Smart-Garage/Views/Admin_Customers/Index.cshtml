@@ -1,25 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Customers";
-    string profile = "";
+    string customerId = "";
 }
 
 @model IList<CustomerViewModel>
 
-<h2 style="margin-bottom:30px; margin-left:30px">Customers</h2>
+<h2 class="heading">Customers</h2>
 
 <a asp-controller="Admin_Customers" asp-action="SignUp" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Customer</a>
 
 @* table-striped *@
-<table class="table" id="resizeMe" style="margin-left:30px; max-width:96%">
+<table class="table myTable" id="resizeMe">
     <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Username</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Details</th>
+            <th scope="col" style="width: 5%">Id</th>
+            <th scope="col" style="width: 15%;">Username</th>
+            <th scope="col" style="width: 15%;">First Name</th>
+            <th scope="col" style="width: 130px;">Last Name</th>
+            <th scope="col" style="width: 170px;">Email</th>
+            <th scope="col" style="width: 170px;">Phone Number</th>
+            <th scope="col" style="width: 170px;">Details</th>
         </tr>
     </thead>
     <tbody>
@@ -34,8 +34,8 @@
                 <td>@customer.Email</td>
                 <td>@customer.PhoneNumber</td>
                 <td>
-                    <form asp-controller="Admin_Customers" asp-action="Index" method="post">
-                        <input asp-for="@profile" type="hidden" name="customerId" value="@customer.Id">
+                    <form asp-controller="Admin_Customers" asp-action="ShowDetail" method="post">
+                        <input asp-for="@customerId" type="hidden" name="customerId" value="@customer.Id">
                         <button type="submit" class="btn btn-primary" style="font-size: 0px;">
                             <span class="material-symbols-outlined">
                                 description
@@ -48,3 +48,7 @@
         }
     </tbody>
 </table>
+
+<a asp-controller="Admin_Customers" asp-action="GeneratePdf">
+    PDF
+</a>

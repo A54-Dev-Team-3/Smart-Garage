@@ -13,6 +13,7 @@ namespace Smart_Garage.Repositories.Contracts
         bool Delete(int id);
         public IList<Vehicle> SearchBy(string filter);
         IList<Vehicle> FilterBy(VehicleQueryParameters vehicleQueryParameters);
+        Vehicle FilterByLicensePlate(string licensePlate);
         public List<Vehicle> SearchByPhoneNumber(string phoneNumber);
     }
 }

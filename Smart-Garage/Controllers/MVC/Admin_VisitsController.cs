@@ -2,9 +2,14 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Rotativa.AspNetCore;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models;
+using Smart_Garage.Models.DTOs.RequestDTOs;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
 using Smart_Garage.Models.ViewModel;
+using Smart_Garage.Repositories.QueryParameters;
 using Smart_Garage.Services;
 using Smart_Garage.Services.Contracts;
 
@@ -14,15 +19,15 @@ namespace Smart_Garage.Controllers.MVC
     {
         private readonly IMapper autoMapper;
         private readonly IVisitService visitService;
-        private readonly SGContext _dbContext;
         private readonly IVehicleService vehicleService;
+        private readonly IUserService userService;
 
-        public Admin_VisitsController(IMapper autoMapper, IVisitService visitService, SGContext _dbContext, IVehicleService vehicleService)
+        public Admin_VisitsController(IMapper autoMapper, IVisitService visitService, IVehicleService vehicleService, IUserService userService)
         {
             this.autoMapper = autoMapper;
             this.visitService = visitService;
-            this._dbContext = _dbContext;
             this.vehicleService = vehicleService;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -38,45 +43,66 @@ namespace Smart_Garage.Controllers.MVC
             return View(visitViewModels);
         }
 
-        [HttpGet("Admin_VisitsController/Create")]
+        [HttpGet]
         [IsAuthenticated]
         public IActionResult Create()
         {
-			var visitViewModel = new CreateVisitGetViewModel();
-            visitViewModel.Vehicles = autoMapper.Map<IList<Vehicle>>(vehicleService.GetAll);
-
+            string serializedVisitViewModel = TempData["VisitViewModel"] as string;
+            VisitViewModel visitViewModel = JsonConvert.DeserializeObject<VisitViewModel>(serializedVisitViewModel);
             return View(visitViewModel);
-		}
+        }
 
-		[HttpGet]
+        [HttpPost]
+        [IsAuthenticated]
+        public async Task<IActionResult> Create(VisitViewModel visitViewModel)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult SearchByLicensePlate()
+        {
+            var vehicleViewModel = new VehicleViewModel();
+            return View(vehicleViewModel);
+        }
+
+        [HttpPost]
+        [IsAuthenticated]
+        public IActionResult SearchByLicensePlate(string licensePlate)
+        {
+            if (string.IsNullOrEmpty(licensePlate))
+            {
+                ModelState.AddModelError("Vehicle.LicensePlate", "The License Plate field is required !");
+                return View(licensePlate);
+            }
+
+            var vehicleResponseDTO = vehicleService.FilterByLicensePlate(licensePlate);
+
+            if (vehicleResponseDTO == null)
+            {
+                ModelState.AddModelError("Vehicle.LicensePlate", "No vehicle found with the provided license plate !");
+                return View(licensePlate);
+            }
+
+            var vehicleViewModel = autoMapper.Map<VehicleViewModel>(vehicleResponseDTO);
+            var customerViewModel = autoMapper.Map<CustomerViewModel>(vehicleResponseDTO.User);
+
+            var visitViewModel = new VisitViewModel();
+            visitViewModel.Vehicle = vehicleViewModel;
+            visitViewModel.Vehicle.User = customerViewModel;
+
+            string serializedVisitViewModel = JsonConvert.SerializeObject(visitViewModel);
+            TempData["VisitViewModel"] = serializedVisitViewModel;
+
+            return RedirectToAction("Create", "Admin_Visits");
+            //return RedirectToAction("Detail", "Admin_Customers", new { id = customerId });
+        }
+
+        [HttpGet]
         [IsAuthenticated]
         public IActionResult Detail(int id)
 		{
-			//var visitViewModel = new VisitViewModel();
-
 			return View();
-		}
-
-        public IActionResult GetLicensePlateSuggestions(string inputText)
-        {
-            // Query your database to fetch suggestions based on inputText
-            var suggestions = _dbContext.Vehicles
-                .Where(v => v.LicensePlate.StartsWith(inputText))
-                .Select(v => v.LicensePlate)
-                .ToList();
-
-            return Json(suggestions);
-        }
-
-		[HttpGet]
-		public IActionResult AutocompleteLicensePlates(string term)
-		{
-			var suggestions = _dbContext.Vehicles
-				.Where(v => v.LicensePlate.StartsWith(term))
-				.Select(v => v.LicensePlate)
-				.ToList();
-
-			return Json(suggestions);
-		}
-	}
+		}  
+    }
 }

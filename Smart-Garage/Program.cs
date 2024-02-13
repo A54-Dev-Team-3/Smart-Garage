@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Smart_Garage.Models.Contracts;
+using Rotativa.AspNetCore;
 
 namespace ForumManagmentSystem
 {
@@ -39,6 +41,9 @@ namespace ForumManagmentSystem
 
             // AuthManager
             builder.Services.AddScoped<AuthManager>();
+
+            // Email
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             // Mapper
             builder.Services.AddScoped<IModelMapper, ModelMapper>();
@@ -97,8 +102,9 @@ namespace ForumManagmentSystem
             app.UseSession();
             app.UseRouting();
             app.UseStaticFiles();
+			app.UseRotativa();
 
-            app.UseSwagger();
+			app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");

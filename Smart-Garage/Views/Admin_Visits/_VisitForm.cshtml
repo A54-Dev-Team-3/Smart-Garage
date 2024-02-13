@@ -1,61 +1,388 @@
-﻿@model CreateVisitGetViewModel
+﻿@model VisitViewModel
+
+<style>
+    .InputReadOnly {
+        background-color: #f8f9fa;
+    }
+</style>
+
+@* @if (Model.Vehicle == null || string.IsNullOrEmpty(Model.Vehicle.Brand))
+{
+
+}
+else
+{ *@
+
+<div style="display: flex; width: 225%;">
+
+    <span style="flex: 1;">
+        @* here is the first div *@
+
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                directions_car
+            </span>
+            Vehicle
+        </h4>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.LicensePlate">License Plate</label>
+            <input id="licensePlateInput" asp-for="Vehicle.LicensePlate" type="text" class="form-control InputReadOnly" placeholder="License Plate" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.VIN">VIN</label>
+            <input asp-for="Vehicle.VIN" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.VIN" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.Brand">Brand</label>
+            <input asp-for="Vehicle.Brand" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.Brand" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.Brand">Model</label>
+            <input asp-for="Vehicle.Model" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.Model" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.CreationYear">Creation Year</label>
+            <input asp-for="Vehicle.CreationYear" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.CreationYear" readonly>
+        </div>
+    </span>
+
+    <span style="flex: 1; margin-left:30px;">
+        @* here is the second div *@
+
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                person
+            </span>
+            Owner
+        </h4>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.User.Username">Username</label>
+            <input asp-for="Vehicle.User.Username" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.User.Username" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.User.FirstName">First Name</label>
+            <input asp-for="Vehicle.User.FirstName" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.User.FirstName" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.User.LastName">Last Name</label>
+            <input asp-for="Vehicle.User.LastName" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.User.LastName" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.User.Email">Email</label>
+            <input asp-for="Vehicle.User.Email" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.User.Email" readonly>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Vehicle.User.PhoneNumber">Phone Number</label>
+            <input asp-for="Vehicle.User.PhoneNumber" type="text" class="form-control InputReadOnly" placeholder="@Model.Vehicle.User.PhoneNumber" readonly>
+        </div>
+    </span>
+
+</div>
+
+<div style="margin-left:-30px">
+    <form asp-controller="Admin_Visits" asp-action="Create" id="addItemForm">
+
+        <!-- Table for Parts -->
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center; margin-top:30px; margin-left: 30px;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                package_2
+            </span>
+            Parts
+        </h4>
+
+        <table class="table" style="width:180%; margin-left:30px">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 60%">Name</th>
+                    <th scope="col" style="width: 10%">Quantity</th>
+                    <th scope="col" style="width: 16%">Unit Price (лв)</th>
+                    <th scope="col" style="width: 23%">Price (лв)</th>
+                    <th scope="col"></th> <!-- Empty cell for delete button -->
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+            </tbody>
+        </table>
+
+        <div style="display: flex; align-items: center; width:1000px">
+            <div style="margin-left: 30px;">
+                <button type="button" class="btn btn-primary" id="addItemBtn">Add Item</button>
+            </div>
+            <div style="margin-left: auto; margin-right: 30px;">
+                <p style="margin-top: 5px; display: flex; align-items: center;">Total Parts Price: <span id="totalPrice" style="margin-left: 5px;">0.00</span> лв.</p>
+            </div>
+        </div>
+
+        <div style="margin-top:50px"></div>
+
+        <!-- Table for Services -->
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center; margin-top:30px; margin-left: 30px;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                construction
+            </span>
+            Service
+        </h4>
+
+        <table class="table" style="width:180%; margin-left:30px">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 50%">Name</th>
+                    <th scope="col" style="width: 25%">Mechanic</th>
+                    <th scope="col" style="width: 15%">Price (лв)</th>
+                    <th scope="col"></th> <!-- Empty cell for delete button -->
+                </tr>
+            </thead>
+            <tbody id="serviceTableBody">
+            </tbody>
+        </table>
+
+        <div style="display: flex; align-items: center; width:1000px">
+            <div style="margin-left: 30px;">
+                <button type="button" class="btn btn-primary" id="addServiceBtn">Add Service</button>
+            </div>
+            <div style="margin-left: auto; margin-right: 30px;">
+                <p style="margin-top: 5px; display: flex; align-items: center;">Total Services Price: <span id="totalServicePrice" style="margin-left: 5px;">0.00</span> лв.</p>
+            </div>
+        </div>
 
 
-<form asp-controller="Admin_Customers" asp-action="SignUp" method="post">
+        <div style="display: flex; align-items: center; margin-top:70px">
+            <!-- Add a new p tag for displaying the combined total price -->
+            <div style="margin-left: 30px;">
+                <p style="margin-top: 7px; display: inline;">Combined Total Price: <span id="combinedTotalPrice">0.00</span> лв.</p>
+            </div>
+        </div>
 
-	<div class="form-groupel" style="margin-bottom: 15px">
-		<label asp-for="Vehicle.LicensePlate">License Plate</label>
-		<input id="LicensePlate" asp-for="Vehicle.LicensePlate" type="text" class="form-control" placeholder="License Plate">
-		<span asp-validation-for="Vehicle.LicensePlate" class="text-danger"></span>
-	</div>
-
-	<div class="form-groupel" style="margin-bottom: 15px">
-		<label asp-for="Vehicle.VIN">VIN</label>
-		<input asp-for="Vehicle.VIN" type="text" class="form-control" placeholder="VIN">
-		<span asp-validation-for="Vehicle.LicensePlate" class="text-danger"></span>
-	</div>
-
-
-	@* <div class="form-group" style="margin-bottom: 15px">
-		<label asp-for="LastName">Last Name:</label>
-		<input asp-for="LastName" type="text" class="form-control" placeholder="Last Name">
-		<span asp-validation-for="LastName" class="text-danger"></span>
-	</div>
-
-	<div class="form-group" style="margin-bottom: 15px">
-		<label asp-for="Email">Email:</label>
-		<input asp-for="Email" type="email" class="form-control" placeholder="Email">
-		<span asp-validation-for="Email" class="text-danger"></span>
-	</div>
-
-	<div class="form-group" style="margin-bottom: 15px">
-		<label asp-for="PhoneNumber">Phone Number:</label>
-		<input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Phone Number">
-		<span asp-validation-for="PhoneNumber" class="text-danger"></span>
-	</div>
-
-	<div class="form-group">
-		<label asp-for="Password">Password:</label>
-		<input asp-for="Password" type="password" class="form-control" placeholder="Password">
-		<span asp-validation-for="Password" class="text-danger"></span>
-	</div> *@
-</form>
+        <button style="margin-left:30px; margin-top:20px; display:block" type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
 
 <script>
-	$(function () {
-		$("#LicensePlate").autocomplete({
-			source: function (request, response) {
-				$.ajax({
-					url: "/Admin_Customers/AutocompleteLicensePlates",
-					type: "GET",
-					dataType: "json",
-					data: { term: request.term },
-					success: function (data) {
-						response(data);
-					}
-				});
-			},
-			minLength: 2 // Minimum characters before autocomplete starts
-		});
-	});
+    $(document).ready(function () {
+        // Listen for keypress event on the input field
+        $('#licensePlateInput').keypress(function (event) {
+            // Check if the pressed key is 'Enter' (key code 13)
+            if (event.which === 13) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+                // Submit the form using JavaScript
+                $('#myForm').submit();
+            }
+        });
+    });
+</script>
+
+<script>
+    // Function to handle adding rows for items
+    function addItemRow() {
+        var itemName = document.createElement('input');
+        itemName.setAttribute('type', 'text');
+        itemName.setAttribute('class', 'form-control');
+        itemName.setAttribute('name', 'ServiceInstance.Parts.Name');
+
+        var itemQuantity = document.createElement('input');
+        itemQuantity.setAttribute('type', 'number');
+        itemQuantity.setAttribute('class', 'form-control');
+        itemQuantity.setAttribute('name', 'ServiceInstance.Parts.Quantity');
+        itemQuantity.setAttribute('min', '1');
+        itemQuantity.setAttribute('step', '1');
+
+        var itemUnitPrice = document.createElement('input');
+        itemUnitPrice.setAttribute('type', 'number');
+        itemUnitPrice.setAttribute('class', 'form-control item-unit-price');
+        itemUnitPrice.setAttribute('name', 'ServiceInstance.Parts.UnitPrice');
+        itemUnitPrice.setAttribute('min', '0');
+        itemUnitPrice.setAttribute('step', '0.01');
+        itemUnitPrice.addEventListener('blur', calculateTotalPrice);
+
+        var itemPrice = document.createElement('input');
+        itemPrice.setAttribute('type', 'number');
+        itemPrice.setAttribute('class', 'form-control item-price');
+        itemPrice.setAttribute('name', 'itemPrice');
+        itemPrice.setAttribute('min', '0');
+        itemPrice.setAttribute('step', '0.01');
+        itemPrice.setAttribute('readonly', 'true');
+        itemPrice.style.backgroundColor = '#f8f9fa';
+        itemPrice.addEventListener('blur', calculateTotalPrice);
+
+        var deleteBtn = document.createElement('button');
+        deleteBtn.setAttribute('type', 'button');
+        deleteBtn.setAttribute('class', 'btn btn-danger delete-row');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.style.color = 'white';
+        deleteBtn.style.backgroundColor = 'red';
+        deleteBtn.addEventListener('click', function () {
+            deleteRow(this);
+            calculateTotalPrice();
+            calculateCombinedTotalPrice();
+        });
+
+        var newRow = document.createElement('tr');
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        var cell3 = newRow.insertCell(2);
+        var cell4 = newRow.insertCell(3);
+        var cell5 = newRow.insertCell(4);
+
+        cell1.appendChild(itemName);
+        cell2.appendChild(itemQuantity);
+        cell3.appendChild(itemUnitPrice);
+        cell4.appendChild(itemPrice);
+        cell5.appendChild(deleteBtn);
+
+        document.getElementById('itemTableBody').appendChild(newRow);
+        calculateTotalPrice();
+    }
+
+    // Adding event listener to the Add Item button
+    document.getElementById('addItemBtn').addEventListener('click', function () {
+        addItemRow();
+    });
+
+    // Function to calculate total price of items
+    function calculateTotalPrice() {
+        var totalPrice = 0;
+        var itemRows = document.querySelectorAll('#itemTableBody tr');
+        itemRows.forEach(function (row) {
+            var quantity = parseInt(row.querySelector('.form-control[name="ServiceInstance.Parts.Quantity"]').value) || 0;
+            var unitPrice = parseFloat(row.querySelector('.form-control.item-unit-price').value) || 0;
+            var price = quantity * unitPrice;
+            totalPrice += price;
+            row.querySelector('.form-control.item-price').value = price.toFixed(2);
+        });
+        document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+        calculateCombinedTotalPrice();
+    }
+
+    // Function to calculate and display the combined total price of items and services
+    function calculateCombinedTotalPrice() {
+        var totalItemsPrice = parseFloat(document.getElementById('totalPrice').textContent) || 0;
+        var totalServicesPrice = parseFloat(document.getElementById('totalServicePrice').textContent) || 0;
+        var combinedTotalPrice = totalItemsPrice + totalServicesPrice;
+        document.getElementById('combinedTotalPrice').textContent = combinedTotalPrice.toFixed(2);
+    }
+
+    // Call the function initially to display the combined total price
+    calculateCombinedTotalPrice();
+
+    // Function to handle deleting rows
+    function deleteRow(btn) {
+        var row = btn.closest('tr');
+        row.remove();
+    }
+
+    // Adding event listener to dynamically created delete buttons
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('delete-row')) {
+            deleteRow(event.target);
+            calculateTotalPrice();
+            calculateCombinedTotalPrice();
+        } else {
+            // Calculate totals when clicking away from input fields
+            if (event.target.nodeName !== 'INPUT') {
+                calculateTotalPrice();
+                calculateCombinedTotalPrice();
+            }
+        }
+    });
+</script>
+
+
+
+<script>
+    // Function to handle adding rows for services
+    function addServiceRow() {
+        var serviceName = document.createElement('input');
+        serviceName.setAttribute('type', 'text');
+        serviceName.setAttribute('class', 'form-control');
+        serviceName.setAttribute('name', 'serviceName');
+
+        var serviceMechanic = document.createElement('input');
+        serviceMechanic.setAttribute('type', 'text');
+        serviceMechanic.setAttribute('class', 'form-control');
+        serviceMechanic.setAttribute('name', 'serviceMechanic');
+
+        var servicePrice = document.createElement('input');
+        servicePrice.setAttribute('type', 'number');
+        servicePrice.setAttribute('class', 'form-control service-price'); // Add class for price calculation
+        servicePrice.setAttribute('name', 'servicePrice');
+        servicePrice.setAttribute('min', '0');
+        servicePrice.setAttribute('step', '1');
+        servicePrice.addEventListener('blur', calculateTotalServicePrice); // Add blur event listener to servicePrice input
+
+        var deleteBtn = document.createElement('button');
+        deleteBtn.setAttribute('type', 'button');
+        deleteBtn.setAttribute('class', 'btn btn-danger delete-row');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.style.color = 'white'; // Set text color to white
+        deleteBtn.style.backgroundColor = 'red'; // Set background color to red
+        deleteBtn.addEventListener('click', function () {
+            deleteRow(this); // Call deleteRow function passing the button as parameter
+            calculateTotalServicePrice(); // Update total service price when row is deleted
+        });
+
+        var newRow = document.createElement('tr');
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        var cell3 = newRow.insertCell(2);
+        var cell4 = newRow.insertCell(3);
+
+        cell1.appendChild(serviceName);
+        cell2.appendChild(serviceMechanic);
+        cell3.appendChild(servicePrice);
+        cell4.appendChild(deleteBtn);
+
+        document.getElementById('serviceTableBody').appendChild(newRow);
+        calculateTotalServicePrice(); // Update total service price when row is added
+    }
+
+    // Adding event listener to the Add Service button
+    document.getElementById('addServiceBtn').addEventListener('click', function () {
+        addServiceRow();
+    });
+
+    // Function to calculate total price of services
+    function calculateTotalServicePrice() {
+        var totalServicePrice = 0;
+        var serviceRows = document.querySelectorAll('#serviceTableBody tr');
+        serviceRows.forEach(function (row) {
+            var price = parseFloat(row.querySelector('.form-control[name="servicePrice"]').value) || 0;
+            totalServicePrice += price;
+        });
+        document.getElementById('totalServicePrice').textContent = totalServicePrice.toFixed(2); // Display total service price
+        calculateCombinedTotalPrice(); // Recalculate combined total price
+    }
+
+    // Function to calculate and display the combined total price of items and services
+    function calculateCombinedTotalPrice() {
+        var totalItemsPrice = parseFloat(document.getElementById('totalPrice').textContent) || 0;
+        var totalServicesPrice = parseFloat(document.getElementById('totalServicePrice').textContent) || 0;
+        var combinedTotalPrice = totalItemsPrice + totalServicesPrice;
+        document.getElementById('combinedTotalPrice').textContent = combinedTotalPrice.toFixed(2);
+    }
+
+    // Function to handle deleting rows
+    function deleteRow(btn) {
+        var row = btn.closest('tr');
+        row.remove();
+    }
+
+    // Adding event listener to dynamically created delete buttons
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('delete-row')) {
+            deleteRow(event.target);
+            calculateTotalServicePrice(); // Update total service price when row is deleted
+            calculateCombinedTotalPrice(); // Recalculate combined total price
+        }
+    });
 </script>

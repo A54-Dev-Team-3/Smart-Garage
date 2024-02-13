@@ -20,8 +20,6 @@ namespace Smart_Garage.Controllers.MVC
         [HttpGet]
         public IActionResult Index()
         {
-            string currentUser = HttpContext.Session.GetString("user");
-
             var vehicleResponseDTO = vehicleService.GetAll();
 
             var vehicleViewModels = autoMapper.Map<IList<VehicleViewModel>>(vehicleResponseDTO);

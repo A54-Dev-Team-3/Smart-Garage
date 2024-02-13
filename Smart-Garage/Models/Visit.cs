@@ -9,6 +9,7 @@ namespace Smart_Garage.Models
 
         [Required]
         public int VehicleId { get; set; }
+        public Vehicle Vehicle { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

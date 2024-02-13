@@ -166,8 +166,9 @@
     </div>
 </div>
 
-<h2 style="margin-top: 90px; margin-bottom:20px; margin-left:30px;">Vehicles</h2>
-<table class="table" id="resizeMe" style="margin-left:30px; max-width: 1200px;">
+<h2 style="margin-top: 90px" class="heading">Vehicles</h2>
+
+<table class="table myTable" id="resizeMe" style="margin-left:30px; max-width: 1200px;">
 
     <thead>
         <tr>
@@ -187,8 +188,8 @@
             <tr>
                 <td>@vehicle.Id</td>
                 <td>@vehicle.LicensePlate</td>
-                <td>@vehicle.Brand</td>
-                <td>@vehicle.Model</td>
+                <td>@vehicle.Model.Brand.Name</td>
+                <td>@vehicle.Model.Name</td>
                 <td>@vehicle.CreationYear</td>
                 <td>@vehicle.VIN</td>
                 <td>

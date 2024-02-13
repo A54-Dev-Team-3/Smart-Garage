@@ -10,6 +10,20 @@ namespace Smart_Garage.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Brands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brands", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Mechanics",
                 columns: table => new
                 {
@@ -32,6 +46,7 @@ namespace Smart_Garage.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -76,14 +91,34 @@ namespace Smart_Garage.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Models",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Models", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Models_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vehicles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModelId = table.Column<int>(type: "int", nullable: false),
                     LicensePlate = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     VIN = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreationYear = table.Column<int>(type: "int", maxLength: 50, nullable: false),
@@ -92,6 +127,12 @@ namespace Smart_Garage.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_Models_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Models",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Vehicles_Users_UserId",
                         column: x => x.UserId,
@@ -130,40 +171,23 @@ namespace Smart_Garage.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    MechanicId = table.Column<int>(type: "int", nullable: false),
                     VisitId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ServiceInstance", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ServiceInstance_Visits_VisitId",
-                        column: x => x.VisitId,
-                        principalTable: "Visits",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Mechanic",
-                columns: table => new
-                {
-                    ServiceInstanceId = table.Column<int>(type: "int", nullable: false),
-                    MechanicId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Mechanic", x => new { x.ServiceInstanceId, x.MechanicId });
-                    table.ForeignKey(
-                        name: "FK_Mechanic_Mechanics_MechanicId",
+                        name: "FK_ServiceInstance_Mechanics_MechanicId",
                         column: x => x.MechanicId,
                         principalTable: "Mechanics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Mechanic_ServiceInstance_ServiceInstanceId",
-                        column: x => x.ServiceInstanceId,
-                        principalTable: "ServiceInstance",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_ServiceInstance_Visits_VisitId",
+                        column: x => x.VisitId,
+                        principalTable: "Visits",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -215,9 +239,9 @@ namespace Smart_Garage.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mechanic_MechanicId",
-                table: "Mechanic",
-                column: "MechanicId");
+                name: "IX_Models_BrandId",
+                table: "Models",
+                column: "BrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Part_PartId",
@@ -228,6 +252,11 @@ namespace Smart_Garage.Migrations
                 name: "IX_Service_ServiceId",
                 table: "Service",
                 column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceInstance_MechanicId",
+                table: "ServiceInstance",
+                column: "MechanicId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServiceInstance_VisitId",
@@ -253,6 +282,11 @@ namespace Smart_Garage.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_ModelId",
+                table: "Vehicles",
+                column: "ModelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_UserId",
                 table: "Vehicles",
                 column: "UserId");
@@ -266,16 +300,10 @@ namespace Smart_Garage.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Mechanic");
-
-            migrationBuilder.DropTable(
                 name: "Part");
 
             migrationBuilder.DropTable(
                 name: "Service");
-
-            migrationBuilder.DropTable(
-                name: "Mechanics");
 
             migrationBuilder.DropTable(
                 name: "Parts");
@@ -287,13 +315,22 @@ namespace Smart_Garage.Migrations
                 name: "Services");
 
             migrationBuilder.DropTable(
+                name: "Mechanics");
+
+            migrationBuilder.DropTable(
                 name: "Visits");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
 
             migrationBuilder.DropTable(
+                name: "Models");
+
+            migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Brands");
         }
     }
 }

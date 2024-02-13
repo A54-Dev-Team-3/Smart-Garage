@@ -38,6 +38,7 @@ namespace Smart_Garage.Services
         public IList<VehicleResponseDTO> GetAll()
         {
             IList<Vehicle> vehicles = this.vehicleRepository.GetAll();
+
             return vehicles
                 .Select(v => autoMapper.Map<VehicleResponseDTO>(v))
                 .ToList();
@@ -69,6 +70,11 @@ namespace Smart_Garage.Services
                 .ToList();
         }
 
+        public VehicleResponseDTO FilterByLicensePlate(string licensePlate)
+        {
+            var vehicleResponseDTO = autoMapper.Map<VehicleResponseDTO>(vehicleRepository.FilterByLicensePlate(licensePlate));
+            return vehicleResponseDTO;
+        }
 
 
         public IList<Vehicle> SearchBy(string filter)

@@ -11,10 +11,12 @@ namespace Smart_Garage.Models
 
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Model> Models { get; set; }
         public DbSet<Visit> Visits { get; set; }
 
         
-        public DbSet<ServiceInstanceMechanic> Mechanic { get; set; }
+        //public DbSet<ServiceInstanceMechanic> Mechanic { get; set; }
         public DbSet<ServiceInstanceService> Service { get; set; }
         public DbSet<ServiceInstancePart> Part { get; set; }
 
@@ -100,18 +102,18 @@ namespace Smart_Garage.Models
             });
 
             // ServiceInstanceMechanic
-            modelBuilder.Entity<ServiceInstanceMechanic>()
-                .HasKey(sim => new { sim.ServiceInstanceId, sim.MechanicId });
+            //modelBuilder.Entity<ServiceInstanceMechanic>()
+            //    .HasKey(sim => new { sim.ServiceInstanceId, sim.MechanicId });
 
-            modelBuilder.Entity<ServiceInstanceMechanic>()
-                .HasOne(sim => sim.ServiceInstance)
-                .WithMany(si => si.ServiceInstanceMechanics)
-                .HasForeignKey(sim => sim.ServiceInstanceId);
+            //modelBuilder.Entity<ServiceInstanceMechanic>()
+            //    .HasOne(sim => sim.ServiceInstance)
+            //    .WithMany(si => si.ServiceInstanceMechanics)
+            //    .HasForeignKey(sim => sim.ServiceInstanceId);
 
-            modelBuilder.Entity<ServiceInstanceMechanic>()
-                .HasOne(sim => sim.Mechanic)
-                .WithMany(m => m.ServiceInstanceMechanics)
-                .HasForeignKey(sim => sim.MechanicId);
+            //modelBuilder.Entity<ServiceInstanceMechanic>()
+            //    .HasOne(sim => sim.Mechanic)
+            //    .WithMany(m => m.ServiceInstanceMechanics)
+            //    .HasForeignKey(sim => sim.MechanicId);
 
             // ServiceInstanceService
             modelBuilder.Entity<ServiceInstanceService>()
@@ -168,6 +170,12 @@ namespace Smart_Garage.Models
                 .IsRequired();
 
                 e.Property(p => p.Price)
+                .IsRequired();
+
+                e.Property(p => p.UnitPrice)
+                .IsRequired();
+
+                e.Property(p => p.Quantity)
                 .IsRequired();
             });
         }

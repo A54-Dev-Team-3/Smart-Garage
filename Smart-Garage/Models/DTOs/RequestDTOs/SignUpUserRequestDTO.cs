@@ -18,10 +18,6 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
         public string Email { get; set; }
 
         [Required]
-        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[+*^$%&!@#_-])[A-Za-z\d+*^$%&!@#_-]{8,}$")]
-        public string Password { get; set; }
-
-        [Required]
 		[RegularExpression(@"^\d{10}$")]
 		public string PhoneNumber { get; set; }
     }

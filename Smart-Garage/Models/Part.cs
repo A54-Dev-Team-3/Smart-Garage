@@ -13,6 +13,8 @@ namespace Smart_Garage.Models
         [Required]
         [Range(0, int.MaxValue)]
         public double Price { get; set; }
+        public double UnitPrice { get; set; }
+        public int Quantity { get; set; }
 
         public bool IsDeleted { get; set; }
 
