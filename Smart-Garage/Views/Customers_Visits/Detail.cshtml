@@ -147,11 +147,15 @@
                 var quantity = parseFloat(row.cells[1].innerText); // Get the quantity from the second column
                 var convertedUnitPrice = originalUnitPrice * conversionRate;
 
+                console.log("Hi", convertedUnitPrice);
+
                 var price = isNaN(convertedUnitPrice) || isNaN(quantity) ? 0 : (convertedUnitPrice * quantity);
 
                 priceCell.innerText = price.toFixed(2) + " " + currencySymbol;
 
                 totalPartsPrice += price;
+
+                unitPriceCell.innerText = convertedUnitPrice.toFixed(2) + " " + currencySymbol;
             });
 
             console.log("Total parts price:", totalPartsPrice.toFixed(2));
