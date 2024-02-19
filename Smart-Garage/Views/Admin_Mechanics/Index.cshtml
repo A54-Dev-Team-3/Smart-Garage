@@ -1,26 +1,40 @@
-﻿@{
+﻿@model IList<MechanicViewModel>
+@{
     ViewData["Title"] = "Mechanics";
 }
 
-@model IList<MechanicViewModel>
+<h2 style="margin-bottom:30px; margin-left:30px">Mechanics</h2>
 
-@* table-striped *@
-<table class="table" id="resizeMe"> 
+<a asp-controller="Admin_Mechanics" asp-action="Create" style="margin-bottom:30px; margin-left:30px" class="btn btn-primary">Add Mechanic</a>
+
+<table class="table myTable" id="resizeMe" style="margin-left:30px">
     <thead>
         <tr>
             <th scope="col">Id</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
+            <th scope="col">Detail</th>
         </tr>
     </thead>
     <tbody>
 
         @foreach (var mechanic in Model)
         {
+            string[] parts = mechanic.Name.Split(' ');
+            string firstName = parts[0];
+            string lastName = parts[1];
+
             <tr>
                 <td>@mechanic.Id</td>
-                <td>@mechanic.FirstName</td>
-                <td>@mechanic.LastName</td>
+                <td>@firstName</td>
+                <td>@lastName</td>
+                <td>
+                    <a asp-controller="Admin_Mechanics" asp-action="Detail" asp-route-id="@mechanic.Id">
+                        <span class="material-symbols-outlined btn btn-primary">
+                            description
+                        </span>
+                    </a>
+                </td>
             </tr>
         }
 

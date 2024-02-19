@@ -1,0 +1,104 @@
+﻿@model MechanicViewModel
+@{
+    ViewData["Title"] = "Mechanic";
+}
+
+<h2 style="margin-bottom:30px; margin-left:30px">Mechanic: @Model.Name</h2>
+
+<div style="max-width:600px; margin-left:70px;">
+    <div class="card-body">
+
+        <form asp-controller="Admin_Mechanics" asp-action="Update" method="post">
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Id</p>
+                </div>
+                <div class="col-sm-7">
+                    <p class="text-muted mb-0">@Model.Id</p>
+                    <input asp-for="Id" type="text" class="form-control" style="display: none;" value="@Model.Id" />
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Username</p>
+                </div>
+                <div class="col-sm-7">
+                    <span class="text-element text-muted mb-0">@Model.Name</span>
+                    <input asp-for="Name" type="text" class="form-control" style="display: none;" value="@Model.Name" />
+                </div>
+                <div class="col-sm-1" style="padding-left:30px;">
+                    <button type="button" class="btn btn-primary edit-btn" style="font-size: 0px;">
+                        <span class="material-symbols-outlined" style="font-size:20px">edit</span>
+                    </button>
+                </div>
+            </div>
+
+            <hr>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".edit-btn").click(function (e) {
+            e.stopPropagation(); // Prevent click event from propagating
+            var parent = $(this).closest(".row");
+            var textElement = parent.find(".text-element"); // Target the text element within the same row
+            var inputElement = parent.find("input[type='text']");
+
+            if (textElement.is(":visible")) {
+                textElement.hide();
+                inputElement.show().focus();
+            } else {
+                textElement.show();
+                inputElement.hide();
+            }
+        });
+
+        // Listen for "blur" event on input fields
+        $("input[type='text']").blur(function () {
+            saveChanges($(this));
+        });
+
+        // Listen for "keypress" event on input fields
+        $("input[type='text']").keypress(function (e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault();
+                saveChanges($(this));
+            }
+        });
+
+        // Listen for "keydown" event on input fields
+        $("input[type='text']").keydown(function (e) {
+            if (e.which == 27) { // Esc key
+                cancelEdit($(this));
+            }
+        });
+
+        function saveChanges(inputField) {
+            var newValue = inputField.val();
+            var parentRow = inputField.closest(".row");
+            var textElement = parentRow.find(".text-element");
+            var inputElement = parentRow.find("input[type='text']");
+            textElement.text(newValue);
+            textElement.show();
+            inputElement.hide();
+            $('button[type="submit"]').prop('disabled', false);
+        }
+
+        function cancelEdit(inputField) {
+            var parentRow = inputField.closest(".row");
+            var textElement = parentRow.find(".text-element");
+            var inputElement = parentRow.find("input[type='text']");
+            // Restore the original text
+            inputField.val(textElement.text());
+            // Hide the input field and show the text element
+            textElement.show();
+            inputElement.hide();
+        }
+    });
+</script>
