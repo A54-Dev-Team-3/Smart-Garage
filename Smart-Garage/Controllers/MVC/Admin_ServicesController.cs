@@ -28,7 +28,7 @@ namespace Smart_Garage.Controllers.MVC
         [IsAuthenticated]
         public IActionResult Index()
         {
-            var serviceResponseDTO = serviceService.GetAll(GetUsername());
+            var serviceResponseDTO = serviceService.GetAll();
 
             var serviceViewModels = autoMapper.Map<IList<ServiceViewModel>>(serviceResponseDTO);
 
@@ -51,7 +51,7 @@ namespace Smart_Garage.Controllers.MVC
 			if (!ModelState.IsValid)
 				return View(serviceViewModel);
 
-			CreateServiceRequestDTO serviceRequestDTO = new CreateServiceRequestDTO()
+			ServiceRequestDTO serviceRequestDTO = new ServiceRequestDTO()
             {
                 Name = serviceViewModel.Name,
                 Price = serviceViewModel.Price
@@ -94,7 +94,7 @@ namespace Smart_Garage.Controllers.MVC
         [IsAuthenticated]
         public IActionResult Update(ServiceViewModel serviceViewModel)
         {
-            var updateServiceDTO = autoMapper.Map<UpdateServiceRequestDTO>(serviceViewModel);
+            var updateServiceDTO = autoMapper.Map<ServiceRequestDTO>(serviceViewModel);
             serviceService.Update(serviceViewModel.Id, updateServiceDTO, GetUsername());
 
             return RedirectToAction("Index", "Admin_Services");

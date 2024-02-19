@@ -225,8 +225,8 @@ namespace Smart_Garage.Helpers
             this.CreateMap<BrandResponseDTO, BrandViewModel>()
                 .ForPath(dest => dest.Models, opt => opt.MapFrom(src => src.Models));
             //ServiceViewModel
-            this.CreateMap<ServiceViewModel, CreateServiceRequestDTO>();
-            this.CreateMap<ServiceViewModel, UpdateServiceRequestDTO>();
+            this.CreateMap<ServiceViewModel, ServiceRequestDTO>();
+            this.CreateMap<ServiceViewModel, ServiceRequestDTO>();
 
             //VehicleViewModel
             this.CreateMap<VehicleViewModel, VehicleResponseDTO>();
@@ -238,7 +238,7 @@ namespace Smart_Garage.Helpers
                 .ForPath(dest => dest.Vehicle.LicensePlate, opt => opt.MapFrom(src => src.Vehicle.LicensePlate))
                 .ForPath(dest => dest.Vehicle.VIN, opt => opt.MapFrom(src => src.Vehicle.VIN))
                 .ForPath(dest => dest.Vehicle.CreationYear, opt => opt.MapFrom(src => src.Vehicle.CreationYear))
-                .ForPath(dest => dest.Vehicle.User, opt => opt.MapFrom(src => src.Vehicle.User));
+                .ForPath(dest => dest.User, opt => opt.MapFrom(src => src.Vehicle.User));
 
             //string
             this.CreateMap<string, Model>();
