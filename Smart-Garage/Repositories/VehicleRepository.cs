@@ -29,7 +29,7 @@ namespace Smart_Garage.Repositories
                 throw new DuplicationException($"Vehicle with VIN: {vehicle.VIN} already exists!");
             }
 
-            vehicle.UserId= user.Id;
+            vehicle.UserId = user.Id;
             context.Vehicles.Add(vehicle);
             vehicle.User.Vehicles.Add(vehicle);
             context.SaveChanges();

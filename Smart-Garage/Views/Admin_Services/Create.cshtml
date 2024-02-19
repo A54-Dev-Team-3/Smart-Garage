@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Create Service";
+}
+@model CreateServiceViewModel
+
+<h2 class="heading">Add a new Service</h2>
+
+<div class="myForm">
+
+	<form asp-controller="Admin_Services" asp-action="Create" method="post">
+
+		<div class="form-group" style="margin-bottom: 15px">
+			<label asp-for="Name">Name</label>
+			<input asp-for="Name" type="text" class="form-control" placeholder="Name">
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+
+		<div class="form-groupel" style="margin-bottom: 15px">
+			<label asp-for="Price">Price</label>
+			<input asp-for="Price" type="text" class="form-control" placeholder="Price">
+			<span asp-validation-for="Price" class="text-danger"></span>
+
+		<button style="margin-top:20px" type="submit" value="Create" class="btn btn-primary">Create</button>
+	</form>
+</div>

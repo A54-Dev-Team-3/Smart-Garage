@@ -44,6 +44,8 @@ namespace Smart_Garage.Helpers
                 .ForPath(dest => dest.User.LastName, opt => opt.MapFrom(src => src.User.LastName))
                 .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForPath(dest => dest.User.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber));
+            //ServiceResponseDTO
+            this.CreateMap<ServiceReponseDTO, ServiceViewModel>();
 
             // VehicleResponseDTO
             this.CreateMap<VehicleResponseDTO, VehicleViewModel>();
@@ -51,10 +53,14 @@ namespace Smart_Garage.Helpers
 
             // VehicleRequestDTO
             this.CreateMap<VehicleRequestDTO, Vehicle>();
+            this.CreateMap<VehicleRequestDTO, CreateVehicleViewModel>();
 
             // VehicleResponseDTO
             this.CreateMap<VehicleResponseDTO, Vehicle>();
             this.CreateMap<VehicleResponseDTO, VehicleViewModel>();
+
+            //Service
+            this.CreateMap<Service, ServiceReponseDTO>();
 
 
             // Service
@@ -218,6 +224,24 @@ namespace Smart_Garage.Helpers
 
             this.CreateMap<BrandResponseDTO, BrandViewModel>()
                 .ForPath(dest => dest.Models, opt => opt.MapFrom(src => src.Models));
+            //ServiceViewModel
+            this.CreateMap<ServiceViewModel, CreateServiceRequestDTO>();
+            this.CreateMap<ServiceViewModel, UpdateServiceRequestDTO>();
+
+            //VehicleViewModel
+            this.CreateMap<VehicleViewModel, VehicleResponseDTO>();
+
+            // VisitResponseDTO
+            this.CreateMap<VisitResponseDTO, VisitViewModel>()
+                .ForPath(dest => dest.Vehicle.Model, opt => opt.MapFrom(src => src.Vehicle.Model))
+                .ForPath(dest => dest.Vehicle.Brand, opt => opt.MapFrom(src => src.Vehicle.Brand))
+                .ForPath(dest => dest.Vehicle.LicensePlate, opt => opt.MapFrom(src => src.Vehicle.LicensePlate))
+                .ForPath(dest => dest.Vehicle.VIN, opt => opt.MapFrom(src => src.Vehicle.VIN))
+                .ForPath(dest => dest.Vehicle.CreationYear, opt => opt.MapFrom(src => src.Vehicle.CreationYear))
+                .ForPath(dest => dest.Vehicle.User, opt => opt.MapFrom(src => src.Vehicle.User));
+
+            //string
+            this.CreateMap<string, Model>();
         }
     }
 }

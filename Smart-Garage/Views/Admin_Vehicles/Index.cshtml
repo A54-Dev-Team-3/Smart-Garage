@@ -1,8 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Vehicles";
+    string vehicleId = "";
 }
 
 @model IList<VehicleViewModel>
+
+<h2 class="heading">Vehicles</h2>
+
+<a asp-controller="Admin_Vehicles" asp-action="Create" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Vehicle</a>
 
 <table class="table table-striped">
     <thead>
@@ -14,6 +19,7 @@
             <th scope="col">Creation Year</th>
             <th scope="col">VIN</th>
             <th scope="col">Owner</th>
+            <th scope="col" style="width: 170px;">Details</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +34,16 @@
                 <td>@vehicle.CreationYear</td>
                 <td>@vehicle.VIN</td>
                 <td>@vehicle.User.FirstName @vehicle.User.LastName</td>
+                <td>
+                    <form asp-controller="Admin_Vehicles" asp-action="ShowDetail" method="post">
+                        <input asp-for="@vehicleId" type="hidden" name="vehicleId" value="@vehicle.Id">
+                        <button type="submit" class="btn btn-primary" style="font-size: 0px;">
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                        </button>
+                    </form>
+                </td>
             </tr>
         }
 
