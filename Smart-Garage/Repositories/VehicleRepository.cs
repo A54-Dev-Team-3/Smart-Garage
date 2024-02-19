@@ -52,6 +52,14 @@ namespace Smart_Garage.Repositories
                 throw new EntityNotFoundException($"Vehicle with id: {id} doesn't exists.");
         }
 
+        public IList<string> GetLicensePlateByUser(string username)
+        {
+            return context.Vehicles
+                .Where(v => !v.IsDeleted && v.User.Username == username)
+                .Select(v => v.LicensePlate)
+                .ToList();
+        }
+
         public Vehicle Update(int vehicleId, Vehicle updatedVehicle)
         {
             Vehicle vehicleToUpdate = GetById(vehicleId);

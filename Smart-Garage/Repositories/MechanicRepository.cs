@@ -35,7 +35,7 @@ namespace Smart_Garage.Repositories
 
         public Mechanic GetByName(string name)
         {
-            return context.Mechanics.FirstOrDefault(m => m.FirstName + " " + m.LastName == name && !m.IsDeleted) ??
+            return context.Mechanics.FirstOrDefault(m => m.Name == name && !m.IsDeleted) ??
                throw new EntityNotFoundException($"Mechanic with name:{name} is not found.");
         }
 
@@ -49,7 +49,7 @@ namespace Smart_Garage.Repositories
 
         public bool VisitExists(string name)
         {
-            return context.Mechanics.Any(m => m.FirstName + " " + m.LastName == name);
+            return context.Mechanics.Any(m => m.Name == name);
         }
     }
 }
