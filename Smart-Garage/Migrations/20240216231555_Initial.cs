@@ -29,8 +29,7 @@ namespace Smart_Garage.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -45,9 +44,7 @@ namespace Smart_Garage.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
                     UnitPrice = table.Column<double>(type: "float", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -167,76 +164,46 @@ namespace Smart_Garage.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServiceInstance",
+                name: "ServiceInstances",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PartQuantity = table.Column<int>(type: "int", nullable: false),
+                    PartUnitPrice = table.Column<double>(type: "float", nullable: false),
+                    PartId = table.Column<int>(type: "int", nullable: false),
+                    ServicePrice = table.Column<double>(type: "float", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false),
                     MechanicId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     VisitId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceInstance", x => x.Id);
+                    table.PrimaryKey("PK_ServiceInstances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ServiceInstance_Mechanics_MechanicId",
+                        name: "FK_ServiceInstances_Mechanics_MechanicId",
                         column: x => x.MechanicId,
                         principalTable: "Mechanics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ServiceInstance_Visits_VisitId",
-                        column: x => x.VisitId,
-                        principalTable: "Visits",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Part",
-                columns: table => new
-                {
-                    ServiceInstanceId = table.Column<int>(type: "int", nullable: false),
-                    PartId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Part", x => new { x.ServiceInstanceId, x.PartId });
-                    table.ForeignKey(
-                        name: "FK_Part_Parts_PartId",
+                        name: "FK_ServiceInstances_Parts_PartId",
                         column: x => x.PartId,
                         principalTable: "Parts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Part_ServiceInstance_ServiceInstanceId",
-                        column: x => x.ServiceInstanceId,
-                        principalTable: "ServiceInstance",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Service",
-                columns: table => new
-                {
-                    ServiceInstanceId = table.Column<int>(type: "int", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Service", x => new { x.ServiceInstanceId, x.ServiceId });
-                    table.ForeignKey(
-                        name: "FK_Service_ServiceInstance_ServiceInstanceId",
-                        column: x => x.ServiceInstanceId,
-                        principalTable: "ServiceInstance",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Service_Services_ServiceId",
+                        name: "FK_ServiceInstances_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServiceInstances_Visits_VisitId",
+                        column: x => x.VisitId,
+                        principalTable: "Visits",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -245,23 +212,23 @@ namespace Smart_Garage.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Part_PartId",
-                table: "Part",
-                column: "PartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Service_ServiceId",
-                table: "Service",
-                column: "ServiceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ServiceInstance_MechanicId",
-                table: "ServiceInstance",
+                name: "IX_ServiceInstances_MechanicId",
+                table: "ServiceInstances",
                 column: "MechanicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceInstance_VisitId",
-                table: "ServiceInstance",
+                name: "IX_ServiceInstances_PartId",
+                table: "ServiceInstances",
+                column: "PartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceInstances_ServiceId",
+                table: "ServiceInstances",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceInstances_VisitId",
+                table: "ServiceInstances",
                 column: "VisitId");
 
             migrationBuilder.CreateIndex(
@@ -301,22 +268,16 @@ namespace Smart_Garage.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Part");
+                name: "ServiceInstances");
 
             migrationBuilder.DropTable(
-                name: "Service");
+                name: "Mechanics");
 
             migrationBuilder.DropTable(
                 name: "Parts");
 
             migrationBuilder.DropTable(
-                name: "ServiceInstance");
-
-            migrationBuilder.DropTable(
                 name: "Services");
-
-            migrationBuilder.DropTable(
-                name: "Mechanics");
 
             migrationBuilder.DropTable(
                 name: "Visits");
