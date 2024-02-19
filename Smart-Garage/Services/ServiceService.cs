@@ -45,9 +45,8 @@ namespace Smart_Garage.Services
         {
             userService.IsCurrentUserAdmin(username);
 
-            return servicesRepository.GetAll()
-                .Select(s => autoMapper.Map<ServiceReponseDTO>(s))
-                .ToList();
+            IList<Service> services = servicesRepository.GetAll().ToList();
+            return autoMapper.Map<IList<ServiceReponseDTO>>(services).ToList();
         }
 
         public IList<ServiceReponseDTO> FilterBy(ServicesQueryParameters filterParameters, string username)

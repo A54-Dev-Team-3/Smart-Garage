@@ -24,7 +24,7 @@ namespace Smart_Garage.Repositories
 
         public IList<Service> GetAll()
         {
-            return context.Services.ToList();
+            return context.Services.Where(s => !s.IsDeleted).ToList();
         }
 
         public IList<Service> FilterBy(ServicesQueryParameters serviceParams)

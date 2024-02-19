@@ -9,6 +9,7 @@ using Smart_Garage.Helpers.Contracts;
 using AutoMapper;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
 using Smart_Garage.Helpers;
+using Smart_Garage.Models.ViewModel;
 
 namespace Smart_Garage.Services
 {
@@ -32,9 +33,27 @@ namespace Smart_Garage.Services
             {
                 throw new UnauthorizedOperationException("You are not an admin!");
             }
-            Vehicle vehicle = this.vehicleRepository.Create(user, autoMapper.Map<Vehicle>(dto));
-            return autoMapper.Map<VehicleResponseDTO>(vehicle);
-        }
+
+			Vehicle vehicle = new Vehicle()
+			{
+				LicensePlate = dto.LicensePlate,
+				VIN = dto.VIN,
+				CreationYear = dto.CreationYear,
+				Model = autoMapper.Map<Model>(dto.Model)
+			};
+
+			Vehicle createdVehicle = this.vehicleRepository.Create(user, vehicle);
+
+            VehicleResponseDTO dtoToReturn = new VehicleResponseDTO()
+			{
+				LicensePlate = createdVehicle.LicensePlate,
+				VIN = createdVehicle.VIN,
+				CreationYear = createdVehicle.CreationYear,
+				Model = autoMapper.Map<string>(createdVehicle.Model)
+			};
+
+            return dtoToReturn;
+		}
         public IList<VehicleResponseDTO> GetAll()
         {
             IList<Vehicle> vehicles = this.vehicleRepository.GetAll();
