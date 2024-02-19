@@ -1,1 +1,11 @@
-﻿
+﻿@model VisitViewModel
+
+@{
+    ViewData["Action"] = "Detail";
+    ViewData["Heading"] = "Visit";
+    ViewData["IsReadOnly"] = true;
+}
+
+<div class="myForm">
+    <partial name="_VisitForm" />
+</div>

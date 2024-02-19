@@ -2,19 +2,23 @@
     string licensePlate = "";
 }
 
-<form asp-controller="Admin_Visits" asp-action="SearchByLicensePlate" method="post" id="myForm">
+<div style="margin-left:27%; margin-top: 17%">
+    <h2>Search for Vehicle by License Plate</h2>
 
-    <div class="form-groupel" style="margin-bottom: 20px">
-        <label asp-for="@licensePlate">License Plate:</label>
-        <input id="licensePlateInput" asp-for="@licensePlate" type="text" class="form-control" placeholder="License Plate">
-        <span asp-validation-for="@licensePlate" class="text-danger"></span>
+    <div style="max-width: 500px; margin-top:20px">
+        <form asp-controller="Admin_Visits" asp-action="SearchByLicensePlate" method="post">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div class="form-group" style="margin-right: 10px;">
+                    <input id="licensePlateInput" asp-for="@licensePlate" type="text" class="form-control" placeholder="License Plate" style="width: 400px;">
+                    <span asp-validation-for="@licensePlate" class="text-danger"></span>
+                </div>
+                <button type="submit" value="Create" class="btn btn-primary">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <button type="submit" value="Create" class="btn btn-primary" style="display: flex; align-items: center;">
-        Search
-        <span class="material-symbols-outlined" style="margin-left: 5px;">
-            search
-        </span>
-    </button>
 
-</form>
+

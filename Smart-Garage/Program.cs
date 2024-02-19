@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Smart_Garage.Models.Contracts;
 using Rotativa.AspNetCore;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace ForumManagmentSystem
 {
@@ -23,6 +25,8 @@ namespace ForumManagmentSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+
             // Repository
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
@@ -30,6 +34,8 @@ namespace ForumManagmentSystem
             builder.Services.AddScoped<IVisitRepository, VisitRepository>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
             builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
+            builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+            builder.Services.AddScoped<IModelRepository, ModelRepository>();
 
             // Service
             builder.Services.AddScoped<IUserService, UserService>();
@@ -38,6 +44,8 @@ namespace ForumManagmentSystem
             builder.Services.AddScoped<IVisitService, VisitService>();
             builder.Services.AddScoped<IPartService, PartService>();
             builder.Services.AddScoped<IMechanicService, MechanicService>();
+            builder.Services.AddScoped<IBrandService, BrandService>();
+            builder.Services.AddScoped<IModelService, ModelService>();
 
             // AuthManager
             builder.Services.AddScoped<AuthManager>();
@@ -63,6 +71,13 @@ namespace ForumManagmentSystem
                     Type = SecuritySchemeType.ApiKey
                 });
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.SupportedCultures = new List<CultureInfo> { new CultureInfo("en-US") };
+                options.SupportedUICultures = new List<CultureInfo> { new CultureInfo("en-US") };
             });
 
             // JWT
@@ -99,12 +114,27 @@ namespace ForumManagmentSystem
             });
 
             var app = builder.Build();
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en-GB"),
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-GB"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
+
             app.UseSession();
             app.UseRouting();
             app.UseStaticFiles();
-			app.UseRotativa();
+            app.UseRotativa();
 
-			app.UseSwagger();
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
@@ -124,4 +154,3 @@ namespace ForumManagmentSystem
 }
 
 
-    

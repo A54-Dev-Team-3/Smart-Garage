@@ -7,6 +7,42 @@
 <h2 class="heading">Visits</h2>
 
 <a asp-controller="Admin_Visits" asp-action="SearchByLicensePlate" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Visit</a>
+<a asp-controller="Admin_Visits" asp-action="CreateVisitForNewCustomer" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Visit For New Customer</a>
+
+<form asp-controller="Admin_Visits" asp-action="Index" method="post">
+    <div class="row" style="margin-left: 17px; margin-bottom:2%">
+
+        <div class="col-md-2">
+            <label style="margin-right:10px;">Filter By:</label>
+            <select id="searchOption" name="searchOption" style="margin-right:10px; max-width:200px;" class="form-control">
+                <option value="Username">Username</option>
+                <option value="LicensePlate">License Plate</option>
+                <option value="VehicleBrand">Vehicle's Brand</option>
+                <option value="VehicleModel">Vehicle's Model</option>
+            </select>
+        </div>
+
+        <div class="col-md-2" style="margin-top:24px;">
+            <input type="text" id="searchString" name="searchString" class="form-control" placeholder="Search...">
+        </div>
+
+        <div class="col-md-2">
+            <!-- Use form-inline to align elements horizontally -->
+            <label for="startDate" style="margin-right:10px;">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" style="margin-right:10px; max-width: 200px;">
+        </div>
+
+        <div class="col-md-2">
+            <label for="endDate" style="margin-right:10px;">End Date:</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" style="max-width: 200px;">
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" style="margin-top:24px;">Filter</button>
+        </div>
+
+    </div>
+</form>
 
 <table class="table myTable" id="resizeMe">
     <thead>
@@ -18,6 +54,7 @@
             <th scope="col">Owner</th>
             <th scope="col">Date</th>
             <th scope="col">Total Price</th>
+            <th scope="col">Details</th>
         </tr>
     </thead>
     <tbody>
@@ -29,10 +66,17 @@
                 <td>@visit.Vehicle.LicensePlate</td>
                 <td>@visit.Vehicle.Brand</td>
                 <td>@visit.Vehicle.Model</td>
-                <td>@visit.Vehicle.User</td>
+                <td>@visit.User.FirstName @visit.User.LastName</td>
                 @* <td>@visit.Vehicle.User.LastName</td> *@
                 <td>@visit.Date.ToString("dd.MM.yyyy")</td>
                 <td>@visit.TotalPrice</td>
+                <td>
+                    <a asp-controller="Admin_Visits" asp-action="Detail" asp-route-id="@visit.Id" class="btn btn-primary">
+                        <span class="material-symbols-outlined">
+                            description
+                        </span>
+                    </a>
+                </td>
             </tr>
         }
 

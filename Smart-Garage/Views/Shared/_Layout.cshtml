@@ -68,14 +68,14 @@
 
                 <!-- Page Content Holder -->
                 <div id="content">
-                    <div class="container-fluid" style="margin-bottom:30px;">
+@*                     <div class="container-fluid" style="margin-bottom:30px;">
 
                         <button type="button" id="sidebarCollapse" class="navbar-btn">
                             <span></span>
                             <span></span>
                             <span></span>
                         </button>
-                    </div>
+                    </div> *@
 
                     <div>
                         @RenderBody()
@@ -85,9 +85,9 @@
         }
         else // isAdmin = false. This is the Private Parts
         {
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 30px">
 
-                <a class="navbar-brand" asp-controller="Customers_Visits" asp-action="Index">Smart-Garage</a>
+                <a class="navbar-brand" asp-controller="Customers_Visits" asp-action="Index" style="margin-left:30px">Smart-Garage</a>
 
                 @* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -101,9 +101,9 @@
                             <a class="nav-link" asp-controller="Customers_Visits" asp-action="Index">Visits</a>
                         </li>
 
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link" asp-controller="Customers_Vehicles" asp-action="Index">Vehicles</a>
-                        </li> 
+                        </li>  *@
 
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Customers_Profile" asp-action="Index">Profile</a>
