@@ -11,6 +11,7 @@ namespace Smart_Garage.Services.Contracts
         VehicleResponseDTO Create(string username, VehicleRequestDTO dto);
         public IList<VehicleResponseDTO> GetAll();
         public VehicleResponseDTO GetById(int id);
+        IList<string> GetLicensePlateByUser(string username);
         public VehicleResponseDTO Update(int vehicleId, VehicleRequestDTO dto);
         bool Delete(int id);
         public IList<Vehicle> SearchBy(string filter);

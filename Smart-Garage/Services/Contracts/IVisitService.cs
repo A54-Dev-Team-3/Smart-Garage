@@ -10,8 +10,9 @@ namespace Smart_Garage.Services.Contracts
     {
         VisitResponseDTO Create(int VehicleId, string username);
         IList<VisitResponseDTO> GetAll(string username);
-        IList<VisitResponseDTO> FilterBy(VisitQueryParameters filterParameters, string username);
+        IList<VisitResponseDTO> FilterBy(VisitQueryParameters filterParameters);
         VisitResponseDTO GetById(int id);
+        VisitResponseDTO Update(VisitRequestDTO visitRequestDTO);
         VisitResponseDTO Delete(int id, string username);
         bool VisitExists(int id);
     }

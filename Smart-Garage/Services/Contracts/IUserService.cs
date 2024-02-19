@@ -11,7 +11,7 @@ namespace Smart_Garage.Services.Contracts
         UserResponseDTO Create(SignUpUserRequestDTO newUser); // Sign Up
         IList<UserResponseDTO> GetAll();
         IList<UserResponseDTO> GetAllNotAdmins();
-        IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username);
+        IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters);
         UserResponseDTO GetById(int id);
         UserResponseDTO GetByName(string username);
         User Authenticate(string username);
