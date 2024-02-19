@@ -1,0 +1,45 @@
+﻿@{
+	ViewData["Title"] = "Create Vehicle";
+}
+
+@model CreateVehicleViewModel
+
+<h2 class="heading">Add a new Vehicle</h2>
+
+<div class="myForm">
+
+	<form asp-controller="Admin_Vehicles" asp-action="Create" method="post">
+
+		<div class="form-group" style="margin-bottom: 15px">
+			<label asp-for="Brand">Brand</label>
+			<input asp-for="Brand" type="text" class="form-control" placeholder="Brand">
+			<span asp-validation-for="Brand" class="text-danger"></span>
+		</div>
+
+		<div class="form-groupel" style="margin-bottom: 15px">
+			<label asp-for="Model">Model</label>
+			<input asp-for="Model" type="text" class="form-control" placeholder="Model">
+			<span asp-validation-for="Model" class="text-danger"></span>
+		</div>
+
+		<div class="form-group" style="margin-bottom: 15px">
+			<label asp-for="LicensePlate">LicensePlate</label>
+			<input asp-for="LicensePlate" type="text" class="form-control" placeholder="LicensePlate">
+			<span asp-validation-for="LicensePlate" class="text-danger"></span>
+		</div>
+
+		<div class="form-group" style="margin-bottom: 15px">
+			<label asp-for="VIN">VIN</label>
+			<input asp-for="VIN" type="text" class="form-control" placeholder="VIN">
+			<span asp-validation-for="VIN" class="text-danger"></span>
+		</div>
+
+		<div class="form-group" style="margin-bottom: 15px">
+			<label asp-for="CreationYear">CreationYear</label>
+			<input asp-for="CreationYear" type="text" class="form-control" placeholder="CreationYear">
+			<span asp-validation-for="CreationYear" class="text-danger"></span>
+		</div>
+
+		<button style="margin-top:20px" type="submit" value="Create" class="btn btn-primary">Create</button>
+	</form>
+</div>

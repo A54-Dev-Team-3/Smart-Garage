@@ -1,1 +1,43 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Services";
+    string serviceId = "";
+}
+
+@model IList<ServiceViewModel>
+
+<h2 class="heading">Services</h2>
+
+<a asp-controller="Admin_Services" asp-action="Create" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Service</a>
+
+@* table-striped *@
+<table class="table myTable" id="resizeMe">
+    <thead>
+        <tr>
+            <th scope="col" style="width: 5%">Id</th>
+            <th scope="col" style="width: 15%;">Service Name</th>
+            <th scope="col" style="width: 15%;">Price</th>
+            <th scope="col" style="width: 170px;">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.Id</td>
+                <td>@service.Name</td>
+                <td>@($"{service.Price:f2}")</td>
+                <td>
+                    <form asp-controller="Admin_Services" asp-action="ShowDetail" method="post">
+                        <input asp-for="@serviceId" type="hidden" name="serviceId" value="@service.Id">
+                        <button type="submit" class="btn btn-primary" style="font-size: 0px;">
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
