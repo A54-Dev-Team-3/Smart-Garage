@@ -32,6 +32,8 @@ namespace Smart_Garage.Helpers
             this.CreateMap<UserResponseDTO, UserRequestDTO>();
             this.CreateMap<UserResponseDTO, CustomerViewModel>();
 
+            //ServiceResponseDTO
+            this.CreateMap<ServiceReponseDTO, ServiceViewModel>();
 
             // VehicleResponseDTO
             this.CreateMap<VehicleResponseDTO, VehicleViewModel>();
@@ -39,11 +41,15 @@ namespace Smart_Garage.Helpers
 
             // VehicleRequestDTO
             this.CreateMap<VehicleRequestDTO, Vehicle>();
+            this.CreateMap<VehicleRequestDTO, CreateVehicleViewModel>();
 
 
             // VehicleResponseDTO
             this.CreateMap<VehicleResponseDTO, Vehicle>();
             this.CreateMap<VehicleResponseDTO, VehicleViewModel>();
+
+            //Service
+            this.CreateMap<Service, ServiceReponseDTO>();
 
 
             // Visit
@@ -83,6 +89,13 @@ namespace Smart_Garage.Helpers
             // CustomerViewModel
             this.CreateMap<CustomerViewModel, UpdateUserRequestDTO>();
 
+            //ServiceViewModel
+            this.CreateMap<ServiceViewModel, CreateServiceRequestDTO>();
+            this.CreateMap<ServiceViewModel, UpdateServiceRequestDTO>();
+
+            //VehicleViewModel
+            this.CreateMap<VehicleViewModel, VehicleResponseDTO>();
+
             // VisitResponseDTO
             this.CreateMap<VisitResponseDTO, VisitViewModel>()
                 .ForPath(dest => dest.Vehicle.Model, opt => opt.MapFrom(src => src.Vehicle.Model))
@@ -91,6 +104,9 @@ namespace Smart_Garage.Helpers
                 .ForPath(dest => dest.Vehicle.VIN, opt => opt.MapFrom(src => src.Vehicle.VIN))
                 .ForPath(dest => dest.Vehicle.CreationYear, opt => opt.MapFrom(src => src.Vehicle.CreationYear))
                 .ForPath(dest => dest.Vehicle.User, opt => opt.MapFrom(src => src.Vehicle.User));
+
+            //string
+            this.CreateMap<string, Model>();
         }
     }
 }
