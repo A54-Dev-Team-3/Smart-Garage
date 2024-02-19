@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Smart_Garage.Models.DTOs.RequestDTOs
+namespace Smart_Garage.Models.ViewModel
 {
-    public class CreateServiceRequestDTO
+    public class CreateServiceViewModel
     {
         [Required]
         public string Name { get; set; }
