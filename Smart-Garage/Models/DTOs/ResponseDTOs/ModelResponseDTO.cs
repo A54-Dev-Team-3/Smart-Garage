@@ -1,9 +1,7 @@
 ﻿namespace Smart_Garage.Models.DTOs.ResponseDTOs
 {
-    public class MechanicResponseDTO
+    public class ModelResponseDTO
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
     }
 }
