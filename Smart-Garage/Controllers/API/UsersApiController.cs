@@ -49,7 +49,7 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var users = userService.FilterBy(filterParameters, username);
+                var users = userService.FilterBy(filterParameters);
                 return Ok(users);
             }
             catch(UnauthorizedAccessException ex)

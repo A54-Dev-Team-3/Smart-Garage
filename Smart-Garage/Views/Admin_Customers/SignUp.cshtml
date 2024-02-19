@@ -1,8 +1,8 @@
-﻿@{
+﻿@model SignUpViewModel
+@{
 	ViewData["Title"] = "Sign Up";
 }
 
-@model SignUpViewModel
 
 <h2 class="heading">Add a new User</h2>
 
@@ -39,12 +39,6 @@
 			<input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Phone Number">
 			<span asp-validation-for="PhoneNumber" class="text-danger"></span>
 		</div>
-
-@* 		<div class="form-group">
-			<label asp-for="Password">Password</label>
-			<input asp-for="Password" type="password" class="form-control" placeholder="Password">
-			<span asp-validation-for="Password" class="text-danger"></span>
-		</div> *@
 
 		<button style="margin-top:20px" type="submit" value="SignUp" class="btn btn-primary">Sign Up</button>
 	</form>

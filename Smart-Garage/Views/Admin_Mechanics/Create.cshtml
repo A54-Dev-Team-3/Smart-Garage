@@ -1,0 +1,23 @@
+﻿@model CreateMechanicViewModel
+
+<h2 style="margin-bottom:30px; margin-left:30px">Add Mechanic</h2>
+
+<div class="myForm">
+
+    <form asp-controller="Admin_Mechanics" asp-action="Create" method="post">
+
+        <div class="form-group" style="margin-bottom: 15px">
+            <label asp-for="FirstName">First Name:</label>
+            <input asp-for="FirstName" type="text" class="form-control" placeholder="First Name">
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="LastName">Last Name</label>
+            <input asp-for="LastName" type="text" class="form-control" placeholder="Last Name">
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <button style="margin-top:20px" type="submit" class="btn btn-primary">Add Mechanic</button>
+    </form>
+</div>

@@ -1,5 +1,16 @@
 ﻿@model VisitViewModel
 
+<h2 style="margin-left:5%; margin-top:2%">Visit</h2>
+<p style="margin-left:5%; margin-top:2%;">Date: @Model.Date.ToString("dd.MM.yyyy")</p>
+<div style="margin-left: 5%; margin-bottom:2%">
+    <p style="display: inline-block;" for="currency">Select Currency:</p>
+    <select id="currency" class="form-control" style="max-width:60px; display: inline-block;">
+        <option value="1">BGN</option> <!-- Bulgarian Lev -->
+        <option value="0.55">USD</option> <!-- US Dollar -->
+        <option value="0.51">EUR</option> <!-- Euro -->
+    </select>
+</div>
+
 <div style="display: flex; width: 90%; margin-left: 5%">
 
     <span style="flex: 0.3;">
@@ -15,44 +26,10 @@
         <p>VIN: @Model.Vehicle.VIN</p>
         <p>Brand: @Model.Vehicle.Brand</p>
         <p>Model: @Model.Vehicle.Model</p>
-        <p>Model: @Model.Vehicle.Model</p>
         <p>Creation Year: @Model.Vehicle.CreationYear</p>
 
     </span>
 
-    <span style="flex: 0.9; margin-left:0px;">
-
-@*         <h4 style="margin-bottom: 20px; display: flex; align-items: center; margin-top:30px; margin-left: 30px;">
-            <span class="material-symbols-outlined" style="margin-right: 5px;">
-                package_2
-            </span>
-            Parts
-        </h4> *@
-
-        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
-            <span class="material-symbols-outlined" style="margin-right: 5px;">
-                package_2
-            </span>
-            Parts
-        </h4>
-
-        <table class="table" style="width:100%; margin-left:0px">
-            <thead>
-                <tr>
-                    <th scope="col" style="width: 60%">Name</th>
-                    <th scope="col" style="width: 10%">Quantity</th>
-                    <th scope="col" style="width: 18%">Unit Price (лв)</th>
-                    <th scope="col" style="width: 23%">Price (лв)</th>
-                </tr>
-            </thead>
-            <tbody id="itemTableBody">
-            </tbody>
-        </table>
-    </span>
-
-</div>
-
-<div style="display: flex; width: 95%; margin-left: 2%; margin-top: 2%">
     <span style="flex: 0.3; margin-left:0px;">
 
         <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
@@ -62,24 +39,222 @@
             Owner
         </h4>
 
-        <p>Username: @Model.Vehicle.User.Username</p>
-        <p>First Name: @Model.Vehicle.User.FirstName</p>
-        <p>Last Name: @Model.Vehicle.User.LastName</p>
-        <p>Last Name: @Model.Vehicle.User.LastName</p>
-        <p>Email: @Model.Vehicle.User.Email</p>
-        <p>Phone Number: @Model.Vehicle.User.PhoneNumber</p>
+        <p>Username: @Model.User.Username</p>
+        <p>First Name: @Model.User.FirstName</p>
+        <p>Last Name: @Model.User.LastName</p>
+        <p>Email: @Model.User.Email</p>
+        <p>Phone Number: @Model.User.PhoneNumber</p>
 
+    </span>
+
+</div>
+
+<div style="display: flex; width: 90%; margin-left: 5%; margin-top: 2%">
+    <span style="flex: 0.9; margin-left:0px;">
+
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">
+                package_2
+            </span>
+            Parts
+        </h4>
+
+        @* Parts *@
+        <table class="table" style="width:100%; margin-left:0px">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 60%">Name</th>
+                    <th scope="col" style="width: 10%">Quantity</th>
+                    <th scope="col" id="unitPriceHeader" style="width: 18%">Unit Price (лв)</th>
+                    <th scope="col" id="priceHeader" style="width: 23%">Price (лв)</th>
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+                @foreach (var serviceInstances in Model.ServiceInstances)
+                {
+
+                    <tr>
+                        <td>@serviceInstances.Part.Name</td>
+                        <td>@serviceInstances.PartQuantity</td>
+                        <td class="unitPrice" data-original="@serviceInstances.PartUnitPrice">@serviceInstances.PartUnitPrice</td>
+                        <td class="price">@serviceInstances.PartQuantity * @serviceInstances.PartUnitPrice</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+        <p>Total Parts Price: <span id="partsTotalPrice" data-original="@Model.PartsTotalPrice">@Model.PartsTotalPrice</span></p>
     </span>
 </div>
 
 
 
+<div style="display: flex; width: 90%; margin-left: 5%; margin-top: 2%">
+    <span style="flex: 0.9; margin-left:0px;">
+        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+            <span class="material-symbols-outlined" style="margin-right: 5px;">construction</span>
+            Service
+        </h4>
+        <!-- Services -->
+        <table class="table" style="width:100%; margin-left:0px">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 60%">Name</th>
+                    <th scope="col" id="servicePriceHeader" style="width: 23%">Price (лв)</th>
+                </tr>
+            </thead>
+            <tbody id="servicesTableBody">
+                @foreach (var serviceInstance in Model.ServiceInstances)
+                {
 
+                    <tr>
+                        <td>@serviceInstance.Service.Name</td>
+                        <td class="price" data-original="@serviceInstance.ServicePrice">@serviceInstance.ServicePrice</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <!-- Total Services Price -->
+        <p>Total Services Price: <span id="servicesTotalPrice" data-original="@Model.ServicesTotalPrice">@Model.ServicesTotalPrice</span></p>
+
+    </span>
+</div>
+
+@* <p >Total Price: <span id="totalPrice">@Model.TotalPrice</span></p> *@
+<p style="margin-left:5%; margin-top:2%">Total Price: <span id="totalPrice">0</span></p>
 
 
 <form asp-controller="Customers_Visits" asp-action="Detail" method="post">
     <input asp-for="@Model.Id" type="hidden" name="id" value="@Model.Id">
-    <button type="submit" class="btn btn-primary" style="font-size: 18px;">
+    <button type="submit" class="btn btn-primary" style="font-size: 18px; margin-left:5%; margin-top:2%">
         PDF
     </button>
 </form>
+
+<script>
+    function updatePrices(currencySymbol, conversionRate) {
+        try {
+            console.log("Updating prices...");
+            var partsRows = document.querySelectorAll("#itemTableBody tr");
+            var totalPartsPrice = 0;
+
+            partsRows.forEach(function (row) {
+                var unitPriceCell = row.querySelector(".unitPrice");
+                var priceCell = row.querySelector(".price");
+
+                var originalUnitPrice = parseFloat(unitPriceCell.dataset.original);
+                var quantity = parseFloat(row.cells[1].innerText); // Get the quantity from the second column
+                var convertedUnitPrice = originalUnitPrice * conversionRate;
+
+                var price = isNaN(convertedUnitPrice) || isNaN(quantity) ? 0 : (convertedUnitPrice * quantity);
+
+                priceCell.innerText = price.toFixed(2) + " " + currencySymbol;
+
+                totalPartsPrice += price;
+            });
+
+            console.log("Total parts price:", totalPartsPrice.toFixed(2));
+            document.getElementById("partsTotalPrice").innerText = totalPartsPrice.toFixed(2) + " " + currencySymbol;
+        } catch (error) {
+            console.error("Error in updatePrices function:", error);
+        }
+    }
+
+
+    function updateServicesPrices(currencySymbol, conversionRate) {
+        try {
+            console.log("Updating service prices...");
+            var servicesRows = document.querySelectorAll("#servicesTableBody tr");
+            var totalServicesPrice = 0;
+
+            servicesRows.forEach(function (row) {
+                var priceCell = row.querySelector(".price");
+                var originalPrice = parseFloat(priceCell.dataset.original);
+                var convertedPrice = originalPrice * conversionRate;
+
+                if (!isNaN(convertedPrice)) {
+                    priceCell.innerText = convertedPrice.toFixed(2) + " " + currencySymbol;
+                    totalServicesPrice += convertedPrice;
+                } else {
+                    console.error("Error: NaN value detected for service price.");
+                }
+            });
+
+            console.log("Total services price:", totalServicesPrice.toFixed(2));
+            document.getElementById("servicesTotalPrice").innerText = totalServicesPrice.toFixed(2) + " " + currencySymbol;
+
+            updateTotalPrice();
+        } catch (error) {
+            console.error("Error in updateServicesPrices function:", error);
+        }
+    }
+
+    function updateTotalPrice() {
+        try {
+            console.log("Updating total price...");
+            var currencySymbol = "";
+            var conversionRate = parseFloat(document.getElementById("currency").value);
+
+            switch (document.getElementById("currency").value) {
+                case "1":
+                    currencySymbol = "лв";
+                    break;
+                case "0.55":
+                    currencySymbol = "USD";
+                    break;
+                case "0.51":
+                    currencySymbol = "EUR";
+                    break;
+                default:
+                    currencySymbol = "лв";
+            }
+
+            var partsTotalPrice = parseFloat(document.getElementById("partsTotalPrice").dataset.original) * conversionRate;
+            var servicesTotalPrice = parseFloat(document.getElementById("servicesTotalPrice").dataset.original) * conversionRate;
+            var totalPrice = partsTotalPrice + servicesTotalPrice;
+
+            console.log("Total price:", totalPrice.toFixed(2));
+            document.getElementById("totalPrice").innerText = "Total Price: " + totalPrice.toFixed(2) + " " + currencySymbol;
+        } catch (error) {
+            console.error("Error in updateTotalPrice function:", error);
+        }
+    }
+
+    function convertCurrency() {
+        try {
+            var currencySelect = document.getElementById("currency");
+            var currencySymbol = "";
+            var conversionRate = parseFloat(currencySelect.value);
+
+            console.log("Conversion rate:", conversionRate);
+
+            switch (currencySelect.value) {
+                case "1":
+                    currencySymbol = "лв";
+                    break;
+                case "0.55":
+                    currencySymbol = "USD";
+                    break;
+                case "0.51":
+                    currencySymbol = "EUR";
+                    break;
+                default:
+                    currencySymbol = "лв";
+            }
+
+            document.getElementById("servicePriceHeader").innerText = "Price (" + currencySymbol + ")";
+            document.getElementById("unitPriceHeader").innerText = "Unit Price (" + currencySymbol + ")";
+            document.getElementById("priceHeader").innerText = "Price (" + currencySymbol + ")";
+
+            updatePrices(currencySymbol, conversionRate);
+            updateServicesPrices(currencySymbol, conversionRate);
+        } catch (error) {
+            console.error("Error in convertCurrency function:", error);
+        }
+    }
+
+    document.getElementById("currency").addEventListener("change", convertCurrency);
+    convertCurrency(); // Call the function initially
+
+</script>

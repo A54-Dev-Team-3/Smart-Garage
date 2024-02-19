@@ -24,7 +24,7 @@ namespace Smart_Garage.Services
             this.autoMapper = autoMapper;
         }
 
-        public CreateServiceResponseDTO Create(CreateServiceRequestDTO newService, string username)
+        public CreateServiceResponseDTO Create(ServiceRequestDTO newService, string username)
         {
 
             if (servicesRepository.ServiceExists(newService.Name))
@@ -41,9 +41,9 @@ namespace Smart_Garage.Services
             return autoMapper.Map<CreateServiceResponseDTO>(servicesRepository.Create(service));
         }
 
-        public IList<ServiceReponseDTO> GetAll(string username)
+        public IList<ServiceReponseDTO> GetAll()
         {
-            userService.IsCurrentUserAdmin(username);
+            //userService.IsCurrentUserAdmin(username);
 
             IList<Service> services = servicesRepository.GetAll().ToList();
             return autoMapper.Map<IList<ServiceReponseDTO>>(services).ToList();
@@ -64,13 +64,13 @@ namespace Smart_Garage.Services
             return autoMapper.Map<ServiceReponseDTO>(servicesRepository.GetById(id));
         }
 
-        public ServiceReponseDTO GetByName(string username)
+        public ServiceReponseDTO GetByName(string name)
         {
-            userService.IsCurrentUserAdmin(username);
-            return autoMapper.Map<ServiceReponseDTO>(servicesRepository.GetByName(username));
+            //userService.IsCurrentUserAdmin(username);
+            return autoMapper.Map<ServiceReponseDTO>(servicesRepository.GetByName(name));
         }
 
-        public UpdateServiceResponseDTO Update(int id, UpdateServiceRequestDTO updatedService, string username)
+        public UpdateServiceResponseDTO Update(int id, ServiceRequestDTO updatedService, string username)
         {
             userService.IsCurrentUserAdmin(username);
 

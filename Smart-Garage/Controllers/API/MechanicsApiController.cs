@@ -27,7 +27,7 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var result = mechanicService.Create(newMechanic, username);
+                var result = mechanicService.Create(newMechanic);
                 return Ok(result);
             }
             catch (DuplicationException ex)
@@ -47,7 +47,7 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var services = mechanicService.GetAll(username);
+                var services = mechanicService.GetAll();
                 return Ok(services);
             }
             catch (UnauthorizedOperationException ex)
@@ -63,7 +63,7 @@ namespace Smart_Garage.Controllers.API
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var service = mechanicService.GetById(int.Parse(id), username);
+                var service = mechanicService.GetById(int.Parse(id));
                 return Ok(service);
             }
             catch (EntityNotFoundException ex)

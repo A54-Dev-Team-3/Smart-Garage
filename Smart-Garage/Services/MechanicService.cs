@@ -21,37 +21,29 @@ namespace Smart_Garage.Services
             this.autoMapper = autoMapper;
         }
 
-        public MechanicResponseDTO Create(MechanicRequestDTO newMechanic, string username)
+        public MechanicResponseDTO Create(MechanicRequestDTO newMechanic)
         {
-            userService.IsCurrentUserAdmin(username);
-
-            Mechanic mechanic = new Mechanic()
-            {
-                FirstName = newMechanic.FirstName,
-                LastName = newMechanic.LastName
-            };
-
+            var mechanic = autoMapper.Map<Mechanic>(newMechanic);
             return autoMapper.Map<MechanicResponseDTO>(mechanicRepository.Create(mechanic));
         }
 
-        public IList<MechanicResponseDTO> GetAll(string username)
+        public IList<MechanicResponseDTO> GetAll()
         {
-            userService.IsCurrentUserAdmin(username);
+            //userService.IsCurrentUserAdmin(username);
 
             return mechanicRepository.GetAll()
                 .Select(v => autoMapper.Map<MechanicResponseDTO>(v))
                 .ToList();
         }
 
-        public MechanicResponseDTO GetById(int id, string username)
+        public MechanicResponseDTO GetById(int id)
         {
-            userService.IsCurrentUserAdmin(username);
             return autoMapper.Map<MechanicResponseDTO>(mechanicRepository.GetById(id));
         }
 
-        public MechanicResponseDTO GetByName(string name, string username)
+        public MechanicResponseDTO GetByName(string name)
         {
-            userService.IsCurrentUserAdmin(username);
+            //userService.IsCurrentUserAdmin(username);
             return autoMapper.Map<MechanicResponseDTO>(mechanicRepository.GetByName(name));
         }
 

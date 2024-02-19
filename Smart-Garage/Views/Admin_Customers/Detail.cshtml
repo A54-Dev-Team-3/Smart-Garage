@@ -214,7 +214,7 @@
 <script>
     $(document).ready(function () {
         $(".edit-btn").click(function (e) {
-            e.stopPropagation(); // Prevent click event from propagating
+            e.preventDefault(); // Prevent the default form submission behavior
             var parent = $(this).closest(".row");
             var textElement = parent.find(".text-element"); // Target the text element within the same row
             var inputElement = parent.find("input[type='text']");

@@ -41,17 +41,18 @@ namespace Smart_Garage.Repositories
 
         public Part GetByName(string name)
         {
-            return context.Parts.FirstOrDefault(p => p.Name == name && !p.IsDeleted) ??
+            return context.Parts
+                .FirstOrDefault(p => p.Name == name && !p.IsDeleted) ??
                throw new EntityNotFoundException($"Part with name:{name} is not found.");
         }
 
         public Part Update(int id, Part newPartDTO)
         {
-            Part newPart = context.Parts.FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
+            var newPart = context.Parts.FirstOrDefault(s => s.Id == id && !s.IsDeleted) ??
                 throw new EntityNotFoundException($"Parts to update with id:{id} not found.");
 
             newPart.Name = newPartDTO.Name;
-            newPart.Price = newPartDTO.Price;
+            newPart.UnitPrice = newPartDTO.UnitPrice;
 
             context.SaveChanges();
             return newPart;
@@ -59,7 +60,7 @@ namespace Smart_Garage.Repositories
 
         public Part Delete(int id)
         {
-            Part toDelete = GetById(id);
+            var toDelete = GetById(id);
             toDelete.IsDeleted = true;
             context.SaveChanges();
             return toDelete;

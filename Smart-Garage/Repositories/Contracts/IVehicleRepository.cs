@@ -9,6 +9,7 @@ namespace Smart_Garage.Repositories.Contracts
         Vehicle Create(User user, Vehicle vehicle);
         IList<Vehicle> GetAll();
         Vehicle GetById(int id);
+        IList<string> GetLicensePlateByUser(string username);
         Vehicle Update(int vehicleId, Vehicle updatedVehicle);
         bool Delete(int id);
         public IList<Vehicle> SearchBy(string filter);

@@ -6,12 +6,16 @@ namespace Smart_Garage.Models.ViewModel
     public class VisitViewModel
     {
         public int Id { get; set; }
-
         public DateTime Date { get; set; }
-        public double TotalPrice { get; set; } // in BGN
-        public double ServicesTotalPrice { get; set; } // in BGN
         public double PartsTotalPrice { get; set; } // in BGN
-        public VehicleViewModel Vehicle { get; set; }
-        public IList<ServiceInstanceViewModel> ServiceInstances { get; set; }
+        public double ServicesTotalPrice { get; set; } // in BGN
+        public double TotalPrice { get; set; } // in BGN
+        public VehicleVisitViewModel Vehicle { get; set; }
+        public CustomerVisitViewModel User { get; set; }
+        public IList<ServiceInstanceViewModel> ServiceInstances { get; set; } = new List<ServiceInstanceViewModel>();
+        public IList<PartViewModel> Parts { get; set; }
+        public IList<ServiceViewModel> Services { get; set; }
+        public IList<MechanicViewModel> Mechanics { get; set; }
+        public IList<BrandViewModel> Brands { get; set; }
     }
 }

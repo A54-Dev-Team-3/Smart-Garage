@@ -30,15 +30,15 @@ namespace Smart_Garage.Services
             Part part = new Part()
             {
                 Name = newPartDTO.Name,
-                Price = newPartDTO.Price
+                UnitPrice = newPartDTO.UnitPrice
             };
 
             return autoMapper.Map<PartResponseDTO>(partRepository.Create(part));
         }
 
-        public IList<PartResponseDTO> GetAll(string username)
+        public IList<PartResponseDTO> GetAll()
         {
-            userService.IsCurrentUserAdmin(username);
+            //userService.IsCurrentUserAdmin(username);
 
             return partRepository.GetAll()
                 .Select(p => autoMapper.Map<PartResponseDTO>(p))
@@ -60,6 +60,12 @@ namespace Smart_Garage.Services
             return autoMapper.Map<PartResponseDTO>(partRepository.GetById(id));
         }
 
+        public PartResponseDTO GetByName(string name)
+        {
+            //userService.IsCurrentUserAdmin(username);
+            return autoMapper.Map<PartResponseDTO>(partRepository.GetByName(name));
+        }
+
         public PartResponseDTO Update(int id, PartRequestDTO newPartDTO, string username)
         {
             userService.IsCurrentUserAdmin(username);
@@ -67,7 +73,7 @@ namespace Smart_Garage.Services
             Part part = new Part()
             {
                 Name = newPartDTO.Name,
-                Price = newPartDTO.Price
+                UnitPrice = newPartDTO.UnitPrice
             };
 
             return autoMapper.Map<PartResponseDTO>(partRepository.Update(id, part));

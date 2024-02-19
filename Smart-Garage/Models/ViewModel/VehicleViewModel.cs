@@ -11,6 +11,6 @@ namespace Smart_Garage.Models.ViewModel
         public string VIN { get; set; }
         public int CreationYear { get; set; }
         public CustomerViewModel? User { get; set; }
-        public IList<Visit> Visits { get; set; }
+        public IList<VisitViewModel> Visits { get; set; }
     }
 }

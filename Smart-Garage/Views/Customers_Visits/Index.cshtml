@@ -1,40 +1,107 @@
 ﻿@model IList<VisitViewModel>
 
-<h2 class="heading">Visits</h2>
+<div style="margin-left:5%; margin-top:2%; margin-right:5%;">
+    <h2>Visits</h2>
 
-<table class="table myTable" id="resizeMe">
-    <thead>
-        <tr>
-            <th scope="col">License Plate</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Model</th>
-            <th scope="col">Date</th>
-            <th scope="col">Total Price</th>
-            <th scope="col" style="width:20px">Details</th>
-        </tr>
-    </thead>
-    <tbody>
+    <form id="filterForm" asp-controller="Customers_Visits" asp-action="FilterByLicensePlate" method="post">
+        <div class="row" style="margin-top:30px; margin-bottom:2%">
 
-        @foreach (var visit in Model)
-        {
+            <div class="col-md-2">
+                <label>License Plate:</label>
+                <select id="vehicleSelect" name="licensePlate" onchange="saveSelectedOption()" style="margin-right:10px; max-width:200px;" class="form-control">
+                    <option value="All">All</option>
+                    @foreach (var plate in ViewData["Vehicles"] as IList<string>)
+                    {
+                        <option value="@plate">@plate</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" placeholder="dd/mm/yyyy" style="margin-right:10px; max-width:200px;" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" placeholder="dd/mm/yyyy" style="margin-right:10px; max-width:200px; display:inline;" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary" style="margin-top:25px">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table" id="resizeMe">
+        <thead>
             <tr>
-                <td>@visit.Vehicle.LicensePlate</td>
-                <td>@visit.Vehicle.Brand</td>
-                <td>@visit.Vehicle.Model</td>
-                <td>@visit.Date.ToString("dd.MM.yyyy")</td>
-                <td>@visit.TotalPrice</td>
-                <td>
-                    <form asp-controller="Customers_Visits" asp-action="Index" method="post">
-                        <input asp-for="@visit.Id" type="hidden" name="id" value="@visit.Id">
-                        <button type="submit" class="btn btn-primary" style="font-size: 0px;">
-                            <span class="material-symbols-outlined">
-                                description
-                            </span>
-                        </button>
-                    </form>
-                </td>
+                <th scope="col">License Plate</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Model</th>
+                <th scope="col">Date</th>
+                <th scope="col">Total Price</th>
+                <th scope="col" style="width:20px">Details</th>
             </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var visit in Model)
+            {
+                <tr>
+                    <td>@visit.Vehicle.LicensePlate</td>
+                    <td>@visit.Vehicle.Brand</td>
+                    <td>@visit.Vehicle.Model</td>
+                    <td>@visit.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@visit.TotalPrice</td>
+                    <td>
+                        <form asp-controller="Customers_Visits" asp-action="Index" method="post">
+                            <input asp-for="@visit.Id" type="hidden" name="id" value="@visit.Id">
+                            <button type="submit" class="btn btn-primary" style="font-size: 0px;">
+                                <span class="material-symbols-outlined">
+                                    description
+                                </span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <script>
+        // Function to save the selected option to local storage
+        function saveSelectedOption() {
+            var selectedOption = document.getElementById("vehicleSelect").value;
+            localStorage.setItem("selectedVehicle", selectedOption);
         }
 
-    </tbody>
-</table>
+        // Function to retrieve the selected option from local storage and set it as the selected option in the dropdown menu
+        function setSelectedOption() {
+            var selectedOption = localStorage.getItem("selectedVehicle");
+            if (selectedOption) {
+                document.getElementById("vehicleSelect").value = selectedOption;
+            }
+        }
+
+        // Call the function to set the selected option when the page loads
+        window.onload = setSelectedOption;
+    </script>
+
+    <script>
+        // Function to format the date as dd/mm/yyyy
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Months are zero based
+            var year = date.getFullYear();
+            return (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+        }
+
+        // Set the initial value of the input fields if necessary
+        document.getElementById("startDate").value = formatDate(new Date());
+        document.getElementById("endDate").value = formatDate(new Date());
+    </script>
+
+
+
+</div>

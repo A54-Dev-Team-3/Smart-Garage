@@ -7,7 +7,32 @@
 
 <h2 class="heading">Customers</h2>
 
-<a asp-controller="Admin_Customers" asp-action="SignUp" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Customer</a>
+<a asp-controller="Admin_Customers" asp-action="SignUp" style="margin-bottom:30px; margin-left:30px" class="btn btn-primary">Add Customer</a>
+
+<form action="/Admin_Customers/Index" method="post">
+    <div class="form-group row" style="margin-left:18px; margin-bottom:30px; max-width:100%;">
+        <div class="col-md-2">
+            <label style="margin-right:10px;">Filter By:</label>
+            <select id="searchOption" name="searchOption" class="form-control">
+                <option value="Username">Username</option>
+                <option value="FirstName">First Name</option>
+                <option value="LastName">Last Name</option>
+                <option value="PhoneNumber">Phone Number</option>
+                <option value="VehicleBrand">Vehicle's Brand</option>
+                <option value="VehicleModel">Vehicle's Model</option>
+            </select>
+        </div>
+
+        <div class="col-md-2" style="margin-top:22px">
+            <input type="text" id="searchString" name="searchString" class="form-control" placeholder="Search...">
+        </div>
+
+        <div class="col-md-2">
+            <button style="margin-top:22px" type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </div>
+</form>
+
 
 @* table-striped *@
 <table class="table myTable" id="resizeMe">
@@ -34,14 +59,11 @@
                 <td>@customer.Email</td>
                 <td>@customer.PhoneNumber</td>
                 <td>
-                    <form asp-controller="Admin_Customers" asp-action="ShowDetail" method="post">
-                        <input asp-for="@customerId" type="hidden" name="customerId" value="@customer.Id">
-                        <button type="submit" class="btn btn-primary" style="font-size: 0px;">
-                            <span class="material-symbols-outlined">
-                                description
-                            </span>
-                        </button>
-                    </form>
+                    <a asp-controller="Admin_Customers" asp-action="Detail" asp-route-id="@customer.Id">
+                        <span class="material-symbols-outlined btn btn-primary">
+                            description
+                        </span>
+                    </a>
                 </td>
             </tr>
         }

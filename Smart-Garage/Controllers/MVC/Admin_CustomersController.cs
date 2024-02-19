@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Rotativa.AspNetCore;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models.DTOs.RequestDTOs;
+using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Models.ViewModel;
 using Smart_Garage.Services;
 using Smart_Garage.Services.Contracts;
@@ -33,12 +34,39 @@ namespace Smart_Garage.Controllers.MVC
             return View(customerViewModels);
         }
 
-		//[HttpPost]
-		//[IsAuthenticated]
-		//public IActionResult Index(int customerId)
-		//{
-  //          return RedirectToAction("Detail", "Admin_Customers", new { id = customerId} );
-  //      }
+        [HttpPost]
+        [IsAuthenticated]
+        public IActionResult Index(string searchOption, string searchString)
+        {
+            var userQueryParameters = new UserQueryParameters();
+
+            switch (searchOption)
+            {
+                case "Username":
+                    userQueryParameters.Username = searchString;
+                    break;
+                case "FirstName":
+                    userQueryParameters.FirstName = searchString;
+                    break;
+                case "LastName":
+                    userQueryParameters.LastName = searchString;
+                    break;
+                case "PhoneNumber":
+                    userQueryParameters.PhoneNumber = searchString;
+                    break;
+                case "VehicleBrand":
+                    userQueryParameters.Brand = searchString;
+                    break;
+                case "VehicleModel":
+                    userQueryParameters.Model = searchString;
+                    break;
+            }
+
+            var userResponseDTOs = userService.FilterBy(userQueryParameters);
+            var customerViewModels = autoMapper.Map<IList<CustomerViewModel>>(userResponseDTOs);
+
+            return View(customerViewModels);
+        }
 
         [HttpGet]
         [IsAuthenticated]

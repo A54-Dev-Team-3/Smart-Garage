@@ -14,12 +14,7 @@ namespace Smart_Garage.Models
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Model> Models { get; set; }
         public DbSet<Visit> Visits { get; set; }
-
-        
-        //public DbSet<ServiceInstanceMechanic> Mechanic { get; set; }
-        public DbSet<ServiceInstanceService> Service { get; set; }
-        public DbSet<ServiceInstancePart> Part { get; set; }
-
+        public DbSet<ServiceInstance> ServiceInstances { get; set; }
 
         // Lists of data
         public DbSet<Mechanic> Mechanics { get; set; }
@@ -101,55 +96,24 @@ namespace Smart_Garage.Models
                 .IsRequired();
             });
 
-            // ServiceInstanceMechanic
-            //modelBuilder.Entity<ServiceInstanceMechanic>()
-            //    .HasKey(sim => new { sim.ServiceInstanceId, sim.MechanicId });
+            // ServiceInstance
+            modelBuilder.Entity<ServiceInstance>(e =>
+            {
 
-            //modelBuilder.Entity<ServiceInstanceMechanic>()
-            //    .HasOne(sim => sim.ServiceInstance)
-            //    .WithMany(si => si.ServiceInstanceMechanics)
-            //    .HasForeignKey(sim => sim.ServiceInstanceId);
+                e.Property(s => s.PartQuantity)
+                .IsRequired();
 
-            //modelBuilder.Entity<ServiceInstanceMechanic>()
-            //    .HasOne(sim => sim.Mechanic)
-            //    .WithMany(m => m.ServiceInstanceMechanics)
-            //    .HasForeignKey(sim => sim.MechanicId);
+                e.Property(s => s.PartUnitPrice)
+                .IsRequired();
 
-            // ServiceInstanceService
-            modelBuilder.Entity<ServiceInstanceService>()
-                .HasKey(sis => new { sis.ServiceInstanceId, sis.ServiceId });
-
-            modelBuilder.Entity<ServiceInstanceService>()
-                .HasOne(sis => sis.ServiceInstance)
-                .WithMany(si => si.ServiceInstanceServices)
-                .HasForeignKey(sis => sis.ServiceInstanceId);
-
-            modelBuilder.Entity<ServiceInstanceService>()
-                .HasOne(sis => sis.Service)
-                .WithMany(s => s.ServiceInstanceServices)
-                .HasForeignKey(sis => sis.ServiceId);
-
-            // ServiceInstancePart
-            modelBuilder.Entity<ServiceInstancePart>()
-                .HasKey(sip => new { sip.ServiceInstanceId, sip.PartId });
-
-            modelBuilder.Entity<ServiceInstancePart>()
-                .HasOne(sis => sis.ServiceInstance)
-                .WithMany(si => si.ServiceInstanceParts)
-                .HasForeignKey(sis => sis.ServiceInstanceId);
-
-            modelBuilder.Entity<ServiceInstancePart>()
-                .HasOne(sis => sis.Part)
-                .WithMany(s => s.ServiceInstanceParts)
-                .HasForeignKey(sis => sis.PartId);
+                e.Property(s => s.ServicePrice)
+                .IsRequired();
+            });
 
             // Mechanic
             modelBuilder.Entity<Mechanic>(e =>
             {
-                e.Property(m => m.FirstName)
-                .IsRequired();
-
-                e.Property(m => m.LastName)
+                e.Property(m => m.Name)
                 .IsRequired();
             });
 
@@ -169,14 +133,9 @@ namespace Smart_Garage.Models
                 e.Property(p => p.Name)
                 .IsRequired();
 
-                e.Property(p => p.Price)
-                .IsRequired();
-
                 e.Property(p => p.UnitPrice)
                 .IsRequired();
 
-                e.Property(p => p.Quantity)
-                .IsRequired();
             });
         }
     }

@@ -24,7 +24,7 @@ namespace Smart_Garage.Controllers.API
         }
 
         [HttpPost("")] // api/services/
-        public async Task<ActionResult<Service>> Create([FromBody] CreateServiceRequestDTO newServiceDTO)
+        public async Task<ActionResult<Service>> Create([FromBody] ServiceRequestDTO newServiceDTO)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Smart_Garage.Controllers.API
         }
 
         [HttpPut("{id}")] // api/services/{id}
-        public IActionResult Update(string id, [FromBody] UpdateServiceRequestDTO newService)
+        public IActionResult Update(string id, [FromBody] ServiceRequestDTO newService)
         {
             try
             {

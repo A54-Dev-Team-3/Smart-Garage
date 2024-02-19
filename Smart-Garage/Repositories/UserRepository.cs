@@ -27,6 +27,63 @@ namespace Smart_Garage.Repositories
             return context.Users.Where(u=> !u.IsDeleted).ToList();
         }
 
+        public IList<User> FilterBy(UserQueryParameters usersParams)
+        {
+
+            IQueryable<User> result = context.Users
+                .Where(u => !u.IsAdmin && !u.IsDeleted)
+                .Include(u => u.Vehicles)
+                .ThenInclude(v => v.Model)
+                .ThenInclude(m => m.Brand);
+
+            if (!string.IsNullOrEmpty(usersParams.Username))
+            {
+                result = result.Where(u => u.Username.Contains(usersParams.Username));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.FirstName))
+            {
+                result = result.Where(u => u.FirstName.Contains(usersParams.FirstName));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.LastName))
+            {
+                result = result.Where(u => u.LastName.Contains(usersParams.LastName));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.Email))
+            {
+                result = result.Where(u => u.Email.Contains(usersParams.Email));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.PhoneNumber))
+            {
+                result = result.Where(u => u.PhoneNumber.Contains(usersParams.PhoneNumber));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.LicensePlate))
+            {
+                result = result.Where(u => u.Vehicles.Any(v => v.LicensePlate.Contains(usersParams.LicensePlate)));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.VIN))
+            {
+                result = result.Where(u => u.Vehicles.Any(v => v.VIN.Contains(usersParams.VIN)));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.Model))
+            {
+                result = result.Where(u => u.Vehicles.Any(v => v.Model.Name.Contains(usersParams.Model)));
+            }
+
+            if (!string.IsNullOrEmpty(usersParams.Brand))
+            {
+                result = result.Where(u => u.Vehicles.Any(v => v.Model.Brand.Name.Contains(usersParams.Brand)));
+            }
+
+            return result.ToList();
+        }
+
         public IList<User> GetAllNotAdmins()
         {
             return context.Users.Where(u => !u.IsAdmin && !u.IsDeleted).ToList();
@@ -132,36 +189,6 @@ namespace Smart_Garage.Repositories
             return context.Users.Where(u => !u.IsDeleted).Count();
         }
 
-        public IList<User> FilterBy(UserQueryParameters usersParams)
-        {
-            IQueryable<User> result = context.Users.Where(u => !u.IsDeleted);
-
-            if (!string.IsNullOrEmpty(usersParams.Username))
-            {
-                result = result.Where(u => u.Username == usersParams.Username);
-            }
-
-            if (!string.IsNullOrEmpty(usersParams.Email))
-            {
-                result = result.Where(u => u.Email == usersParams.Email);
-            }
-
-            if (!string.IsNullOrEmpty(usersParams.PhoneNumber))
-            {
-                result = result.Where(u => u.PhoneNumber == usersParams.PhoneNumber);
-            }
-
-            if (!string.IsNullOrEmpty(usersParams.LicensePlate))
-            {
-                result = result.Where(u => u.Vehicles.Any(v => v.LicensePlate == usersParams.LicensePlate));
-            }
-
-            if (!string.IsNullOrEmpty(usersParams.VIN))
-            {
-                result = result.Where(u => u.Vehicles.Any(v => v.VIN == usersParams.VIN));
-            }
-
-            return result.ToList();
-        }
+        
     }
 }

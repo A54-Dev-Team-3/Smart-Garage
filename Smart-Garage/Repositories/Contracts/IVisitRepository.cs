@@ -9,6 +9,7 @@ namespace Smart_Garage.Repositories.Contracts
         IList<Visit> GetAll();
         IList<Visit> FilterBy(VisitQueryParameters visitsParams);
         Visit GetById(int id);
+        Visit Update(Visit visitToUpdate);
         Visit Delete(int id);
         bool VisitExists(int id);
     }

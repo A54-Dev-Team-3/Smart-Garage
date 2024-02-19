@@ -1,9 +1,13 @@
-﻿namespace Smart_Garage.Models.DTOs.RequestDTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Smart_Garage.Models.DTOs.RequestDTOs
 {
     public class MechanicRequestDTO
     {
-        public string FirstName { get; set; }
+        [Required]
+        public int Id { get; set; }
 
-        public string LastName { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }

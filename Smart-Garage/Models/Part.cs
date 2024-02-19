@@ -11,14 +11,12 @@ namespace Smart_Garage.Models
         public string Name { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]
-        public double Price { get; set; }
+        [Range(0, double.MaxValue)]
         public double UnitPrice { get; set; }
-        public int Quantity { get; set; }
 
         public bool IsDeleted { get; set; }
 
         // Image ?
-        public ICollection<ServiceInstancePart> ServiceInstanceParts { get; set; } = new HashSet<ServiceInstancePart>();
+        public ICollection<ServiceInstance> ServiceInstances { get; set; } = new HashSet<ServiceInstance>();
     }
 }

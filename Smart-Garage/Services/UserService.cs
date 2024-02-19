@@ -66,9 +66,9 @@ namespace Smart_Garage.Services
             return autoMapper.Map<IList<UserResponseDTO>>(users);
         }
 
-        public IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters, string username)
+        public IList<UserResponseDTO> FilterBy(UserQueryParameters filterParameters)
         {
-            IsCurrentUserAdmin(username);
+            //IsCurrentUserAdmin(username);
 
             return usersRepository.FilterBy(filterParameters)
                             .Select(u => autoMapper.Map<UserResponseDTO>(u))

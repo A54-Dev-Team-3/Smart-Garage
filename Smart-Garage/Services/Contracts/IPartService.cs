@@ -7,9 +7,10 @@ namespace Smart_Garage.Services.Contracts
     public interface IPartService
     {
         PartResponseDTO Create(PartRequestDTO newPartDTO, string username);
-        IList<PartResponseDTO> GetAll(string username);
+        IList<PartResponseDTO> GetAll();
         IList<PartResponseDTO> FilterBy(PartQueryParameters filterParameters, string username);
         PartResponseDTO GetById(int id, string username);
+        PartResponseDTO GetByName(string name);
         PartResponseDTO Update(int id, PartRequestDTO newPartDTO, string username);
         PartResponseDTO Delete(int id, string username);
         bool PartExists(string name);

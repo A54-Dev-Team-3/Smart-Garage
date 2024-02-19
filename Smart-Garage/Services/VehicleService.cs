@@ -70,6 +70,11 @@ namespace Smart_Garage.Services
             return autoMapper.Map<VehicleResponseDTO>(vehicle);
         }
 
+        public IList<string> GetLicensePlateByUser(string username)
+        {
+            return vehicleRepository.GetLicensePlateByUser(username);
+        }
+
         public VehicleResponseDTO Update(int vehicleId, VehicleRequestDTO dto)
         {
             Vehicle updatedVehicle = this.vehicleRepository.Update(vehicleId, autoMapper.Map<Vehicle>(dto));
