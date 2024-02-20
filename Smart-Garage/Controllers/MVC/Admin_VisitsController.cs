@@ -115,7 +115,9 @@ namespace Smart_Garage.Controllers.MVC
         [IsAuthenticated]
         public IActionResult Create(VisitViewModel visitViewModel)
         {
-            return View();
+            var visitRequestDTO = autoMapper.Map<VisitRequestDTO>(visitViewModel);
+            visitService.Create(visitRequestDTO);
+            return RedirectToAction("Index", "Admin_Visits");
         }
 
         [HttpGet]
@@ -150,6 +152,9 @@ namespace Smart_Garage.Controllers.MVC
             var visitViewModel = new VisitViewModel();
             visitViewModel.Vehicle = vehicleViewModel;
             visitViewModel.User = customerViewModel;
+            visitViewModel.Parts = autoMapper.Map<IList<PartViewModel>>(partService.GetAll());
+            visitViewModel.Services = autoMapper.Map<IList<ServiceViewModel>>(serviceService.GetAll());
+            visitViewModel.Mechanics = autoMapper.Map<IList<MechanicViewModel>>(mechanicService.GetAll());
 
             string serializedVisitViewModel = JsonConvert.SerializeObject(visitViewModel);
             TempData["VisitViewModel"] = serializedVisitViewModel;
@@ -194,6 +199,27 @@ namespace Smart_Garage.Controllers.MVC
         [HttpPost]
         [IsAuthenticated]
         public IActionResult CreateVisitForNewCustomer(VisitViewModel visitViewModel)
+        {
+            var signUpUserRequestDTO = autoMapper.Map<SignUpUserRequestDTO>(visitViewModel.User);
+            userService.Create(signUpUserRequestDTO);
+
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Test()
+        {
+            var testViewModelList = new MajorTestViewData();
+            testViewModelList.items.Add(new TestViewModel { ClientSampleID = "1", AdditionalComments = "First comment", AcidStables = "ACDEFG" });
+            testViewModelList.items.Add(new TestViewModel { ClientSampleID = "2", AdditionalComments = "Second comment", AcidStables = "HIKLMN" });
+            testViewModelList.items.Add(new TestViewModel { ClientSampleID = "3", AdditionalComments = "Third comment", AcidStables = "PQRSTV" });
+
+            return View(testViewModelList);
+        }
+
+        [HttpPost]
+        public IActionResult Test(MajorTestViewData majorTestViewData)
         {
             return View();
         }

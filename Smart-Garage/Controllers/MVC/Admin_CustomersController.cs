@@ -30,7 +30,6 @@ namespace Smart_Garage.Controllers.MVC
             var customerResponseDTO = userService.GetAllNotAdmins();
 
             var customerViewModels = autoMapper.Map<IList<CustomerViewModel>>(customerResponseDTO);
-
             return View(customerViewModels);
         }
 

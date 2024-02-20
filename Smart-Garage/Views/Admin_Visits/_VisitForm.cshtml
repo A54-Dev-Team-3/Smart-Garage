@@ -1,10 +1,5 @@
 ﻿@model VisitViewModel
 
-@{
-    var partsCounter = 0;
-    var serviceCounter = 0;
-}
-
 <style>
     .InputReadOnly {
         background-color: #f8f9fa;
@@ -24,104 +19,108 @@
     </select>
 </div>
 
-<div style="display: flex; width: 225%;">
+<form asp-controller="Admin_Visits" asp-action="@ViewData["Action"]" id="addItemForm">
 
-    <span style="flex: 1;">
+    <div style="display: flex; width: 225%;">
 
-        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
-            <span class="material-symbols-outlined" style="margin-right: 5px;">
-                directions_car
-            </span>
-            Vehicle
-        </h4>
+        <span style="flex: 1;">
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="Vehicle.LicensePlate">License Plate</label>
-            <input id="licensePlateInput" asp-for="Vehicle.LicensePlate" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
+            <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+                <span class="material-symbols-outlined" style="margin-right: 5px;">
+                    directions_car
+                </span>
+                Vehicle
+            </h4>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="Vehicle.VIN">VIN</label>
-            <input asp-for="Vehicle.VIN" type="number" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
+            <input asp-for="Vehicle.Id" type="hidden">
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="Vehicle.Brand">Brand</label>
-            @if ((string)ViewData["Action"] == "CreateVisitForNewCustomer")
-            {
-                <select asp-for="Vehicle.Brand" class="form-control" name="Vehicle.Brand" id="brandSelect">
-                    <option value=""></option>
-                    @foreach (var brand in Model.Brands)
-                    {
-                        <option value="@brand.Name">@brand.Name</option>
-                    }
-                </select>
-            }
-            else
-            {
-                <input asp-for="Vehicle.Brand" type="text" class="form-control InputReadOnly" readonly="@ViewData["IsReadOnly"]">
-            }
-        </div>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="Vehicle.LicensePlate">License Plate</label>
+                <input id="licensePlateInput" asp-for="Vehicle.LicensePlate" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="Vehicle.Model">Model</label>
-            @if ((string)ViewData["Action"] == "CreateVisitForNewCustomer")
-            {
-                <select type="text" class="form-control" id="modelSelect" name="Vehicle.Model">
-                    <option value=""></option>
-                </select>
-            }
-            else
-            {
-                <input asp-for="Vehicle.Model" type="text" class="form-control InputReadOnly" readonly="@ViewData["IsReadOnly"]">
-            }
-        </div>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="Vehicle.VIN">VIN</label>
+                <input asp-for="Vehicle.VIN" type="number" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="Vehicle.CreationYear">Creation Year</label>
-            <input asp-for="Vehicle.CreationYear" type="number" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
-    </span>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="Vehicle.Brand">Brand</label>
+                @if ((string)ViewData["Action"] == "CreateVisitForNewCustomer")
+                {
+                    <select asp-for="Vehicle.Brand" class="form-control" name="Vehicle.Brand" id="brandSelect">
+                        <option value=""></option>
+                        @foreach (var brand in Model.Brands)
+                        {
+                            <option value="@brand.Name">@brand.Name</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <input asp-for="Vehicle.Brand" type="text" class="form-control InputReadOnly" readonly="@ViewData["IsReadOnly"]">
+                }
+            </div>
 
-    <span style="flex: 1; margin-left:30px;">
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="Vehicle.Model">Model</label>
+                @if ((string)ViewData["Action"] == "CreateVisitForNewCustomer")
+                {
+                    <select type="text" class="form-control" id="modelSelect" name="Vehicle.Model">
+                        <option value=""></option>
+                    </select>
+                }
+                else
+                {
+                    <input asp-for="Vehicle.Model" type="text" class="form-control InputReadOnly" readonly="@ViewData["IsReadOnly"]">
+                }
+            </div>
 
-        <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
-            <span class="material-symbols-outlined" style="margin-right: 5px;">
-                person
-            </span>
-            Owner
-        </h4>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="Vehicle.CreationYear">Creation Year</label>
+                <input asp-for="Vehicle.CreationYear" type="number" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
+        </span>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="User.Username">Username</label>
-            <input asp-for="User.Username" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
+        <span style="flex: 1; margin-left:30px;">
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="User.FirstName">First Name</label>
-            <input asp-for="User.FirstName" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
+            <h4 style="margin-bottom: 20px; display: flex; align-items: center;">
+                <span class="material-symbols-outlined" style="margin-right: 5px;">
+                    person
+                </span>
+                Owner
+            </h4>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="User.LastName">Last Name</label>
-            <input asp-for="User.LastName" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="User.Username">Username</label>
+                <input asp-for="User.Username" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="User.Email">Email</label>
-            <input asp-for="User.Email" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="User.FirstName">First Name</label>
+                <input asp-for="User.FirstName" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
 
-        <div class="form-groupel" style="margin-bottom: 15px">
-            <label asp-for="User.PhoneNumber">Phone Number</label>
-            <input asp-for="User.PhoneNumber" type="number" min="10" max="10" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
-        </div>
-    </span>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="User.LastName">Last Name</label>
+                <input asp-for="User.LastName" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
 
-</div>
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="User.Email">Email</label>
+                <input asp-for="User.Email" type="text" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
 
-<div style="margin-left:-30px">
-    <form asp-controller="Admin_Visits" asp-action="@ViewData["Action"]" id="addItemForm">
+            <div class="form-groupel" style="margin-bottom: 15px">
+                <label asp-for="User.PhoneNumber">Phone Number</label>
+                <input asp-for="User.PhoneNumber" type="number" minlength="10" maxlength="10" class="form-control @(ViewData["IsReadOnly"] != null && (bool)ViewData["IsReadOnly"] ? "InputReadOnly" : "")" readonly="@ViewData["IsReadOnly"]">
+            </div>
+        </span>
+
+    </div>
+
+    <div style="margin-left:-30px">
+
 
         <!-- Table for Parts -->
         <h4 style="margin-bottom: 20px; display: flex; align-items: center; margin-top:30px; margin-left: 30px;">
@@ -131,7 +130,7 @@
             Parts
         </h4>
 
-        <table class="table" style="width:180%; margin-left:30px">
+        <table class="table" id="partSubmissionTable" style="width:180%; margin-left:30px">
             <thead>
                 <tr>
                     <th scope="col" style="width: 60%">Name</th>
@@ -141,47 +140,17 @@
                     <th scope="col"></th> <!-- Empty cell for delete button -->
                 </tr>
             </thead>
-            <tbody id="itemTableBody">
-                @foreach (var serviceInstance in Model.ServiceInstances)
-                {
+            <tbody id="partsTable">
 
-                    <tr>
-                        <input name="ServiceInstances[@partsCounter].Part.Id" type="hidden" value="@serviceInstance.Part.Id">
+                @* <tr id="partstablerow4">
+                </tr> *@
 
-
-                        <td>
-                            <select type="text" class="form-control" name="ServiceInstances[@partsCounter].Part.Name" value="@serviceInstance.Part.Name">
-                                @foreach (var part in Model.Parts)
-                                {
-                                    if (part.Name == serviceInstance.Part.Name)
-                                    {
-                                        <option value="@part.Name" selected>@part.Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@part.Name">@part.Name</option>
-                                    }
-                                }
-                            </select>
-                        </td>
-                        <td><input type="number" class="form-control" name="ServiceInstances[@partsCounter].PartQuantity" min="1" step="1" value="@serviceInstance.PartQuantity" /></td>
-                        <td><input type="number" class="form-control item-unit-price" min="0" step="0.01" onblur="calculateTotalPrice()" name="ServiceInstances[@partsCounter].PartUnitPrice" min="1" step="0.01" value="@serviceInstance.PartUnitPrice" /></td>
-                        <td><input type="number" class="form-control item-price" min="0" step="0.01" onblur="calculateTotalPrice()" min="1" step="0.01" name="PartPrice @partsCounter" value="@serviceInstance.PartUnitPrice * @serviceInstance.PartQuantity" readonly style="background-color: #f8f9fa" /></td>
-
-                        <td>
-                            <button type="button" class="btn btn-danger delete-row" style="color:white; background-color:red" onclick="deleteRow(this); calculateTotalPrice(); calculateCombinedTotalPrice();">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    partsCounter++;
-                }
             </tbody>
         </table>
 
         <div style="display: flex; align-items: center; width:1000px">
             <div style="margin-left: 30px;">
-                <button type="button" class="btn btn-primary" id="addItemBtn">Add Item</button>
+                <button type="button" class="btn btn-primary" id="addPart">Add Item</button>
             </div>
             <div style="margin-left: auto; margin-right: 30px;">
                 <p style="margin-top: 5px; display: flex; align-items: center;">Total Parts Price: <span id="totalPrice" style="margin-left: 5px;">0.00</span> лв.</p>
@@ -198,7 +167,7 @@
             Service
         </h4>
 
-        <table class="table" style="width:180%; margin-left:30px">
+        <table class="table" id="serviceSubmissionTable" style="width:180%; margin-left:30px">
             <thead>
                 <tr>
                     <th scope="col" style="width: 50%">Name</th>
@@ -208,59 +177,9 @@
                 </tr>
             </thead>
             <tbody id="serviceTableBody">
-                @foreach (var serviceInstance in Model.ServiceInstances)
-                {
-                    <tr>
 
-                        <input name="ServiceInstances[@serviceCounter].Service.Id" type="hidden" value="@serviceInstance.Service.Id">
-
-                        <td>
-                            <select type="text" class="form-control" name="ServiceInstances[@serviceCounter].Service.Name" value="@serviceInstance.Service.Name">
-                                @foreach (var service in Model.Services)
-                                {
-                                    if (service.Name == serviceInstance.Service.Name)
-                                    {
-                                        <option value="@service.Name" selected>@service.Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@service.Name">@service.Name</option>
-                                    }
-                                }
-                            </select>
-                        </td>
-
-                        <input name="ServiceInstances[@serviceCounter].Mechanic.Id" type="hidden" value="@serviceInstance.Mechanic.Id">
-
-                        <td>
-                            <select type="text" class="form-control" name="ServiceInstances[@serviceCounter].Mechanic.Name" value="@serviceInstance.Mechanic.Name">
-                                @foreach (var mechanic in Model.Mechanics)
-                                {
-                                    if (mechanic.Name == serviceInstance.Mechanic.Name)
-                                    {
-                                        <option value="@mechanic.Name" selected>@mechanic.Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@mechanic.Name">@mechanic.Name</option>
-                                    }
-                                }
-                            </select>
-                        </td>
-
-                        <td>
-                            <input type="number" class="form-control service-price" name="ServiceInstances[@serviceCounter].ServicePrice" value="@serviceInstance.ServicePrice" min="0" step="0.01" onblur="calculateTotalServicePrice()" />
-                        </td>
-
-                        <td>
-                            <button type="button" class="btn btn-danger delete-row" style="color:white; background-color:red" onclick="deleteRow(this); calculateTotalPrice(); calculateCombinedTotalPrice();">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-
-                    serviceCounter++;
-                }
+                @* <tr id="servicestablerow0">
+                    </tr> *@
             </tbody>
         </table>
 
@@ -283,302 +202,296 @@
 
         <button style="margin-left:30px; margin-top:20px; display:block" type="submit" class="btn btn-primary">Save</button>
 
-        <input asp-for="@Model.Id" type="hidden" value="@Model.Id">
+        <input name="Date" type="hidden" value="@DateTime.Now">
         <input name="PartsTotalPrice" type="hidden" value="@Model.PartsTotalPrice">
         <input name="ServicesTotalPrice" type="hidden" value="@Model.ServicesTotalPrice">
         <input name="TotalPrice" type="hidden" value="@Model.TotalPrice">
 
-    </form>
-</div>
+
+    </div>
+
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 
 <script>
+
     $(document).ready(function () {
-        // Listen for keypress event on the input field
+
+        var modelData = @Html.Raw(Json.Serialize(Model));
+        fillTableWithData(modelData);
+
         $('#licensePlateInput').keypress(function (event) {
-            // Check if the pressed key is 'Enter' (key code 13)
-            if (event.which === 13) {
-                // Prevent the default form submission behavior
+
+            if (event.which === 13) { // Enter
                 event.preventDefault();
-                return false; // Stop the event propagation
+                return false;
             }
         });
 
-        // Listen for change event on the currency select element
         $('#currency').change(function () {
             updatePrices();
         });
 
-        // Function to update prices based on the selected currency
-        function updatePrices() {
-            var currencyRate = parseFloat($('#currency').val());
-            var partsRows = document.querySelectorAll('#itemTableBody tr');
-            partsRows.forEach(function (row, index) {
-                var unitPrice = parseFloat(row.querySelector('.form-control[name="ServiceInstances[' + index + '].PartUnitPrice"]').value) || 0;
-                var quantity = parseInt(row.querySelector('.form-control[name="ServiceInstances[' + index + '].PartQuantity"]').value) || 0;
-                var totalPrice = unitPrice * quantity * currencyRate;
-                row.querySelector('.form-control[name="PartPrice ' + index + '"]').value = totalPrice.toFixed(2);
-            });
+        calculateTotalPartsPrice();
+        calculateTotalServicePrice();
+        // updatePrices(); // Call updatePrices initially
+    });
 
-            var serviceRows = document.querySelectorAll('#serviceTableBody tr');
-            serviceRows.forEach(function (row, index) {
-                var price = parseFloat(row.querySelector('.form-control[name="ServiceInstances[' + index + '].ServicePrice"]').value) || 0;
-                var totalPrice = price * currencyRate;
-                row.querySelector('.form-control[name="ServiceInstances[' + index + '].ServicePrice"]').value = totalPrice.toFixed(2);
-            });
-
-            // Recalculate total prices
-            calculateTotalPrice();
-            calculateTotalServicePrice();
-            calculateCombinedTotalPrice();
+    function removeTrFromPartsTable(index)
+    {
+        for (int k = 0; k < ServiceInstances.Count(); k++)
+        {
+            console.log(ServiceInstances[k].Part.Name);
         }
 
-        // Call updatePrices initially
-        updatePrices();
-    });
-</script>
+        console.log("After: partsCounter", partsCounter);
+        if (partsCounter >= 0) {
+            $('#partstablerow' + index).remove();
+            partsCounter--;
+        }
+        console.log("Before: partsCounter", partsCounter);
+        calculateTotalPartsPrice();
+        return false;
+    }
 
-<script>
-    // Function to handle adding rows for items
-    function addItemRow() {
+    // Shift
 
-        var partsData = @Html.Raw(Json.Serialize(Model.Parts));
+    function removeTrFromServiceTable(index)
+    {
+        console.log("Before: serviceCounter", serviceCounter);
+        if (serviceCounter >= 0) {
+            $('#servicestablerow' + index).remove();
+            serviceCounter--;
+        }
+        console.log("After: serviceCounter", serviceCounter);
+        calculateTotalServicePrice();
+        return false;
+    }
 
-        var itemName = document.createElement('select');
-        itemName.setAttribute('class', 'form-control');
-        itemName.setAttribute('name', 'ServiceInstances[@partsCounter].Part.Name');
+    var partsCounter = 0;
+    var serviceCounter = 0;
+    @Model.ServiceInstances
 
-        var defaultOption = document.createElement('option');
-        defaultOption.value = ""; // Set the value to an empty string or any appropriate value
-        defaultOption.text = "";
-        itemName.appendChild(defaultOption);
+    function fillTableWithData(modelData) {
+        if (modelData.serviceInstances.length != 0)
+        {
 
-        partsData.forEach(function (part) {
-            var option = document.createElement('option');
-            option.value = part.name; // Set the value attribute to the part's name
-            option.text = part.name; // Set the text content of the option to the part's name
-            itemName.appendChild(option); // Append the option to the select element
-        });
-
-        var itemQuantity = document.createElement('input');
-        itemQuantity.setAttribute('type', 'number');
-        itemQuantity.setAttribute('class', 'form-control');
-        itemQuantity.setAttribute('name', 'ServiceInstances[@partsCounter].PartQuantity');
-        itemQuantity.setAttribute('min', '1');
-        itemQuantity.setAttribute('step', '1');
-        itemQuantity.value = '1';
-
-        var itemUnitPrice = document.createElement('input');
-        itemUnitPrice.setAttribute('type', 'number');
-        itemUnitPrice.setAttribute('class', 'form-control item-unit-price');
-        itemUnitPrice.setAttribute('name', 'ServiceInstances[@partsCounter].PartUnitPrice');
-        itemUnitPrice.setAttribute('min', '0');
-        itemUnitPrice.setAttribute('step', '0.01');
-        itemUnitPrice.addEventListener('blur', calculateTotalPrice);
-
-        itemName.addEventListener('change', function () {
-            var selectedOption = this.options[this.selectedIndex].text;
-            partsData.forEach(function (part) {
-                if (selectedOption == part.name) {
-                    itemUnitPrice.value = part.UnitPrice;
+            for (var i = 0; i < modelData.serviceInstances.length; i++)
+            {
+                if (modelData.serviceInstances[i].part != null)
+                {
+                    partsCounter++;
                 }
-            });
-        });
 
-        // Append itemName, itemQuantity, and itemUnitPrice to your form or container
+                if (modelData.serviceInstances[i].service != null)
+                {
+                    serviceCounter++;
+                }
+            }
 
-        var itemPrice = document.createElement('input');
-        itemPrice.setAttribute('type', 'number');
-        itemPrice.setAttribute('class', 'form-control item-price');
-        itemPrice.setAttribute('name', 'PartPrice @partsCounter');
-        itemPrice.setAttribute('min', '0');
-        itemPrice.setAttribute('step', '0.01');
-        itemPrice.setAttribute('readonly', 'true');
-        itemPrice.style.backgroundColor = '#f8f9fa';
-        itemPrice.addEventListener('blur', calculateTotalPrice);
+            // Parts
+            for (var i = 0; i < partsCounter; i++) {
+                var serviceInstance = modelData.serviceInstances[i];
 
-        var deleteBtn = document.createElement('button');
-        deleteBtn.setAttribute('type', 'button');
-        deleteBtn.setAttribute('class', 'btn btn-danger delete-row');
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.style.color = 'white';
-        deleteBtn.style.backgroundColor = 'red';
-        deleteBtn.addEventListener('click', function () {
-            deleteRow(this);
-            // partsCounter--;
-            calculateTotalPrice();
-            calculateCombinedTotalPrice();
-        });
+                var partsTableRowHtml = '<tr id="partstablerow' + i + '">' +
+                    '<td>' +
+                    '<select type="text" class="form-control" name="ServiceInstances[' + i + '].Part.Name" required="required">';
 
-        var newRow = document.createElement('tr');
-        var cell1 = newRow.insertCell(0);
-        var cell2 = newRow.insertCell(1);
-        var cell3 = newRow.insertCell(2);
-        var cell4 = newRow.insertCell(3);
-        var cell5 = newRow.insertCell(4);
+                // Loop through the parts using JavaScript syntax
+                for (var j = 0; j < modelData.parts.length; j++) {
+                    var part = modelData.parts[j];
+                    if (part.name == serviceInstance.part.name) {
+                        partsTableRowHtml += '<option value="' + part.name + '" selected>' + part.name + '</option>';
+                    } else {
+                        partsTableRowHtml += '<option value="' + part.name + '">' + part.name + '</option>';
+                    }
+                }
 
-        cell1.appendChild(itemName);
-        cell2.appendChild(itemQuantity);
-        cell3.appendChild(itemUnitPrice);
-        cell4.appendChild(itemPrice);
-        cell5.appendChild(deleteBtn);
+                partsTableRowHtml += '</select>' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="number" class="form-control" name="ServiceInstances[' + i + '].PartQuantity" min="1" step="1" onblur="calculateTotalPartsPrice()" value="' + serviceInstance.partQuantity + '" required="required" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="number" class="form-control item-unit-price" min="0" step="0.01" onblur="calculateTotalPartsPrice()" name="ServiceInstances[' + i + '].PartUnitPrice" value="' + serviceInstance.partUnitPrice + '" required="required" />' +
+                    '</td>' +
 
-        document.getElementById('itemTableBody').appendChild(newRow);
-        calculateTotalPrice();
+                    '<td>' +
+                    '<input type="number" class="form-control item-price" min="0" step="0.01" onblur="calculateTotalPartsPrice()" readonly style="background-color: #f8f9fa" name="PartPrice[' + i + ']" value="' + serviceInstance.partUnitPrice * serviceInstance.partQuantity + '" required="required" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-danger delete-row" style="color:white; background-color:red"  onclick="removeTrFromPartsTable(' + i + '); calculateTotalPartsPrice(); calculateCombinedTotalPrice();">Delete</button>' +
+                    '</td>' +
+                    '</tr>';
+                $('#partsTable').append(partsTableRowHtml);
 
-    @{
-        partsCounter++;
+            }
+
+            // Services
+            for (var i = 0; i < serviceCounter; i++) {
+                var serviceInstance = modelData.serviceInstances[i];
+                var servicesTableRowHtml = '<tr id="servicestablerow' + i + '">' +
+                    '<td>' +
+                    '<select type="text" class="form-control" name="ServiceInstances[' + i + '].Service.Name" required="required">';
+
+                // Loop through the parts using JavaScript syntax
+                for (var j = 0; j < modelData.services.length; j++) {
+                    var service = modelData.services[j];
+                    if (service.name == serviceInstance.service.name) {
+                        servicesTableRowHtml += '<option value="' + service.name + '" selected>' + service.name + '</option>';
+                    } else {
+                        servicesTableRowHtml += '<option value="' + service.name + '">' + service.name + '</option>';
+                    }
+                }
+
+                servicesTableRowHtml += '</select>' +
+                    '</td>' +
+                    '<td>' +
+                    '<select type="text" class="form-control" name="ServiceInstances[' + i + '].Mechanic.Name" required="required">';
+
+                // Loop through the services using JavaScript syntax
+                for (var j = 0; j < modelData.services.length; j++) {
+                    var mechanic = modelData.mechanics[j];
+                    if (mechanic.name == serviceInstance.mechanic.name) {
+                        servicesTableRowHtml += '<option value="' + mechanic.name + '" selected>' + mechanic.name + '</option>';
+                    } else {
+                        servicesTableRowHtml += '<option value="' + mechanic.name + '">' + mechanic.name + '</option>';
+                    }
+                }
+                servicesTableRowHtml += '</select>' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="number" class="form-control service-price" min="0" step="0.01" onblur="calculateTotalServicePrice()" name="ServiceInstances[' + i + '].ServicePrice" value="' + serviceInstance.servicePrice + '" required="required" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-danger delete-row" style="color:white; background-color:red"  onclick="removeTrFromServiceTable(' + i + '); calculateTotalServicePrice(); calculateCombinedTotalPrice();">Delete</button>' +
+                    '</td>' +
+                    '</tr>';
+                $('#serviceSubmissionTable').append(servicesTableRowHtml);
+            }
+        }
     }
-            console.log("Hi", @partsCounter);
-    }
 
-    // Adding event listener to the Add Item button
-    document.getElementById('addItemBtn').addEventListener('click', function () {
-        addItemRow();
+    $(function () {
+        $('#addPart').click(function () {
+            var modelData = @Html.Raw(Json.Serialize(Model));
+
+            var partsTableRowHtml = '<tr id="partstablerow' + partsCounter + '"><td>' +
+                '<select type="text" class="form-control" name="ServiceInstances[' + partsCounter + '].Part.Name" required="required">';
+
+            partsTableRowHtml += '<option value="' + '">' + '</option>';
+            // Loop through the parts using JavaScript syntax
+            for (var j = 0; j < modelData.parts.length; j++) {
+                var part = modelData.parts[j];
+                partsTableRowHtml += '<option value="' + part.name + '">' + part.name + '</option>';
+            }
+
+            partsTableRowHtml += '</select>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control" name="ServiceInstances[' + partsCounter + '].PartQuantity" min="1" step="1" onblur="calculateTotalPartsPrice()" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control item-unit-price" min="0" step="0.01" onblur="calculateTotalPartsPrice()" name="ServiceInstances[' + partsCounter + '].PartUnitPrice" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control item-price" onblur="calculateTotalPartsPrice()" readonly style="background-color: #f8f9fa" name="PartPrice[' + partsCounter + ']" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<button type="button" class="btn btn-danger delete-row" style="color:white; background-color:red"  onclick="removeTrFromPartsTable(' + partsCounter + '); calculateTotalPartsPrice(); calculateCombinedTotalPrice();">Delete</button>' +
+                '</td>' +
+                '</tr>';
+
+            $(partsTableRowHtml).appendTo('#partsTable');
+            partsCounter++;
+            return false;
+        });
+        $('#addServiceBtn').click(function () {
+            var modelData = @Html.Raw(Json.Serialize(Model));
+
+            var servicesTableRowHtml = '<tr id="servicestablerow' + serviceCounter + '">' +
+                '<td>' +
+                '<select type="text" class="form-control" name="ServiceInstances[' + serviceCounter + '].Service.Name" required="required">';
+
+            servicesTableRowHtml += '<option value="' + '">' + '</option>';
+            // Loop through the parts using JavaScript syntax
+            for (var j = 0; j < modelData.services.length; j++) {
+                var service = modelData.services[j];
+                servicesTableRowHtml += '<option value="' + service.name + '">' + service.name + '</option>';
+            }
+
+            servicesTableRowHtml += '</select>' +
+                '</td>' +
+                '<td>' +
+                '<select type="text" class="form-control" name="ServiceInstances[' + serviceCounter + '].Mechanic.Name" required="required">';
+
+            servicesTableRowHtml += '<option value="' + '">' + '</option>';
+            // Loop through the services using JavaScript syntax
+            for (var j = 0; j < modelData.services.length; j++) {
+                var mechanic = modelData.mechanics[j];
+                servicesTableRowHtml += '<option value="' + mechanic.name + '">' + mechanic.name + '</option>';
+            }
+            servicesTableRowHtml += '</select>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control service-price" min="0" step="0.01" onblur="calculateTotalServicePrice()" name="ServiceInstances[' + serviceCounter + '].ServicePrice" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<button type="button" class="btn btn-danger delete-row" style="color:white; background-color:red"  onclick="removeTrFromServiceTable(' + serviceCounter + '); calculateTotalPrice(); calculateCombinedTotalPrice();">Delete</button>' +
+                '</td>' +
+                '</tr>';
+
+            $(servicesTableRowHtml).appendTo('#serviceSubmissionTable');
+            serviceCounter++;
+            return false;
+        });
     });
 
-    // Function to calculate total price of items
-    function calculateTotalPrice() {
-        var totalPrice = 0;
-        var itemRows = document.querySelectorAll('#itemTableBody tr');
-        itemRows.forEach(function (row, index) {
+    // Function to update prices based on the selected currency
+    function updatePrices() {
+        var currencyRate = parseFloat($('#currency').val());
+        var partsRows = document.querySelectorAll('#partsTable tr');
+        partsRows.forEach(function (row, index) {
+            var unitPrice = parseFloat(row.querySelector('.form-control[name="ServiceInstances[' + index + '].PartUnitPrice"]').value) || 0;
+            var quantity = parseInt(row.querySelector('.form-control[name="ServiceInstances[' + index + '].PartQuantity"]').value) || 0;
+            var totalPrice = unitPrice * quantity * currencyRate;
+            row.querySelector('.form-control[name="PartPrice[' + index + ']"]').value = totalPrice.toFixed(2);
+        });
 
+        // var serviceRows = document.querySelectorAll('#serviceTableBody tr');
+        // serviceRows.forEach(function (row, index) {
+        //     var price = parseFloat(row.querySelector('.form-control[name="ServiceInstances[' + index + '].ServicePrice"]').value) || 0;
+        //     var totalPrice = price * currencyRate;
+        //     row.querySelector('.form-control[name="ServiceInstances[' + index + '].ServicePrice"]').value = totalPrice.toFixed(2);
+        // });
+
+        // Recalculate total prices
+        calculateTotalPartsPrice();
+        // calculateTotalServicePrice();
+        // calculateCombinedTotalPrice();
+    }
+
+    function calculateTotalPartsPrice() {
+        var totalPrice = 0;
+        var itemRows = document.querySelectorAll('#partsTable tr');
+        itemRows.forEach(function (row, index) {
             var quantity = parseInt(row.querySelector('.form-control[name="ServiceInstances[' + index + '].PartQuantity"]').value) || 0;
             var unitPrice = parseFloat(row.querySelector('.form-control[name="ServiceInstances[' + index + '].PartUnitPrice"]').value) || 0;
             var price = quantity * unitPrice;
-            row.querySelector('.form-control[name="PartPrice ' + index + '"]').value = price.toFixed(2);
+            row.querySelector('.form-control[name="PartPrice[' + index + ']"]').value = price.toFixed(2);
             totalPrice += price;
         });
         document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
         document.querySelector('input[name="PartsTotalPrice"]').value = totalPrice.toFixed(2);
-
         calculateCombinedTotalPrice();
     }
 
-    // Function to calculate and display the combined total price of items and services
-    function calculateCombinedTotalPrice() {
-        var totalItemsPrice = parseFloat(document.getElementById('totalPrice').textContent) || 0;
-        var totalServicesPrice = parseFloat(document.getElementById('totalServicePrice').textContent) || 0;
-        var combinedTotalPrice = totalItemsPrice + totalServicesPrice;
-        document.getElementById('combinedTotalPrice').textContent = combinedTotalPrice.toFixed(2);
-        document.querySelector('input[name="TotalPrice"]').value = combinedTotalPrice.toFixed(2);
-    }
-
-    // Call the function initially to display the combined total price
-    calculateCombinedTotalPrice();
-
-    // Function to handle deleting rows
-    function deleteRow(btn) {
-        var row = btn.closest('tr');
-        row.remove();
-    }
-
-    // Adding event listener to dynamically created delete buttons
-    document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('delete-row')) {
-            deleteRow(event.target);
-            calculateTotalPrice();
-            calculateCombinedTotalPrice();
-        } else {
-            // Calculate totals when clicking away from input fields
-            if (event.target.nodeName !== 'INPUT') {
-                calculateTotalPrice();
-                calculateCombinedTotalPrice();
-            }
-        }
-    });
-</script>
-
-<script>
-    // Function to handle adding rows for services
-    function addServiceRow() {
-
-        var serviceData = @Html.Raw(Json.Serialize(Model.Services));
-
-        var serviceName = document.createElement('select');
-        serviceName.setAttribute('type', 'text');
-        serviceName.setAttribute('class', 'form-control');
-        serviceName.setAttribute('name', 'ServiceInstances[@serviceCounter].Service.Name');
-
-        var defaultOption = document.createElement('option');
-        defaultOption.value = ""; // Set the value to an empty string or any appropriate value
-        defaultOption.text = "";
-        serviceName.appendChild(defaultOption);
-
-        serviceData.forEach(function (service) {
-            var option = document.createElement('option');
-            option.value = service.name;
-            option.text = service.name;
-            serviceName.appendChild(option);
-        });
-
-        var mechanicData = @Html.Raw(Json.Serialize(Model.Mechanics));
-
-        var serviceMechanic = document.createElement('select');
-        serviceMechanic.setAttribute('type', 'text');
-        serviceMechanic.setAttribute('class', 'form-control');
-        serviceMechanic.setAttribute('name', 'ServiceInstances[@serviceCounter].Mechanic.Name');
-
-        var defaultOption = document.createElement('option');
-        defaultOption.value = ""; // Set the value to an empty string or any appropriate value
-        defaultOption.text = "";
-        serviceMechanic.appendChild(defaultOption);
-
-        mechanicData.forEach(function (mechanic) {
-            var option = document.createElement('option');
-            option.value = mechanic.name;
-            option.text = mechanic.name;
-            serviceMechanic.appendChild(option);
-        });
-
-        var servicePrice = document.createElement('input');
-        servicePrice.setAttribute('type', 'number');
-        servicePrice.setAttribute('class', 'form-control service-price'); // Add class for price calculation
-        servicePrice.setAttribute('name', 'ServiceInstances[@serviceCounter].ServicePrice');
-        servicePrice.setAttribute('min', '0');
-        servicePrice.setAttribute('step', '0.01');
-        servicePrice.addEventListener('blur', calculateTotalServicePrice); // Add blur event listener to servicePrice input
-
-        var deleteBtn = document.createElement('button');
-        deleteBtn.setAttribute('type', 'button');
-        deleteBtn.setAttribute('class', 'btn btn-danger delete-row');
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.style.color = 'white';
-        deleteBtn.style.backgroundColor = 'red';
-        deleteBtn.addEventListener('click', function () {
-            deleteRow(this);
-            // serviceCounter--;
-            calculateTotalServicePrice();
-            calculateCombinedTotalPrice();
-        });
-
-        var newRow = document.createElement('tr');
-        var cell1 = newRow.insertCell(0);
-        var cell2 = newRow.insertCell(1);
-        var cell3 = newRow.insertCell(2);
-        var cell4 = newRow.insertCell(3);
-
-        cell1.appendChild(serviceName);
-        cell2.appendChild(serviceMechanic);
-        cell3.appendChild(servicePrice);
-        cell4.appendChild(deleteBtn);
-
-        document.getElementById('serviceTableBody').appendChild(newRow);
-        calculateTotalServicePrice(); // Update total service price when row is added
-
-        serviceCounter++;
-    }
-
-    // Adding event listener to the Add Service button
-    document.getElementById('addServiceBtn').addEventListener('click', function () {
-        addServiceRow();
-    });
-
-    // Function to calculate total price of services
     function calculateTotalServicePrice() {
         var totalServicePrice = 0;
         var serviceRows = document.querySelectorAll('#serviceTableBody tr');
         serviceRows.forEach(function (row, index) {
-            //ServiceInstances[@serviceCounter].ServicePrice
             var price = parseFloat(row.querySelector('.form-control[name="ServiceInstances[' + index + '].ServicePrice"]').value) || 0;
             totalServicePrice += price;
         });
@@ -588,38 +501,17 @@
         calculateCombinedTotalPrice(); // Recalculate combined total price
     }
 
-    // Function to handle deleting rows
-    function deleteRow(btn) {
-        var row = btn.closest('tr');
-        row.remove();
+    function calculateCombinedTotalPrice() {
+        var totalItemsPrice = parseFloat(document.getElementById('totalPrice').textContent) || 0;
+        var totalServicesPrice = parseFloat(document.getElementById('totalServicePrice').textContent) || 0;
+        var combinedTotalPrice = totalItemsPrice + totalServicesPrice;
+        document.getElementById('combinedTotalPrice').textContent = combinedTotalPrice.toFixed(2);
+        document.querySelector('input[name="TotalPrice"]').value = combinedTotalPrice.toFixed(2);
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        calculateTotalServicePrice();
-        calculateTotalPrice();
-        calculateCombinedTotalPrice();
-    });
-
-    document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('delete-row')) {
-            deleteRow(event.target);
-            calculateTotalServicePrice();
-            calculateCombinedTotalPrice();
-        } else {
-            // Calculate totals when clicking away from input fields
-            if (event.target.nodeName !== 'INPUT') {
-                calculateTotalServicePrice();
-                calculateCombinedTotalPrice();
-            }
-        }
-    });
 </script>
-
 
 <script>
     var brandData = @Html.Raw(Json.Serialize(Model.Brands));
-
-    console.log(brandData);
 
     document.addEventListener('DOMContentLoaded', function () {
         var brandSelect = document.getElementById('brandSelect');

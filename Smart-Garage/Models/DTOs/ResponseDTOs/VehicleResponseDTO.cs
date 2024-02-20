@@ -6,6 +6,7 @@ namespace Smart_Garage.Models.DTOs.ResponseDTOs
 {
     public class VehicleResponseDTO
     {
+        public int Id { get; set; }
         [Required]
 		[DisplayName("License Plate")]
 		public string LicensePlate { get; set; }

@@ -23,13 +23,13 @@ namespace Smart_Garage.Controllers.API
         }
 
         [HttpPost("")] // api/services/
-        public async Task<ActionResult<Visit>> Create([FromHeader] int VehicleId)
+        public async Task<ActionResult<Visit>> Create()
         {
             try
             {
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                var newVisit = visitsService.Create(VehicleId, username);
-                return Ok(newVisit);
+                //var newVisit = visitsService.Create(VehicleId, username);
+                return Ok();
             }
             catch (DuplicationException ex)
             {

@@ -8,7 +8,7 @@ namespace Smart_Garage.Services.Contracts
 {
     public interface IVisitService
     {
-        VisitResponseDTO Create(int VehicleId, string username);
+        VisitResponseDTO Create(VisitRequestDTO visitRequestDTO);
         IList<VisitResponseDTO> GetAll(string username);
         IList<VisitResponseDTO> FilterBy(VisitQueryParameters filterParameters);
         VisitResponseDTO GetById(int id);

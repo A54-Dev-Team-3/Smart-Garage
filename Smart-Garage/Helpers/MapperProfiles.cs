@@ -35,6 +35,7 @@ namespace Smart_Garage.Helpers
 
             // Vehicle
             this.CreateMap<Vehicle, VehicleViewModel>();
+
             this.CreateMap<Vehicle, VehicleResponseDTO>()
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model.Name))
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Model.Brand.Name))
@@ -44,6 +45,7 @@ namespace Smart_Garage.Helpers
                 .ForPath(dest => dest.User.LastName, opt => opt.MapFrom(src => src.User.LastName))
                 .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForPath(dest => dest.User.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber));
+
             //ServiceResponseDTO
             this.CreateMap<ServiceReponseDTO, ServiceViewModel>();
 
@@ -93,13 +95,22 @@ namespace Smart_Garage.Helpers
             // PartResponseDTO
             this.CreateMap<PartResponseDTO, PartViewModel>();
 
+            // PartResponseDTO
+            this.CreateMap<ServiceInstanceResponseDTO, ServiceInstanceViewModel>();
+
 
             // Visit
             this.CreateMap<Visit, VisitResponseDTO>()
-                .ForPath(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle))
+                .ForPath(dest => dest.Vehicle.LicensePlate, opt => opt.MapFrom(src => src.Vehicle.LicensePlate))
+                .ForPath(dest => dest.Vehicle.VIN, opt => opt.MapFrom(src => src.Vehicle.VIN))
+                .ForPath(dest => dest.Vehicle.CreationYear, opt => opt.MapFrom(src => src.Vehicle.CreationYear))
                 .ForPath(dest => dest.Vehicle.Brand, opt => opt.MapFrom(src => src.Vehicle.Model.Brand.Name))
                 .ForPath(dest => dest.Vehicle.Model, opt => opt.MapFrom(src => src.Vehicle.Model.Name))
-                .ForPath(dest => dest.Vehicle.User, opt => opt.MapFrom(src => src.Vehicle.User))
+                .ForPath(dest => dest.User.Username, opt => opt.MapFrom(src => src.Vehicle.User.Username))
+                .ForPath(dest => dest.User.FirstName, opt => opt.MapFrom(src => src.Vehicle.User.FirstName))
+                .ForPath(dest => dest.User.LastName, opt => opt.MapFrom(src => src.Vehicle.User.LastName))
+                .ForPath(dest => dest.User.PhoneNumber, opt => opt.MapFrom(src => src.Vehicle.User.PhoneNumber))
+                .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.Vehicle.User.Email))
                 .ForMember(dest => dest.ServiceInstances, opt => opt.MapFrom(src => src.ServiceInstances.Select(si => new ServiceInstanceResponseDTO
                 {
                     Mechanic = new MechanicResponseDTO
@@ -125,10 +136,20 @@ namespace Smart_Garage.Helpers
                     ServicePrice = si.ServicePrice
                 })));
 
+            this.CreateMap<UserVisitResponseDTO, CustomerVisitViewModel>();
+
             // VisitResponseDTO
             this.CreateMap<VisitResponseDTO, VisitViewModel>()
-                .ForPath(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle))
-                .ForPath(dest => dest.User, opt => opt.MapFrom(src => src.Vehicle.User))
+                .ForPath(dest => dest.Vehicle.LicensePlate, opt => opt.MapFrom(src => src.Vehicle.LicensePlate))
+                .ForPath(dest => dest.Vehicle.VIN, opt => opt.MapFrom(src => src.Vehicle.VIN))
+                .ForPath(dest => dest.Vehicle.CreationYear, opt => opt.MapFrom(src => src.Vehicle.CreationYear))
+                .ForPath(dest => dest.Vehicle.Brand, opt => opt.MapFrom(src => src.Vehicle.Brand))
+                .ForPath(dest => dest.Vehicle.Model, opt => opt.MapFrom(src => src.Vehicle.Model))
+                .ForPath(dest => dest.User.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForPath(dest => dest.User.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                .ForPath(dest => dest.User.LastName, opt => opt.MapFrom(src => src.User.LastName))
+                .ForPath(dest => dest.User.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForPath(dest => dest.User.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
                 .ForMember(dest => dest.ServiceInstances, opt => opt.MapFrom(src => src.ServiceInstances.Select(si => new ServiceInstanceViewModel
                 {
                     Mechanic = new MechanicViewModel
@@ -155,7 +176,6 @@ namespace Smart_Garage.Helpers
 
             // VisitViewModel
             this.CreateMap<VisitViewModel, VisitRequestDTO>()
-                .ForPath(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForPath(dest => dest.PartsTotalPrice, opt => opt.MapFrom(src => src.PartsTotalPrice))
                 .ForPath(dest => dest.ServicesTotalPrice, opt => opt.MapFrom(src => src.ServicesTotalPrice))
                 .ForPath(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
@@ -185,7 +205,6 @@ namespace Smart_Garage.Helpers
 
             // VisitRequestDTO
             this.CreateMap<VisitRequestDTO, Visit>()
-                .ForPath(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForPath(dest => dest.PartsTotalPrice, opt => opt.MapFrom(src => src.PartsTotalPrice))
                 .ForPath(dest => dest.ServicesTotalPrice, opt => opt.MapFrom(src => src.ServicesTotalPrice))
                 .ForPath(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
@@ -238,7 +257,7 @@ namespace Smart_Garage.Helpers
                 .ForPath(dest => dest.Vehicle.LicensePlate, opt => opt.MapFrom(src => src.Vehicle.LicensePlate))
                 .ForPath(dest => dest.Vehicle.VIN, opt => opt.MapFrom(src => src.Vehicle.VIN))
                 .ForPath(dest => dest.Vehicle.CreationYear, opt => opt.MapFrom(src => src.Vehicle.CreationYear))
-                .ForPath(dest => dest.User, opt => opt.MapFrom(src => src.Vehicle.User));
+                .ForPath(dest => dest.User, opt => opt.MapFrom(src => src.User));
 
             //string
             this.CreateMap<string, Model>();

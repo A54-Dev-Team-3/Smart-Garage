@@ -70,7 +70,7 @@ namespace Smart_Garage.Repositories
             if (!string.IsNullOrEmpty(visitsParams.StartDate))
             {
                 DateTime startDate;
-                if (DateTime.TryParseExact(visitsParams.StartDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
+                if (DateTime.TryParseExact(visitsParams.StartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
                     result = result.Where(v => v.Date >= startDate);
                 else
                 {
@@ -82,7 +82,7 @@ namespace Smart_Garage.Repositories
             if (!string.IsNullOrEmpty(visitsParams.EndDate))
             {
                 DateTime endDate;
-                if (DateTime.TryParseExact(visitsParams.EndDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
+                if (DateTime.TryParseExact(visitsParams.EndDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
                 {
                     endDate = endDate.AddDays(1);
                     result = result.Where(v => v.Date < endDate);
