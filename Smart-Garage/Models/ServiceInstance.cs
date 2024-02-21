@@ -16,18 +16,18 @@ namespace Smart_Garage.Models
         [Range(0, double.MaxValue)]
 
         public double PartUnitPrice { get; set; }
-        public int PartId { get; set; }
+        public int? PartId { get; set; }
         public Part Part { get; set; }
 
 
         [Required]
         [Range(0, double.MaxValue)]
         public double ServicePrice { get; set; }
-        public int ServiceId { get; set; }
+        public int? ServiceId { get; set; }
         public Service Service { get; set; }
         
 
-        public int MechanicId { get; set; }
+        public int? MechanicId { get; set; }
         public Mechanic Mechanic { get; set; }
 
 

@@ -1,0 +1,124 @@
+﻿@model MajorTestViewData
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<form asp-controller="Admin_Visits" asp-action="Test" method="post">
+    <fieldset>
+        <legend>Sample submission</legend>
+        <table id="submissionTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Sample ID</td>
+                    <td>Additional Comments</td>
+                    <td>Acid-stable amino acids</td>
+                </tr>
+            </thead>
+
+            <tr id="tablerow0">
+                <td>
+                    <div class="editor-field">
+                        <input class="text-box single-line" type="text" value="" required="required" />
+                    </div>
+                </td>
+                <td>
+                    <div class="editor-field">
+                        <input class="text-box single-line" type="text" value="" required="required" />
+                    </div>
+                </td>
+                <td>
+                    <div class="editor-field">
+                        <input class="text-box single-line" type="text" value="" />
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="removeTr(0);">Delete</button>
+                </td>
+                <td></td>
+            </tr>
+
+        </table>
+        <p>
+            <button id="add" type="button" class="btn btn-primary">Add</button>
+        </p>
+        <hr />
+
+        <p>
+            <input type="submit" value="Create" class="btn btn-default" />
+        </p>
+    </fieldset>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+        var modelData = @Html.Raw(Json.Serialize(Model));
+        // Call the fillTableWithData function with the model data
+        removeTr(0);
+        fillTableWithData(modelData);
+    });
+
+    function fillTableWithData(modelData) {
+
+        if (modelData.items.length != 0) {
+            
+            counter = modelData.items.length;
+
+            for (var i = 0; i < counter; i++) {
+
+                var item = modelData.items[i];
+  
+                // Generate HTML for the table row with data from the model item
+                var tableRowHtml = '<tr id="tablerow' + i + '">' +
+                    '<td>' +
+                    '<input type="text" class="text-box single-line" name="items[' + i + '].ClientSampleID" value="' + item.clientSampleID + '" required="required" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" class="text-box single-line" name="items[' + i + '].AdditionalComments" value="' + item.additionalComments + '" required="required" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" class="text-box single-line" name="items[' + i + '].AcidStables" value="' + item.acidStables + '" required="required" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<select class="form-control" name="items[' + i + '].AcidStables" required="required">';
+
+                for (var j = 1; j <= 10; j++) {
+                    tableRowHtml += '<option value="' + j + '">' + j + '</option>';
+                }
+
+                tableRowHtml += '</select>' +
+                    '</td>' +
+                    '</tr>';
+
+                // Append the table row HTML to the submissionTable
+                $('#submissionTable').append(tableRowHtml);
+            }
+        }
+    }
+
+    var counter = 2;
+    $(function () {
+        $('#add').click(function () {
+            $('<tr id="tablerow' + counter + '"><td>' +
+                '<input type="text" class="text-box single-line" name="items[' + counter + '].ClientSampleID" value="" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="text-box single-line" name="items[' + counter + '].AdditionalComments" value="" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="text-box single-line" name="items[' + counter + '].AcidStables" value="" required="required" />' +
+                '</td>' +
+                '<td>' +
+                '<button type="button" class="btn btn-primary" onclick="removeTr(' + counter + ');">Delete</button>' +
+                '</td>' +
+                '</tr>').appendTo('#submissionTable');
+            counter++;
+            return false;
+        });
+    });
+    function removeTr(index) {
+        if (counter > 1) {
+            $('#tablerow' + index).remove();
+            counter--;
+        }
+        return false;
+    }
+</script>

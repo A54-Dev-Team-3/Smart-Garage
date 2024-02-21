@@ -31,16 +31,32 @@ namespace Smart_Garage.Services
             this.partService = partService;
         }
 
-        public VisitResponseDTO Create(int VehicleId, string username)
+        public VisitResponseDTO Create(VisitRequestDTO visitRequestDTO)
         {
 
-            userService.IsCurrentUserAdmin(username);
+            //userService.IsCurrentUserAdmin(username);
 
-            Visit visit = new Visit()
+            var visit = autoMapper.Map<Visit>(visitRequestDTO);
+
+            foreach (var serviceInstance in visit.ServiceInstances)
             {
-                VehicleId = VehicleId,
-                Date = DateTime.Now,
-            };
+                if (serviceInstance.Service != null && serviceInstance.Service.Name != null)
+                {
+                    serviceInstance.ServiceId = serviceService.GetByName(serviceInstance.Service.Name).Id;
+                }
+
+                if (serviceInstance.Mechanic != null && serviceInstance.Mechanic.Name != null)
+                {
+                    serviceInstance.MechanicId = mechanicService.GetByName(serviceInstance.Mechanic.Name).Id;
+                }
+
+
+                if (serviceInstance.Part != null && serviceInstance.Part.Name != null)
+                {
+                   serviceInstance.PartId = partService.GetByName(serviceInstance.Part.Name).Id;
+                }
+
+            }
 
             return autoMapper.Map<VisitResponseDTO>(visitsRepository.Create(visit));
         }
