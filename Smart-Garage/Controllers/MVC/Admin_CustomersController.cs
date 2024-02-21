@@ -119,7 +119,9 @@ namespace Smart_Garage.Controllers.MVC
             var userEmail = new SendEmailViewModel();
             userEmail.Email = signUpViewModel.Email;
 
-            userService.SendEmailLogic(userEmail);
+            var message = $"<p>Dear User,</p><br><p>You have just created an account. Please click the link below to create a password:</p><br><p><a href=\"http://localhost:5068/Admin_Users/SetPassword/{userEmail.Email}\">[Password Reset Link]</a></p><br><p>Thank you for your attention to this matter.</p><br><p>Best regards,<br>The team of Smart-Garage</p>";
+
+            userService.SendEmailLogic(userEmail, message);
 
             return RedirectToAction("Index", "Admin_Customers");
 		}

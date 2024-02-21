@@ -158,11 +158,10 @@ namespace Smart_Garage.Services
                 throw new UnauthorizedOperationException("You are not an admin!");
         }
 
-        public async void SendEmailLogic(SendEmailViewModel userEmail)
+        public async void SendEmailLogic(SendEmailViewModel userEmail, string message)
         {
             //var reciever = "smart-garage@abv.bg";
             var subject = "Set Password";
-            var message = $"<p>Dear User,</p><br><p>It seems that you've forgotten your password for accessing our platform. Not to worry, we've got you covered! To reset your password and regain access to your account, please follow the link below:</p><br><p><a href=\"http://localhost:5068/Admin_Users/SetPassword/{userEmail.Email}\">[Password Reset Link]</a></p><br><p>If you did not initiate this password reset request, please ignore this email or contact our support team immediately.</p><p>Thank you for your attention to this matter.</p><br><p>Best regards,<br>The team of Smart-Garage</p>";
 
             await emailSender.SendEmailAsync(userEmail.Email, subject, message);
         }

@@ -241,11 +241,6 @@
 
     function removeTrFromPartsTable(index)
     {
-        for (int k = 0; k < ServiceInstances.Count(); k++)
-        {
-            console.log(ServiceInstances[k].Part.Name);
-        }
-
         console.log("After: partsCounter", partsCounter);
         if (partsCounter >= 0) {
             $('#partstablerow' + index).remove();
@@ -272,7 +267,6 @@
 
     var partsCounter = 0;
     var serviceCounter = 0;
-    @Model.ServiceInstances
 
     function fillTableWithData(modelData) {
         if (modelData.serviceInstances.length != 0)
