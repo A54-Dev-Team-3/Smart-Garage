@@ -403,6 +403,7 @@
             return false;
         });
         $('#addServiceBtn').click(function () {
+            console.log("1");
             var modelData = @Html.Raw(Json.Serialize(Model));
 
             var servicesTableRowHtml = '<tr id="servicestablerow' + serviceCounter + '">' +
@@ -416,17 +417,22 @@
                 servicesTableRowHtml += '<option value="' + service.name + '">' + service.name + '</option>';
             }
 
+            console.log("2");
+            console.log(modelData);
             servicesTableRowHtml += '</select>' +
                 '</td>' +
                 '<td>' +
                 '<select type="text" class="form-control" name="ServiceInstances[' + serviceCounter + '].Mechanic.Name" required="required">';
 
+            console.log("2.5");
             servicesTableRowHtml += '<option value="' + '">' + '</option>';
             // Loop through the services using JavaScript syntax
-            for (var j = 0; j < modelData.services.length; j++) {
+            console.log("2.6");
+            for (var j = 0; j < modelData.mechanics.length; j++) {
                 var mechanic = modelData.mechanics[j];
                 servicesTableRowHtml += '<option value="' + mechanic.name + '">' + mechanic.name + '</option>';
             }
+            console.log("3");
             servicesTableRowHtml += '</select>' +
                 '</td>' +
                 '<td>' +
@@ -437,6 +443,7 @@
                 '</td>' +
                 '</tr>';
 
+            console.log("3");
             $(servicesTableRowHtml).appendTo('#serviceSubmissionTable');
             serviceCounter++;
             return false;
