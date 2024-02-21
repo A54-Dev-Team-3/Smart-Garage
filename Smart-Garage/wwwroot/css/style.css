@@ -52,3 +52,17 @@
     width: 100px;
     position: relative;
 }
+.custom-dropdown {
+    width: 100px;
+    font-size: 14px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+    .custom-dropdown::-ms-expand {
+        transform: rotate(90deg);
+    }
+
+    .custom-dropdown option {
+        padding: 5px;
+    }

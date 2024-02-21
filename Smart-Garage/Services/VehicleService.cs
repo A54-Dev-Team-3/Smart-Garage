@@ -34,25 +34,9 @@ namespace Smart_Garage.Services
                 throw new UnauthorizedOperationException("You are not an admin!");
             }
 
-			Vehicle vehicle = new Vehicle()
-			{
-				LicensePlate = dto.LicensePlate,
-				VIN = dto.VIN,
-				CreationYear = dto.CreationYear,
-				Model = autoMapper.Map<Model>(dto.Model)
-			};
+			Vehicle createdVehicle = this.vehicleRepository.Create(user, autoMapper.Map<Vehicle>(dto));
 
-			Vehicle createdVehicle = this.vehicleRepository.Create(user, vehicle);
-
-            VehicleResponseDTO dtoToReturn = new VehicleResponseDTO()
-			{
-				LicensePlate = createdVehicle.LicensePlate,
-				VIN = createdVehicle.VIN,
-				CreationYear = createdVehicle.CreationYear,
-				Model = autoMapper.Map<string>(createdVehicle.Model)
-			};
-
-            return dtoToReturn;
+            return autoMapper.Map<VehicleResponseDTO>(createdVehicle);
 		}
         public IList<VehicleResponseDTO> GetAll()
         {
@@ -77,7 +61,10 @@ namespace Smart_Garage.Services
 
         public VehicleResponseDTO Update(int vehicleId, VehicleRequestDTO dto)
         {
-            Vehicle updatedVehicle = this.vehicleRepository.Update(vehicleId, autoMapper.Map<Vehicle>(dto));
+            Vehicle vehicle = autoMapper.Map<Vehicle>(dto);
+            vehicle.User = userRepository.GetByName(dto.User.Username);
+
+            Vehicle updatedVehicle = this.vehicleRepository.Update(vehicleId, vehicle);
             return autoMapper.Map<VehicleResponseDTO>(updatedVehicle);
 
         }

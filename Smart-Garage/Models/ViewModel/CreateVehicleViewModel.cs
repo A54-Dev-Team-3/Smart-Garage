@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Smart_Garage.Models.DTOs;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
 
 namespace Smart_Garage.Models.ViewModel
 {
@@ -18,7 +20,9 @@ namespace Smart_Garage.Models.ViewModel
         [Required]
         [Range(1886, 2024)]
         public int CreationYear { get; set; }
-        //public CustomerViewModel? User { get; set; }
+        public CustomerViewModel? User { get; set; }
+        public IList<BrandResponseDTO> Brands { get; set; }
+        public int BrandId { get; set; }
         //public IList<Visit> Visits { get; set; }
     }
 }

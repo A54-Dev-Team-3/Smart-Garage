@@ -5,5 +5,7 @@ namespace Smart_Garage.Services.Contracts
     public interface IModelService
     {
         public IList<ModelResponseDTO> GetAll();
+        IList<ModelResponseDTO> GetModelsByBrandId(int id);
+
     }
 }

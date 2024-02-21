@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Smart_Garage.Models.ViewModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Smart_Garage.Models.DTOs.RequestDTOs
 {
     public class VehicleRequestDTO
     {
+        public int Id { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "The {0} field is required and must not be an empty string.")]
         [RegularExpression(@"^[A-C, E, H, K, M, O, P, T, X, Y]{1,2}\s?\d{4}[A-C, E, H, K, M, O, P, T, X, Y]{2}$", ErrorMessage = "The {0} must be a valid Bulgarian license plate.")]
         public string LicensePlate { get; set; }
@@ -28,5 +31,7 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
 
         [Required]
         public int UserId { get; set; }
+        public CustomerViewModel? User { get; set; }
+        public IList<VisitViewModel> Visits { get; set; }
     }
 }

@@ -9,6 +9,40 @@
 
 <a asp-controller="Admin_Services" asp-action="Create" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Service</a>
 
+<form asp-controller="Admin_Services" asp-action="Index" method="post">
+    <div class="row" style="margin-left: 17px; margin-bottom:2%">
+
+        <div class="col-md-2">
+            <label style="margin-right:10px;">Filter By:</label>
+            <select id="searchOption" name="searchOption" style="margin-right:10px; max-width:200px;" class="form-control">
+                <option value="Name">Name</option>
+            </select>
+        </div>
+
+        <div class="col-md-2" style="margin-top:24px;">
+            <input type="text" id="searchString" name="searchString" class="form-control" placeholder="Search...">
+        </div>
+
+        <div class="col-md-4">
+            <label for="minPrice" style="margin-right:10px;">Min Price:</label>
+            <input type="range" id="minPrice" name="minPrice" min="0" max="1000" step="0.01" value="0" class="form-range" style="max-width: 200px;">
+            <input type="number" id="minPriceInput" name="minPriceInput" min="0" max="1000" step="0.01" value="0" class="form-control" style="max-width: 100px;">
+        </div>
+
+        <div class="col-md-4">
+            <label for="maxPrice" style="margin-right:10px;">Max Price:</label>
+            <input type="range" id="maxPrice" name="maxPrice" min="0" max="1000" step="0.01" value="1000" class="form-range" style="max-width: 200px;">
+            <input type="number" id="maxPriceInput" name="maxPriceInput" min="0" max="1000" step="0.01" value="1000" class="form-control" style="max-width: 100px;">
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" style="margin-top:24px;">Filter</button>
+        </div>
+
+    </div>
+</form>
+
+
 @* table-striped *@
 <table class="table myTable" id="resizeMe">
     <thead>
@@ -41,3 +75,28 @@
         }
     </tbody>
 </table>
+
+<script>
+    const minPrice = document.getElementById('minPrice');
+    const maxPrice = document.getElementById('maxPrice');
+    const minPriceInput = document.getElementById('minPriceInput');
+    const maxPriceInput = document.getElementById('maxPriceInput');
+
+    // Update the value of the input field when the range slider is moved
+    minPrice.addEventListener('input', function () {
+        minPriceInput.value = this.value;
+    });
+
+    maxPrice.addEventListener('input', function () {
+        maxPriceInput.value = this.value;
+    });
+
+    // Update the value of the range slider when the input field is changed
+    minPriceInput.addEventListener('input', function () {
+        minPrice.value = this.value;
+    });
+
+    maxPriceInput.addEventListener('input', function () {
+        maxPrice.value = this.value;
+    });
+</script>

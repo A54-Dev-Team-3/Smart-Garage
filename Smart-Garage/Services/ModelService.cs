@@ -22,5 +22,10 @@ namespace Smart_Garage.Services
                 .Select(v => autoMapper.Map<ModelResponseDTO>(v))
                 .ToList();
         }
+
+        public IList<ModelResponseDTO> GetModelsByBrandId(int brandId)
+        {
+            return autoMapper.Map<IList<ModelResponseDTO>>(modelRepository.GetModelsByBrandId(brandId));
+        }
     }
 }

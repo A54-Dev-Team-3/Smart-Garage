@@ -19,7 +19,7 @@ namespace Smart_Garage.Repositories
 
         public Vehicle Create(User user, Vehicle vehicle)
         {
-            if(context.Vehicles.Any(v => v.LicensePlate == vehicle.LicensePlate && !v.IsDeleted))
+            if (context.Vehicles.Any(v => v.LicensePlate == vehicle.LicensePlate && !v.IsDeleted))
             {
                 throw new DuplicationException($"Vehicle with license plate: {vehicle.LicensePlate} already exists!");
             }
@@ -30,8 +30,28 @@ namespace Smart_Garage.Repositories
             }
 
             vehicle.UserId = user.Id;
-            context.Vehicles.Add(vehicle);
+
+            if (context.Models.FirstOrDefault(m => m.Name == vehicle.Model.Name) == null)
+            {
+                context.Models.Add(vehicle.Model);
+            }
+            else
+            {
+                vehicle.Model.Id = context.Models.FirstOrDefault(m => m.Name == vehicle.Model.Name).Id;
+			}
+
+            if (context.Brands.FirstOrDefault(b => b.Name == vehicle.Model.Brand.Name) == null)
+            {
+                context.Brands.Add(vehicle.Model.Brand);
+            }
+			else
+			{
+				vehicle.Model.Brand.Id = context.Models.FirstOrDefault(b => b.Name == vehicle.Model.Brand.Name).Id;
+			}
+
+			context.Vehicles.Add(vehicle);
             vehicle.User.Vehicles.Add(vehicle);
+
             context.SaveChanges();
 
             return vehicle;
@@ -48,7 +68,11 @@ namespace Smart_Garage.Repositories
 
         public Vehicle GetById(int id)
         {
-            return context.Vehicles.FirstOrDefault(v => v.Id == id && !v.IsDeleted) ??
+            return context.Vehicles
+                .Include(v => v.User)
+                            .Include(v => v.Model)
+                                .ThenInclude(m => m.Brand)
+                                .FirstOrDefault(v => v.Id == id && !v.IsDeleted) ??
                 throw new EntityNotFoundException($"Vehicle with id: {id} doesn't exists.");
         }
 
@@ -65,6 +89,11 @@ namespace Smart_Garage.Repositories
             Vehicle vehicleToUpdate = GetById(vehicleId);
 
             vehicleToUpdate.LicensePlate = updatedVehicle.LicensePlate;
+            vehicleToUpdate.Model = updatedVehicle.Model;
+            vehicleToUpdate.Model.Brand = updatedVehicle.Model.Brand;
+            vehicleToUpdate.CreationYear = updatedVehicle.CreationYear;
+            vehicleToUpdate.VIN = updatedVehicle.VIN;
+            vehicleToUpdate.User = updatedVehicle.User;
 
             context.Update(vehicleToUpdate);
             context.SaveChanges();
@@ -87,6 +116,8 @@ namespace Smart_Garage.Repositories
             vehicles = FilterByModel(vehicles, filterParameters.Model);
             vehicles = FilterByBrand(vehicles, filterParameters.Brand);
             vehicles = FilterByYearOfCreation(vehicles, filterParameters.YearOfCreation);
+            vehicles = FilterByLicensePlateQ(vehicles, filterParameters.LicensePlate);
+            vehicles = FilterByVIN(vehicles, filterParameters.VIN);
             vehicles = SortBy(vehicles, filterParameters.SortBy);
 
             return vehicles.ToList();
@@ -122,6 +153,36 @@ namespace Smart_Garage.Repositories
                 return vehicles.FirstOrDefault(v => v.LicensePlate == licensePlate);
             else
                 throw new EntityNotFoundException($"Car with license plate \"{licensePlate}\" not found");
+        }
+
+        private IList<Vehicle> FilterByLicensePlateQ(IList<Vehicle> vehicles, string model)
+        {
+            if (!string.IsNullOrEmpty(model))
+            {
+                return vehicles.Where(v => v.LicensePlate.Contains(model)).ToList();
+            }
+
+            return vehicles;
+        }
+
+        private IList<Vehicle> FilterByOwner(IList<Vehicle> vehicles, string model)
+        {
+            if (!string.IsNullOrEmpty(model))
+            {
+                return vehicles.Where(v => v.User.Username.Contains(model)).ToList();
+            }
+
+            return vehicles;
+        }
+
+        private IList<Vehicle> FilterByVIN(IList<Vehicle> vehicles, string model)
+        {
+            if (!string.IsNullOrEmpty(model))
+            {
+                return vehicles.Where(v => v.VIN.Contains(model)).ToList();
+            }
+
+            return vehicles;
         }
 
         private IList<Vehicle> FilterByModel(IList<Vehicle> vehicles, string model)

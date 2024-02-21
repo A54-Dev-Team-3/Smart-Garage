@@ -19,5 +19,7 @@ namespace Smart_Garage.Repositories
                 .Include(b => b.Models)
                 .Where(b => !b.IsDeleted).ToList();
         }
+        
+
     }
 }
