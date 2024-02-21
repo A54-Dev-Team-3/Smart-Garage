@@ -33,7 +33,7 @@ namespace Smart_Garage.Repositories
 
             if (!string.IsNullOrEmpty(serviceParams.Name))
             {
-                result = result.Where(s => s.Name == serviceParams.Name);
+                result = result.Where(s => s.Name.Contains(serviceParams.Name));
             }
 
             if (serviceParams.MinPrice.HasValue)

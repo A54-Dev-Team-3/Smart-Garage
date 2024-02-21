@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models.DTOs.RequestDTOs;
+using Smart_Garage.Models.DTOs.ResponseDTOs;
+using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Models.ViewModel;
+using Smart_Garage.Repositories.QueryParameters;
 using Smart_Garage.Services;
 using Smart_Garage.Services.Contracts;
 
@@ -12,11 +15,15 @@ namespace Smart_Garage.Controllers.MVC
     {
         private readonly IVehicleService vehicleService;
         private readonly IMapper autoMapper;
+        private readonly IBrandService brandService;
+        private readonly IModelService modelService;
 
-        public Admin_VehiclesController(IVehicleService vehicleService, IMapper autoMapper)
+        public Admin_VehiclesController(IVehicleService vehicleService, IMapper autoMapper, IBrandService brandService, IModelService modelService)
         {
             this.vehicleService = vehicleService;
             this.autoMapper = autoMapper;
+            this.brandService = brandService;
+            this.modelService = modelService;
         }
 
         [HttpGet]
@@ -30,14 +37,66 @@ namespace Smart_Garage.Controllers.MVC
             return View(vehicleViewModels);
         }
 
+        [HttpPost]
+        [IsAuthenticated]
+        public IActionResult Index(string searchOption, string searchString)
+        {
+            var vehicleQueryParameters = new VehicleQueryParameters();
+
+            switch (searchOption)
+            {
+                case "Brand":
+                    vehicleQueryParameters.Brand = searchString;
+                    break;
+                case "LicensePlate":
+                    vehicleQueryParameters.LicensePlate = searchString;
+                    break;
+                case "Model":
+                    vehicleQueryParameters.Model = searchString;
+                    break;
+                case "VIN":
+                    vehicleQueryParameters.VIN = searchString;
+                    break;
+                case "Owner":
+                    vehicleQueryParameters.Owner = searchString;
+                    break;
+                case "YearOfCreation":
+                    vehicleQueryParameters.YearOfCreation = searchString;
+                    break;
+            }
+
+            var vehicleResponseDTOs = vehicleService.FilterBy(vehicleQueryParameters);
+            var vehicleViewModels = autoMapper.Map<IList<VehicleViewModel>>(vehicleResponseDTOs);
+
+            return View(vehicleViewModels);
+        }
+
         [HttpGet]
         [IsAuthenticated]
         public IActionResult Create()
         {
-            var vehicleViewModel = new CreateVehicleViewModel();
+            var brandViewModels = new List<BrandResponseDTO>();
+
+            foreach (var brand in brandService.GetAll())
+            {
+                var models = modelService.GetModelsByBrandId(brand.Id);
+                var brandViewModel = new BrandResponseDTO
+                {
+                    Id = brand.Id,
+                    Name = brand.Name,
+                    Models = models
+                };
+                brandViewModels.Add(brandViewModel);
+            }
+
+            var vehicleViewModel = new CreateVehicleViewModel
+            {
+                Brands = brandViewModels
+            };
 
             return View(vehicleViewModel);
         }
+
 
         [HttpPost]
         [IsAuthenticated]
@@ -95,7 +154,7 @@ namespace Smart_Garage.Controllers.MVC
             var updateVehicleDTO = autoMapper.Map<VehicleRequestDTO>(vehicleViewModel);
             vehicleService.Update(vehicleViewModel.Id, updateVehicleDTO);
 
-            return RedirectToAction("Detail", "Admin_Vehicle", new { id = vehicleViewModel.Id });
+            return RedirectToAction("Index", "Admin_Vehicle");
         }
 
         private string GetUsername()

@@ -4,7 +4,9 @@ using Smart_Garage.Exceptions;
 using Smart_Garage.Helpers;
 using Smart_Garage.Models.DTOs.RequestDTOs;
 using Smart_Garage.Models.DTOs.ResponseDTOs;
+using Smart_Garage.Models.QueryParameters;
 using Smart_Garage.Models.ViewModel;
+using Smart_Garage.Repositories.QueryParameters;
 using Smart_Garage.Services;
 using Smart_Garage.Services.Contracts;
 using System.Security.Claims;
@@ -31,6 +33,21 @@ namespace Smart_Garage.Controllers.MVC
             var serviceResponseDTO = serviceService.GetAll();
 
             var serviceViewModels = autoMapper.Map<IList<ServiceViewModel>>(serviceResponseDTO);
+
+            return View(serviceViewModels);
+        }
+
+        [HttpPost]
+        [IsAuthenticated]
+        public IActionResult Index(string searchOption, string searchString, double minPrice, double maxPrice)
+        {
+            var serviceQueryParameters = new ServicesQueryParameters();
+            serviceQueryParameters.Name = searchString;
+            serviceQueryParameters.MinPrice = minPrice;
+            serviceQueryParameters.MaxPrice = maxPrice;
+
+            var serviceResponseDTOs = serviceService.FilterBy(serviceQueryParameters, GetUsername());
+            var serviceViewModels = autoMapper.Map<IList<ServiceViewModel>>(serviceResponseDTOs);
 
             return View(serviceViewModels);
         }

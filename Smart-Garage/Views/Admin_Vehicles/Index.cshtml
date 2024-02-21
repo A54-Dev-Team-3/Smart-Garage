@@ -9,16 +9,40 @@
 
 <a asp-controller="Admin_Vehicles" asp-action="Create" style="margin-bottom:20px; margin-left:30px" class="btn btn-primary">Add Vehicle</a>
 
-<table class="table table-striped">
+<form action="/Admin_Vehicles/Index" method="post">
+    <div class="form-group row" style="margin-left:18px; margin-bottom:30px; max-width:100%;">
+        <div class="col-md-2">
+            <label style="margin-right:10px;">Filter By:</label>
+            <select id="searchOption" name="searchOption" class="form-control">
+                <option value="LicensePlate">License Plate</option>
+                <option value="Brand">Brand</option>
+                <option value="Model">Model</option>
+                <option value="Creation Year">Creation Year</option>
+                <option value="VIN">VIN</option>
+                <option value="Owner">Owner</option>
+            </select>
+        </div>
+
+        <div class="col-md-2" style="margin-top:22px">
+            <input type="text" id="searchString" name="searchString" class="form-control" placeholder="Search...">
+        </div>
+
+        <div class="col-md-2">
+            <button style="margin-top:22px" type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </div>
+</form>
+
+<table class="table myTable" style="margin-left:30px" id="resizeMe">
     <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">License Plate</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Model</th>
-            <th scope="col">Creation Year</th>
-            <th scope="col">VIN</th>
-            <th scope="col">Owner</th>
+            <th scope="col" style="width: 5%">Id</th>
+            <th scope="col" style="width: 15%;">License Plate</th>
+            <th scope="col" style="width: 15%;">Brand</th>
+            <th scope="col" style="width: 130px;">Model</th>
+            <th scope="col" style="width: 170px;">Creation Year</th>
+            <th scope="col" style="width: 170px;">VIN</th>
+            <th scope="col" style="width: 170px;">Owner</th>
             <th scope="col" style="width: 170px;">Details</th>
         </tr>
     </thead>
