@@ -8,7 +8,7 @@
 
 <h2 style="margin-bottom:30px;">@ViewData["Heading"]</h2>
 
-<p style="margin-bottom:30px;">Date: @DateTime.Now.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</p>
+<p style="margin-bottom:30px;">Date: @Model.Date.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</p>
 
 <div style="margin-left: 0%; margin-bottom:2%">
     <p style="display: inline-block;" for="currency">Select Currency:</p>

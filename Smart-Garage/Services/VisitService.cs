@@ -38,25 +38,25 @@ namespace Smart_Garage.Services
 
             var visit = autoMapper.Map<Visit>(visitRequestDTO);
 
-            foreach (var serviceInstance in visit.ServiceInstances)
-            {
-                if (serviceInstance.Service != null && serviceInstance.Service.Name != null)
-                {
-                    serviceInstance.ServiceId = serviceService.GetByName(serviceInstance.Service.Name).Id;
-                }
+            //foreach (var serviceInstance in visit.ServiceInstances)
+            //{
+            //    if (serviceInstance.Service != null && serviceInstance.Service.Name != null)
+            //    {
+            //        serviceInstance.ServiceId = serviceService.GetByName(serviceInstance.Service.Name).Id;
+            //    }
 
-                if (serviceInstance.Mechanic != null && serviceInstance.Mechanic.Name != null)
-                {
-                    serviceInstance.MechanicId = mechanicService.GetByName(serviceInstance.Mechanic.Name).Id;
-                }
+            //    if (serviceInstance.Mechanic != null && serviceInstance.Mechanic.Name != null)
+            //    {
+            //        serviceInstance.MechanicId = mechanicService.GetByName(serviceInstance.Mechanic.Name).Id;
+            //    }
 
 
-                if (serviceInstance.Part != null && serviceInstance.Part.Name != null)
-                {
-                   serviceInstance.PartId = partService.GetByName(serviceInstance.Part.Name).Id;
-                }
+            //    if (serviceInstance.Part != null && serviceInstance.Part.Name != null)
+            //    {
+            //       serviceInstance.PartId = partService.GetByName(serviceInstance.Part.Name).Id;
+            //    }
 
-            }
+            //}
 
             return autoMapper.Map<VisitResponseDTO>(visitsRepository.Create(visit));
         }
@@ -70,13 +70,11 @@ namespace Smart_Garage.Services
                 .ToList();
         }
 
-        public IList<VisitResponseDTO> FilterBy(VisitQueryParameters filterParameters)
+        public PaginatedList<VisitResponseDTO> FilterBy(VisitQueryParameters filterParameters)
         {
-            //userService.IsCurrentUserAdmin(username);
-
-            return visitsRepository.FilterBy(filterParameters)
-                            .Select(v => autoMapper.Map<VisitResponseDTO>(v))
-                            .ToList();
+            var visits = visitsRepository.FilterBy(filterParameters);
+            var tmp = autoMapper.Map<PaginatedList<VisitResponseDTO>>(visits);
+            return tmp;
         }
 
         public VisitResponseDTO GetById(int id)
@@ -87,17 +85,17 @@ namespace Smart_Garage.Services
 
         public Visit GetServiceInstancesIds(Visit visit)
         {
-            foreach (var ServiceInstance in visit.ServiceInstances)
-            {
-                var newMechanic = mechanicService.GetByName(ServiceInstance.Mechanic.Name).Id;
-                var newService = serviceService.GetByName(ServiceInstance.Service.Name).Id;
-                var newPart = partService.GetByName(ServiceInstance.Part.Name).Id;
+            //foreach (var ServiceInstance in visit.ServiceInstances)
+            //{
+            //    var newMechanic = mechanicService.GetByName(ServiceInstance.Mechanic.Name).Id;
+            //    var newService = serviceService.GetByName(ServiceInstance.Service.Name).Id;
+            //    var newPart = partService.GetByName(ServiceInstance.Part.Name).Id;
 
-                ServiceInstance.MechanicId = newMechanic;
-                ServiceInstance.ServiceId = newService;
-                ServiceInstance.PartId = newPart;
+            //    ServiceInstance.MechanicId = newMechanic;
+            //    ServiceInstance.ServiceId = newService;
+            //    ServiceInstance.PartId = newPart;
 
-            }
+            //}
 
             return visit;
         }

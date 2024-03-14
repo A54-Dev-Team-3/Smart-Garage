@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Smart_Garage.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace Smart_Garage.Models
 {
@@ -16,7 +17,7 @@ namespace Smart_Garage.Models
 
         public bool IsDeleted { get; set; }
 
-        public ICollection<ServiceInstance> ServiceInstances { get; set; } = new HashSet<ServiceInstance>();
+        public ICollection<ServiceVisit> ServiceVisits { get; set; } = new HashSet<ServiceVisit>();
 
     }
 }

@@ -70,7 +70,7 @@
                 </tr>
             </thead>
             <tbody id="itemTableBody">
-                @foreach (var serviceInstances in Model.ServiceInstances)
+                @* @foreach (var serviceInstances in Model.ServiceInstances)
                 {
 
                     <tr>
@@ -80,7 +80,7 @@
                         <td class="price">@serviceInstances.PartQuantity * @serviceInstances.PartUnitPrice</td>
                     </tr>
 
-                }
+                } *@
             </tbody>
         </table>
 
@@ -105,14 +105,14 @@
                 </tr>
             </thead>
             <tbody id="servicesTableBody">
-                @foreach (var serviceInstance in Model.ServiceInstances)
+                @* @foreach (var serviceInstance in Model.ServiceInstances)
                 {
 
                     <tr>
                         <td>@serviceInstance.Service.Name</td>
                         <td class="price" data-original="@serviceInstance.ServicePrice">@serviceInstance.ServicePrice</td>
                     </tr>
-                }
+                } *@
             </tbody>
         </table>
         <!-- Total Services Price -->

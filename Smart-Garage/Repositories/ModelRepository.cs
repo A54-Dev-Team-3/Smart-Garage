@@ -15,12 +15,12 @@ namespace Smart_Garage.Repositories
             this.context = context;
         }
 
-        public IList<Model> GetAll()
+        public IList<VehicleModel> GetAll()
         {
             return context.Models.Where(u => !u.IsDeleted).ToList();
         }
 
-        public IList<Model> GetModelsByBrandId(int brandId)
+        public IList<VehicleModel> GetModelsByBrandId(int brandId)
         {
             return context.Models
                 .Where(m => m.Brand.Id == brandId)

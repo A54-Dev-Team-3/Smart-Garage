@@ -4,6 +4,6 @@ namespace Smart_Garage.Repositories.Contracts
 {
     public interface IBrandRepository
     {
-        public IList<Brand> GetAll();
+        public IList<VehicleBrand> GetAll();
     }
 }

@@ -12,7 +12,6 @@ namespace Smart_Garage.Models.ViewModel
         public double TotalPrice { get; set; } // in BGN
         public VehicleVisitViewModel Vehicle { get; set; }
         public CustomerVisitViewModel User { get; set; }
-        public IList<ServiceInstanceViewModel> ServiceInstances { get; set; } = new List<ServiceInstanceViewModel>();
         public IList<PartViewModel> Parts { get; set; }
         public IList<ServiceViewModel> Services { get; set; }
         public IList<MechanicViewModel> Mechanics { get; set; }

@@ -10,6 +10,5 @@ namespace Smart_Garage.Models.DTOs.RequestDTOs
         public double ServicesTotalPrice { get; set; } // in BGN
         public double TotalPrice { get; set; } // in BGN
         public int VehicleId { get; set; }
-        public IList<ServiceInstanceRequestDTO> ServiceInstances { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Smart_Garage.Models
         public User User { get; set; }
 
         public int ModelId { get; set; }
-        public Model Model { get; set; }
+        public VehicleModel Model { get; set; }
 
         [Required]
         [RegularExpression(@"^[A-C, E, H, K, M, O, P, T, X, Y]{1,2}\s?\d{4}[A-C, E, H, K, M, O, P, T, X, Y]{2}$")]
