@@ -46,12 +46,12 @@ namespace Smart_Garage.Controllers.MVC
 
         [HttpGet]
         [IsAuthenticated]
-        public IActionResult Index()
+        public IActionResult Index(VisitQueryParameters visitQueryParameters)
         {
             string currentUser = HttpContext.Session.GetString("user");
 
-            var visitResponseDTO = visitService.GetAll(currentUser);
-            var visitViewModels = autoMapper.Map<IList<VisitViewModel>>(visitResponseDTO);
+            PaginatedList<VisitResponseDTO> visitPaginatedList = visitService.FilterBy(visitQueryParameters);
+            var visitViewModels = autoMapper.Map<PaginatedList<VisitViewModel>>(visitPaginatedList);
 
             return View(visitViewModels);
         }
