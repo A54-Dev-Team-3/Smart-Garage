@@ -25,7 +25,17 @@ Here're some of the project's best features:
 update-database
 ```
 
-<p>4. Now you are good to go. All users who register have passwords same as username. Example username = "test" password = "test".</p>
+<p>4. Now you are good to go. All users who register have passwords same as username. Example username = "test" password = "test". Here is a list of all predefined users and their passwords</p>
+
+| User | Password |
+| ------------- | ------------- |
+| admin  | admin  |
+| george123  | george123  |
+| alexander99 | alexander99 |
+| ben | ben |
+| ethan Mit | ethan Mit |
+| The Oliver_6 | The Oliver_6 |
+
 
 <h2>🍰 Contribution Guidelines:</h2>
 
