@@ -8,7 +8,7 @@
 
 <h2 style="margin-bottom:30px;">@ViewData["Heading"]</h2>
 
-<p style="margin-bottom:30px;">Date: @DateTime.Now.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</p>
+<p style="margin-bottom:30px;">Date: @Model.Date.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</p>
 
 <div style="margin-left: 0%; margin-bottom:2%">
     <p style="display: inline-block;" for="currency">Select Currency:</p>
@@ -241,11 +241,6 @@
 
     function removeTrFromPartsTable(index)
     {
-        for (int k = 0; k < ServiceInstances.Count(); k++)
-        {
-            console.log(ServiceInstances[k].Part.Name);
-        }
-
         console.log("After: partsCounter", partsCounter);
         if (partsCounter >= 0) {
             $('#partstablerow' + index).remove();
@@ -272,7 +267,6 @@
 
     var partsCounter = 0;
     var serviceCounter = 0;
-    @Model.ServiceInstances
 
     function fillTableWithData(modelData) {
         if (modelData.serviceInstances.length != 0)
@@ -409,6 +403,7 @@
             return false;
         });
         $('#addServiceBtn').click(function () {
+            console.log("1");
             var modelData = @Html.Raw(Json.Serialize(Model));
 
             var servicesTableRowHtml = '<tr id="servicestablerow' + serviceCounter + '">' +
@@ -422,17 +417,22 @@
                 servicesTableRowHtml += '<option value="' + service.name + '">' + service.name + '</option>';
             }
 
+            console.log("2");
+            console.log(modelData);
             servicesTableRowHtml += '</select>' +
                 '</td>' +
                 '<td>' +
                 '<select type="text" class="form-control" name="ServiceInstances[' + serviceCounter + '].Mechanic.Name" required="required">';
 
+            console.log("2.5");
             servicesTableRowHtml += '<option value="' + '">' + '</option>';
             // Loop through the services using JavaScript syntax
-            for (var j = 0; j < modelData.services.length; j++) {
+            console.log("2.6");
+            for (var j = 0; j < modelData.mechanics.length; j++) {
                 var mechanic = modelData.mechanics[j];
                 servicesTableRowHtml += '<option value="' + mechanic.name + '">' + mechanic.name + '</option>';
             }
+            console.log("3");
             servicesTableRowHtml += '</select>' +
                 '</td>' +
                 '<td>' +
@@ -443,6 +443,7 @@
                 '</td>' +
                 '</tr>';
 
+            console.log("3");
             $(servicesTableRowHtml).appendTo('#serviceSubmissionTable');
             serviceCounter++;
             return false;

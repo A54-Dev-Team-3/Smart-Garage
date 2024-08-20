@@ -1,11 +1,11 @@
 ﻿namespace Smart_Garage.Models
 {
-    public class Brand
+    public class VehicleModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int BrandId { get; set; }
+        public VehicleBrand Brand { get; set; }
         public bool IsDeleted { get; set; }
-
-        public ICollection<Model> Models { get; set; } = new HashSet<Model>();
     }
 }

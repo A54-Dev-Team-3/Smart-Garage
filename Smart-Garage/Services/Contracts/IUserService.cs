@@ -22,7 +22,7 @@ namespace Smart_Garage.Services.Contracts
         int GetCount();
         bool UserExists(string username);
         bool EmailExists(string email);
-        void SendEmailLogic(SendEmailViewModel userEmail);
+        void SendEmailLogic(SendEmailViewModel userEmail, string message);
         void IsCurrentUserAdmin(string currentUser); // "currentUser" is username
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);

@@ -13,6 +13,5 @@ namespace Smart_Garage.Models.DTOs.ResponseDTOs
 
         public VehicleVisitResponseDTO Vehicle { get; set; }
         public UserVisitResponseDTO User { get; set; }
-        public IList<ServiceInstanceResponseDTO> ServiceInstances { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace Smart_Garage.Repositories.Contracts
     {
         Visit Create(Visit newVisit);
         IList<Visit> GetAll();
-        IList<Visit> FilterBy(VisitQueryParameters visitsParams);
+        PaginatedList<Visit> FilterBy(VisitQueryParameters visitsParams);
         Visit GetById(int id);
         Visit Update(Visit visitToUpdate);
         Visit Delete(int id);

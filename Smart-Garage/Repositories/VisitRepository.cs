@@ -37,7 +37,7 @@ namespace Smart_Garage.Repositories
                 .ToList();
         }
 
-        public IList<Visit> FilterBy(VisitQueryParameters visitsParams)
+        public PaginatedList<Visit> FilterBy(VisitQueryParameters visitsParams)
         {
             IQueryable<Visit> result = context.Visits
                 .Where(v => !v.IsDeleted)
@@ -66,7 +66,6 @@ namespace Smart_Garage.Repositories
                 result = result.Where(v => v.Vehicle.Model.Brand.Name.Contains(visitsParams.Brand));
             }
 
-
             if (!string.IsNullOrEmpty(visitsParams.StartDate))
             {
                 DateTime startDate;
@@ -87,26 +86,20 @@ namespace Smart_Garage.Repositories
                     endDate = endDate.AddDays(1);
                     result = result.Where(v => v.Date < endDate);
                 }
-                else
-                {
-                    // Handle invalid date format or value
-                    // You may throw an exception, log the error, or take other appropriate action
-                }
             }
 
-            return result.ToList();
+            int totalPages = (int)Math.Ceiling((double)result.Count() / visitsParams.PageSize);
+
+
+            result = result.Skip(visitsParams.PageSize * (visitsParams.PageNumber - 1)).Take(visitsParams.PageSize);
+
+            return new PaginatedList<Visit>(result.ToList(), totalPages, visitsParams.PageNumber);
         }
 
         public Visit GetById(int id)
         {
             return context.Visits
                 .Include(v => v.Vehicle.User)
-                .Include(v => v.ServiceInstances.Where(si => !si.IsDeleted)) // where to put .Where(si => !si.IsDeleted)
-                    .ThenInclude(si => si.Mechanic)
-                .Include(v => v.ServiceInstances.Where(si => !si.IsDeleted))
-                            .ThenInclude(sis => sis.Service)
-                .Include(v => v.ServiceInstances.Where(si => !si.IsDeleted))
-                            .ThenInclude(sip => sip.Part)
                 .Include(v => v.Vehicle)
                     .ThenInclude(v => v.Model)
                         .ThenInclude(m => m.Brand)
@@ -119,30 +112,30 @@ namespace Smart_Garage.Repositories
             var visit = GetById(visitToUpdate.Id);
 
 
-            foreach (var serviceInstance in visit.ServiceInstances)
-            {
-                serviceInstance.IsDeleted = true;
-            }
+            //foreach (var serviceInstance in visit.ServiceInstances)
+            //{
+            //    serviceInstance.IsDeleted = true;
+            //}
 
-            visit.PartsTotalPrice = visitToUpdate.PartsTotalPrice;
-            visit.ServicesTotalPrice = visitToUpdate.ServicesTotalPrice;
-            visit.TotalPrice = visitToUpdate.TotalPrice;
+            //visit.PartsTotalPrice = visitToUpdate.PartsTotalPrice;
+            //visit.ServicesTotalPrice = visitToUpdate.ServicesTotalPrice;
+            //visit.TotalPrice = visitToUpdate.TotalPrice;
 
-            foreach (var serviceInstance in visitToUpdate.ServiceInstances)
-            {
+            //foreach (var serviceInstance in visitToUpdate.ServiceInstances)
+            //{
 
-                var newServiceInstance = new ServiceInstance
-                {
-                    MechanicId = serviceInstance.MechanicId,
-                    ServiceId = serviceInstance.ServiceId,
-                    PartId = serviceInstance.PartId,
-                    PartQuantity = serviceInstance.PartQuantity,
-                    PartUnitPrice = serviceInstance.PartUnitPrice,
-                    ServicePrice = serviceInstance.ServicePrice
-                };
+            //    var newServiceInstance = new ServiceInstance
+            //    {
+            //        MechanicId = serviceInstance.MechanicId,
+            //        ServiceId = serviceInstance.ServiceId,
+            //        PartId = serviceInstance.PartId,
+            //        PartQuantity = serviceInstance.PartQuantity,
+            //        PartUnitPrice = serviceInstance.PartUnitPrice,
+            //        ServicePrice = serviceInstance.ServicePrice
+            //    };
 
-                visit.ServiceInstances.Add(newServiceInstance);
-            }
+            //    visit.ServiceInstances.Add(newServiceInstance);
+            //}
 
             context.SaveChanges();
             return visit;

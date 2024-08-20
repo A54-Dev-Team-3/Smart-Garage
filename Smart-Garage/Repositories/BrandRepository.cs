@@ -13,7 +13,7 @@ namespace Smart_Garage.Repositories
             this.context = context;
         }
 
-        public IList<Brand> GetAll()
+        public IList<VehicleBrand> GetAll()
         {
             return context.Brands
                 .Include(b => b.Models)
