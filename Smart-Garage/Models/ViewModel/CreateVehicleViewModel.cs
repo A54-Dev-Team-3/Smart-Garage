@@ -21,7 +21,7 @@ namespace Smart_Garage.Models.ViewModel
         [Range(1886, 2024)]
         public int CreationYear { get; set; }
         public CustomerViewModel? User { get; set; }
-        public IList<BrandResponseDTO> Brands { get; set; }
+        public IList<BrandViewModel> Brands { get; set; }
         public int BrandId { get; set; }
         //public IList<Visit> Visits { get; set; }
     }

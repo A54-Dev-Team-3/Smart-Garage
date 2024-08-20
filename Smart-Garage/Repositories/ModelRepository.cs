@@ -23,8 +23,7 @@ namespace Smart_Garage.Repositories
         public IList<Model> GetModelsByBrandId(int brandId)
         {
             return context.Models
-                .Where(m => m.Brand.Id == brandId)
-                .ToList();
+                .Where(m => m.Brand.Id == brandId).ToList();
         }
     }
 }

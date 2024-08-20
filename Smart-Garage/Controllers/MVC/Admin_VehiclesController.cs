@@ -75,24 +75,9 @@ namespace Smart_Garage.Controllers.MVC
         [IsAuthenticated]
         public IActionResult Create()
         {
-            var brandViewModels = new List<BrandResponseDTO>();
+            var vehicleViewModel = new CreateVehicleViewModel();
 
-            foreach (var brand in brandService.GetAll())
-            {
-                var models = modelService.GetModelsByBrandId(brand.Id);
-                var brandViewModel = new BrandResponseDTO
-                {
-                    Id = brand.Id,
-                    Name = brand.Name,
-                    Models = models
-                };
-                brandViewModels.Add(brandViewModel);
-            }
-
-            var vehicleViewModel = new CreateVehicleViewModel
-            {
-                Brands = brandViewModels
-            };
+            vehicleViewModel.Brands = autoMapper.Map<IList<BrandViewModel>>(brandService.GetAll());
 
             return View(vehicleViewModel);
         }

@@ -8,97 +8,86 @@
 
 <div class="myForm" style="margin-left:30px">
     <form asp-controller="Admin_Vehicles" asp-action="Create" method="post">
-
-        <div class="form-group" style="margin-bottom: 15px">
+        <div class="form-groupel" style="margin-bottom: 15px">
             <label asp-for="Brand">Brand</label>
-            <select id="brandDropdown" asp-for="Brand" class="form-control custom-dropdown">
-                <option value="">Select Brand</option>
+            <select asp-for="Brand" class="form-control" id="brandSelect" name="Brand">
+                <option value=""></option>
                 @foreach (var brand in Model.Brands)
                 {
-                    <option value="@brand.Id">@brand.Name</option>
+                    <option value="@brand.Name">@brand.Name</option>
                 }
             </select>
-            <span asp-validation-for="Brand" class="text-danger"></span>
+            <input type="text" id="BrandInput" name="BrandInput" class="form-control" placeholder="Enter Brand">
+        </div>
+
+        <div class="form-groupel" style="margin-bottom: 15px">
+            <label asp-for="Model">Model</label>
+            <select asp-for="Model" class="form-control" id="modelSelect" name="Model">
+                <option value=""></option>
+            </select>
+            <input type="text" id="ModelInput" name="ModelInput" class="form-control" placeholder="Enter Model">
         </div>
 
         <div class="form-group" style="margin-bottom: 15px">
-            <label asp-for="Model">Model</label>
-            <select id="modelDropdown" asp-for="Model" class="form-control custom-dropdown">
-                <option value="">Select Model</option>
-                @if (Model.BrandId != null)
-                {
-                    foreach (var brand in Model.Brands)
+            <label asp-for="LicensePlate">LicensePlate</label>
+            <input asp-for="LicensePlate" type="text" class="form-control" placeholder="LicensePlate">
+            <span asp-validation-for="LicensePlate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px">
+            <label asp-for="VIN">VIN</label>
+            <input asp-for="VIN" type="text" class="form-control" placeholder="VIN">
+            <span asp-validation-for="VIN" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px">
+            <label asp-for="CreationYear">Creation Year</label>
+            <select asp-for="CreationYear" class="form-control custom-dropdown">
+                <option value="">Select Year</option>
+                @{
+                    for (int year = 1886; year <= 2024; year++)
                     {
-                        if (brand.Id == Model.BrandId)
-                        {
-                            foreach (var model in brand.Models)
-                            {
-                                <option value="model.Id">model.Name</option>
-                            }
-                            break;
-                        }
+                        <option value="@year">@year</option>
                     }
                 }
             </select>
-            <span asp-validation-for="Model" class="text-danger"></span>
+            <span asp-validation-for="CreationYear" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button style="margin-top:20px" type="submit" value="Create" class="btn btn-primary">Create</button>
     </form>
 </div>
 
-<div class="form-group" style="margin-bottom: 15px">
-    <label asp-for="LicensePlate">LicensePlate</label>
-    <input asp-for="LicensePlate" type="text" class="form-control" placeholder="LicensePlate">
-    <span asp-validation-for="LicensePlate" class="text-danger"></span>
-</div>
-
-<div class="form-group" style="margin-bottom: 15px">
-    <label asp-for="VIN">VIN</label>
-    <input asp-for="VIN" type="text" class="form-control" placeholder="VIN">
-    <span asp-validation-for="VIN" class="text-danger"></span>
-</div>
-
-<div class="form-group" style="margin-bottom: 15px">
-    <label asp-for="CreationYear">Creation Year</label>
-    <select asp-for="CreationYear" class="form-control custom-dropdown">
-        <option value="">Select Year</option>
-        @{
-            for (int year = 1886; year <= 2024; year++)
-            {
-                <option value="@year">@year</option>
-            }
-        }
-    </select>
-    <span asp-validation-for="CreationYear" class="text-danger"></span>
-</div>
-
-<button style="margin-top:20px" type="submit" value="Create" class="btn btn-primary">Create</button>
-</div>
-
 <script>
-    document.getElementById('brandDropdown').addEventListener('change', function () {
-        var selectedBrandId = this.value;
-        var modelDropdown = document.getElementById('modelDropdown');
-        modelDropdown.innerHTML = ''; // Clear existing options
+    var brandData = @Html.Raw(Json.Serialize(Model.Brands));
 
-        // Fetch models for the selected brand and update the model dropdown
-        fetch('/Admin_Vehicles/GetModelsByBrandId?brandId=' + selectedBrandId)
-            .then(response => response.json())
-            .then(models => {
-                models.forEach(model => {
-                    var option = document.createElement('option');
-                    option.value = model.Id;
-                    option.textContent = model.Name;
-                    modelDropdown.appendChild(option);
+    document.addEventListener('DOMContentLoaded', function () {
+        var brandSelect = document.getElementById('brandSelect');
+        var modelSelect = document.getElementById('modelSelect');
+
+        brandSelect.addEventListener('change', function () {
+            chosenBrand = this.value; // Update chosenBrand variable with the selected value
+
+            modelSelect.innerHTML = '';
+
+            if (brandData && brandData.length > 0) {
+
+                var defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.textContent = "";
+                modelSelect.appendChild(defaultOption);
+
+                brandData.forEach(function (brand) {
+                    if (brand.name == chosenBrand) {
+                        brand.models.forEach(function (model) {
+                            var option = document.createElement('option');
+                            option.value = model.name;
+                            option.textContent = model.name;
+                            modelSelect.appendChild(option);
+                        });
+                    }
                 });
-            })
-            .catch(error => console.error('Error fetching models:', error));
-    });
-</script>
-<script>
-    document.getElementById('brandDropdown').addEventListener('change', function () {
-        var brandId = this.value;
-        document.getElementById('BrandId').value = brandId;
+            }
+        });
     });
 </script>
